@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_dynamic_widget/json_dynamic_widget.dart';
-import 'package:thesis_client/page/error_page.dart';
-import 'package:thesis_client/page/progress_page.dart';
+import 'package:thesis_client/json_dynamic_page/error_page.dart';
+import 'package:thesis_client/json_dynamic_page/progress_page.dart';
 
 /* 
 Devi caricare il JSON da API passata da costruttore
