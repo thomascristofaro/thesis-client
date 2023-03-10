@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:thesis_client/component/page_list.dart';
+import 'package:thesis_client/pages/home.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
 import 'package:thesis_client/widgets/color_seed_button.dart';
 import 'package:thesis_client/widgets/trailing_actions.dart';
 import 'package:thesis_client/widgets/expanded_trailing_actions.dart';
-import 'package:thesis_client/widgets/navigation_bars.dart';
 
 import 'package:thesis_client/pages/color_palettes_screen.dart';
 import 'package:thesis_client/pages/component_screen.dart';
@@ -38,6 +39,7 @@ class Navigation extends StatefulWidget {
 
 class _NavigationState extends State<Navigation> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  bool showSmallSizeLayout = true;
   bool showMediumSizeLayout = false;
   bool showLargeSizeLayout = false;
   bool extendedRail = false;
@@ -56,6 +58,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
       showMediumSizeLayout = false;
       showLargeSizeLayout = false;
     }
+    showSmallSizeLayout = !showMediumSizeLayout && !showLargeSizeLayout;
   }
 
   void handlePageChanged(int pageSelected) {
@@ -89,6 +92,8 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
         return const TypographyScreen();
       case PageSelected.elevation:
         return const ElevationScreen();
+      case PageSelected.list:
+        return const PageList(columns: ["Col1", "Col2", "Col3"]);
       default:
         return FirstComponentList(
             scaffoldKey: scaffoldKey
@@ -96,18 +101,16 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
     }
   }
 
-  PreferredSizeWidget createAppBar() {
+  PreferredSizeWidget buildAppBar() {
     return AppBar(
-      title: widget.useMaterial3
-          ? const Text('Material 3')
-          : const Text('Material 2'),
-      leading: showMediumSizeLayout || showLargeSizeLayout
+      title: const Text('BLOX'),
+      leading: !showSmallSizeLayout
         ? IconButton(
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           tooltip: 'Open navigation menu',
           onPressed: () => handleRailChanged(),
         ) : null,
-      actions: !showMediumSizeLayout && !showLargeSizeLayout
+      actions: showSmallSizeLayout
           ? [
               BrightnessButton(
                 handleBrightnessChange: widget.handleBrightnessChange,
@@ -124,68 +127,103 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
     );
   }
 
-  Widget _trailingActions() => extendedRail
-      ? ExpandedTrailingActions(useLightMode: widget.useLightMode,
-          useMaterial3: widget.useMaterial3,
-          colorSelected: widget.colorSelected,
-          handleBrightnessChange: widget.handleBrightnessChange,
-          handleMaterialVersionChange: widget.handleMaterialVersionChange,
-          handleColorSelect: widget.handleColorSelect,
-      )
-      : TrailingActions(colorSelected: widget.colorSelected,
-          handleBrightnessChange: widget.handleBrightnessChange,
-          handleMaterialVersionChange: widget.handleMaterialVersionChange,
-          handleColorSelect: widget.handleColorSelect,
-  );
+  NavigationDrawer buildNavigationDrawer(BuildContext context) {
+    return NavigationDrawer(
+        selectedIndex: pageIndex,
+        onDestinationSelected: (index) {
+          handlePageChanged(index);
+          Navigator.pop(context);
+        },
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
+            child: Text(
+              'Menu',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+          ),
+          ...navDrawerDestinations
+        ]
+    );
+  }
+
+  NavigationRail buildNavigationRail() {
+    return NavigationRail(
+      extended: extendedRail,
+      destinations: navRailDestinations,
+      selectedIndex: pageIndex,
+      onDestinationSelected: (index) {
+        handlePageChanged(index);
+      },
+      trailing: Expanded(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: extendedRail
+              ? ExpandedTrailingActions(useLightMode: widget.useLightMode,
+            useMaterial3: widget.useMaterial3,
+            colorSelected: widget.colorSelected,
+            handleBrightnessChange: widget.handleBrightnessChange,
+            handleMaterialVersionChange: widget.handleMaterialVersionChange,
+            handleColorSelect: widget.handleColorSelect)
+              : TrailingActions(colorSelected: widget.colorSelected,
+            handleBrightnessChange: widget.handleBrightnessChange,
+            handleMaterialVersionChange: widget.handleMaterialVersionChange,
+            handleColorSelect: widget.handleColorSelect),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      appBar: createAppBar(),
+      appBar: buildAppBar(),
       body: Row(
         children: <Widget>[
-          if (showLargeSizeLayout || showMediumSizeLayout)
-            NavigationRail(
-              extended: extendedRail,
-              destinations: navRailDestinations,
-              selectedIndex: pageIndex,
-              onDestinationSelected: (index) {
-                handlePageChanged(index);
-              },
-              trailing: Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: _trailingActions(),
-                ),
-              ),
-            ),
+          if (!showSmallSizeLayout) buildNavigationRail(),
           createPageFor(PageSelected.values[pageIndex]),
         ],
       ),
-      drawer: (!showLargeSizeLayout && !showMediumSizeLayout)
-          ? NavigationDrawer(
-            selectedIndex: pageIndex,
-            onDestinationSelected: (index) {
-              handlePageChanged(index);
-              Navigator.pop(context);
-            },
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(28, 16, 16, 10),
-                child: Text(
-                'Menu',
-                style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ),
-              ...navDrawerDestinations
-            ]
-          ) : null
+      drawer: showSmallSizeLayout ? buildNavigationDrawer(context) : null
     );
   }
 }
 
-final List<NavigationRailDestination> navRailDestinations = appBarDestinations
+const List<NavigationDestination> navDestinations = [
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.widgets_outlined),
+    label: 'Components',
+    selectedIcon: Icon(Icons.widgets),
+  ),
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.format_paint_outlined),
+    label: 'Color',
+    selectedIcon: Icon(Icons.format_paint),
+  ),
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.text_snippet_outlined),
+    label: 'Typography',
+    selectedIcon: Icon(Icons.text_snippet),
+  ),
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.invert_colors_on_outlined),
+    label: 'Elevation',
+    selectedIcon: Icon(Icons.opacity),
+  ),
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.table_chart_outlined),
+    label: 'Table',
+    selectedIcon: Icon(Icons.table_chart),
+  )
+];
+
+final List<NavigationRailDestination> navRailDestinations = navDestinations
     .map(
       (destination) => NavigationRailDestination(
         icon: Tooltip(
@@ -201,7 +239,7 @@ final List<NavigationRailDestination> navRailDestinations = appBarDestinations
     )
     .toList();
 
-final List<NavigationDrawerDestination> navDrawerDestinations = appBarDestinations
+final List<NavigationDrawerDestination> navDrawerDestinations = navDestinations
     .map(
       (destination) => NavigationDrawerDestination(
         icon: Tooltip(

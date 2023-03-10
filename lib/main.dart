@@ -2,28 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:thesis_client/constants.dart';
 import 'package:thesis_client/pages/navigation.dart';
-import 'package:thesis_client/component/table.dart';
 
-// change in App
-// void main() => runApp(const MyApp());
 void main() => runApp(const App());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo Dynamic',
-      home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Data Tables'),
-          ),
-          body: const Repeater(columns: ["Col1", "Col2"])),
-      // home: JsonWidgetPage(),
-    );
-  }
-}
 
 class App extends StatefulWidget {
   const App({super.key});
