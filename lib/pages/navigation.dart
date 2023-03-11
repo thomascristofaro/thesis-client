@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:thesis_client/component/page_list.dart';
+import 'package:thesis_client/pages/page_list.dart';
 import 'package:thesis_client/pages/home.dart';
+
+import 'package:thesis_client/component/scrollable_table.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
@@ -37,7 +39,8 @@ class Navigation extends StatefulWidget {
   State<Navigation> createState() => _NavigationState();
 }
 
-class _NavigationState extends State<Navigation> with SingleTickerProviderStateMixin {
+class _NavigationState extends State<Navigation>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool showSmallSizeLayout = true;
   bool showMediumSizeLayout = false;
@@ -83,9 +86,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
   Widget createPageFor(PageSelected pageSelected) {
     switch (pageSelected) {
       case PageSelected.component:
-        return FirstComponentList(
-            scaffoldKey: scaffoldKey
-        );
+        return FirstComponentList(scaffoldKey: scaffoldKey);
       case PageSelected.color:
         return const ColorPalettesScreen();
       case PageSelected.typography:
@@ -94,10 +95,10 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
         return const ElevationScreen();
       case PageSelected.list:
         return const PageList(columns: ["Col1", "Col2", "Col3"]);
+      case PageSelected.listScroll:
+        return const ScrollableTable();
       default:
-        return FirstComponentList(
-            scaffoldKey: scaffoldKey
-        );
+        return FirstComponentList(scaffoldKey: scaffoldKey);
     }
   }
 
@@ -105,11 +106,12 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
     return AppBar(
       title: const Text('BLOX'),
       leading: !showSmallSizeLayout
-        ? IconButton(
-          icon: const Icon(Icons.menu),
-          tooltip: 'Open navigation menu',
-          onPressed: () => handleRailChanged(),
-        ) : null,
+          ? IconButton(
+              icon: const Icon(Icons.menu),
+              tooltip: 'Open navigation menu',
+              onPressed: () => handleRailChanged(),
+            )
+          : null,
       actions: showSmallSizeLayout
           ? [
               BrightnessButton(
@@ -143,8 +145,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
             ),
           ),
           ...navDrawerDestinations
-        ]
-    );
+        ]);
   }
 
   NavigationRail buildNavigationRail() {
@@ -159,16 +160,20 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
         child: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: extendedRail
-              ? ExpandedTrailingActions(useLightMode: widget.useLightMode,
-            useMaterial3: widget.useMaterial3,
-            colorSelected: widget.colorSelected,
-            handleBrightnessChange: widget.handleBrightnessChange,
-            handleMaterialVersionChange: widget.handleMaterialVersionChange,
-            handleColorSelect: widget.handleColorSelect)
-              : TrailingActions(colorSelected: widget.colorSelected,
-            handleBrightnessChange: widget.handleBrightnessChange,
-            handleMaterialVersionChange: widget.handleMaterialVersionChange,
-            handleColorSelect: widget.handleColorSelect),
+              ? ExpandedTrailingActions(
+                  useLightMode: widget.useLightMode,
+                  useMaterial3: widget.useMaterial3,
+                  colorSelected: widget.colorSelected,
+                  handleBrightnessChange: widget.handleBrightnessChange,
+                  handleMaterialVersionChange:
+                      widget.handleMaterialVersionChange,
+                  handleColorSelect: widget.handleColorSelect)
+              : TrailingActions(
+                  colorSelected: widget.colorSelected,
+                  handleBrightnessChange: widget.handleBrightnessChange,
+                  handleMaterialVersionChange:
+                      widget.handleMaterialVersionChange,
+                  handleColorSelect: widget.handleColorSelect),
         ),
       ),
     );
@@ -177,16 +182,15 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      appBar: buildAppBar(),
-      body: Row(
-        children: <Widget>[
-          if (!showSmallSizeLayout) buildNavigationRail(),
-          createPageFor(PageSelected.values[pageIndex]),
-        ],
-      ),
-      drawer: showSmallSizeLayout ? buildNavigationDrawer(context) : null
-    );
+        key: scaffoldKey,
+        appBar: buildAppBar(),
+        body: Row(
+          children: <Widget>[
+            if (!showSmallSizeLayout) buildNavigationRail(),
+            createPageFor(PageSelected.values[pageIndex]),
+          ],
+        ),
+        drawer: showSmallSizeLayout ? buildNavigationDrawer(context) : null);
   }
 }
 
@@ -220,6 +224,12 @@ const List<NavigationDestination> navDestinations = [
     icon: Icon(Icons.table_chart_outlined),
     label: 'Table',
     selectedIcon: Icon(Icons.table_chart),
+  ),
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.scale_outlined),
+    label: 'Table Scroll',
+    selectedIcon: Icon(Icons.scale),
   )
 ];
 
@@ -251,9 +261,6 @@ final List<NavigationDrawerDestination> navDrawerDestinations = navDestinations
           child: destination.selectedIcon,
         ),
         label: Text(destination.label),
-     ),
-    ).toList();
-
-
-
-
+      ),
+    )
+    .toList();

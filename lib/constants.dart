@@ -30,7 +30,8 @@ enum PageSelected {
   color(1),
   typography(2),
   elevation(3),
-  list(4);
+  list(4),
+  listScroll(5);
 
   const PageSelected(this.value);
   final int value;
@@ -43,4 +44,4 @@ const smallSpacing = 10.0;
 const double cardWidth = 115;
 const double widthConstraint = 450;
 
-const baseURL= 'https://thomascristofaro.github.io/app/assets/';
+const baseURL = 'https://thomascristofaro.github.io/app/assets/';
