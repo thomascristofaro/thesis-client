@@ -31,7 +31,8 @@ enum PageSelected {
   typography(2),
   elevation(3),
   list(4),
-  listScroll(5);
+  demo1(5),
+  demo2(6);
 
   const PageSelected(this.value);
   final int value;

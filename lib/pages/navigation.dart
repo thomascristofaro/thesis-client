@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:thesis_client/demo/data_table2_scrollup.dart';
+import 'package:thesis_client/pages/demo_page.dart';
 import 'package:thesis_client/pages/page_list.dart';
 import 'package:thesis_client/pages/home.dart';
-
-import 'package:thesis_client/component/scrollable_table.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
@@ -16,6 +16,8 @@ import 'package:thesis_client/pages/elevation_screen.dart';
 import 'package:thesis_client/pages/typography_screen.dart';
 
 import 'package:thesis_client/constants.dart';
+
+import 'package:thesis_client/demo/paginated_data_table_demo.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({
@@ -94,9 +96,11 @@ class _NavigationState extends State<Navigation>
       case PageSelected.elevation:
         return const ElevationScreen();
       case PageSelected.list:
-        return const PageList(columns: ["Col1", "Col2", "Col3"]);
-      case PageSelected.listScroll:
-        return const ScrollableTable();
+        return const PageList();
+      case PageSelected.demo1:
+        return const DemoPage(internal: DataTable2ScrollupDemo());
+      case PageSelected.demo2:
+        return const DemoPage(internal: PaginatedDataTableDemo());
       default:
         return FirstComponentList(scaffoldKey: scaffoldKey);
     }
@@ -227,9 +231,15 @@ const List<NavigationDestination> navDestinations = [
   ),
   NavigationDestination(
     tooltip: '',
-    icon: Icon(Icons.scale_outlined),
-    label: 'Table Scroll',
-    selectedIcon: Icon(Icons.scale),
+    icon: Icon(Icons.developer_mode_outlined),
+    label: 'Demo 1',
+    selectedIcon: Icon(Icons.developer_mode),
+  ),
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.developer_mode_outlined),
+    label: 'Demo 2',
+    selectedIcon: Icon(Icons.developer_mode),
   )
 ];
 
