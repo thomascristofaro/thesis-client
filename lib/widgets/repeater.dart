@@ -45,17 +45,18 @@ class _RepeaterState extends State<Repeater> {
 
   @override
   Widget build(BuildContext context) {
-    return DataTable2(
+    return AsyncPaginatedDataTable2(
         // scrollController: _scrollController,
-        columnSpacing: 0,
-        horizontalMargin: 12,
-        bottomMargin: 10,
+        // columnSpacing: 0,
+        // horizontalMargin: 12,
+        // bottomMargin: 10,
         minWidth: 1000,
         sortColumnIndex: 0,
         onSelectAll: (val) => setState(() => _dataSource.selectAll(val)),
         columns: _columns,
-        rows: List<DataRow>.generate(
-            _dataSource.rowCount, (index) => _dataSource.getRow(index)));
+        source: _dataSource);
+    // rows: List<DataRow>.generate(
+    //     _dataSource.rowCount, (index) => _dataSource.getRow(index)));
   }
 }
 

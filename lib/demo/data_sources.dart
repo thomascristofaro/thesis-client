@@ -203,7 +203,175 @@ class DessertDataSource extends DataTableSource {
   }
 }
 
+/// Async datasource for AsynPaginatedDataTabke2 example. Based on AsyncDataTableSource which
+/// is an extension to FLutter's DataTableSource and aimed at solving
+/// saync data fetching scenarious by paginated table (such as using Web API)
+class DessertDataSourceAsync extends AsyncDataTableSource {
+  DessertDataSourceAsync() {
+    print('DessertDataSourceAsync created');
+  }
+
+  DessertDataSourceAsync.empty() {
+    _empty = true;
+    print('DessertDataSourceAsync.empty created');
+  }
+
+  DessertDataSourceAsync.error() {
+    _errorCounter = 0;
+    print('DessertDataSourceAsync.error created');
+  }
+
+  bool _empty = false;
+  int? _errorCounter;
+
+  RangeValues? _caloriesFilter;
+
+  RangeValues? get caloriesFilter => _caloriesFilter;
+  set caloriesFilter(RangeValues? calories) {
+    _caloriesFilter = calories;
+    refreshDatasource();
+  }
+
+  final DesertsFakeWebService _repo = DesertsFakeWebService();
+
+  String _sortColumn = "name";
+  bool _sortAscending = true;
+
+  void sort(String columnName, bool ascending) {
+    _sortColumn = columnName;
+    _sortAscending = ascending;
+    refreshDatasource();
+  }
+
+  Future<int> getTotalRecords() {
+    return Future<int>.delayed(
+        const Duration(milliseconds: 0), () => _empty ? 0 : _dessertsX3.length);
+  }
+
+  @override
+  Future<AsyncRowsResponse> getRows(int start, int end) async {
+    print('getRows($start, $end)');
+    if (_errorCounter != null) {
+      _errorCounter = _errorCounter! + 1;
+
+      if (_errorCounter! % 2 == 1) {
+        await Future.delayed(const Duration(milliseconds: 1000));
+        throw 'Error #${((_errorCounter! - 1) / 2).round() + 1} has occured';
+      }
+    }
+
+    var index = start;
+    // final format = NumberFormat.decimalPercentPattern(
+    //   locale: 'en',
+    //   decimalDigits: 0,
+    // );
+    assert(index >= 0);
+
+    // List returned will be empty is there're fewer items than startingAt
+    var x = _empty
+        ? await Future.delayed(const Duration(milliseconds: 2000),
+            () => DesertsFakeWebServiceResponse(0, []))
+        : await _repo.getData(
+            start, end, _caloriesFilter, _sortColumn, _sortAscending);
+
+    var r = AsyncRowsResponse(
+        x.totalRecords,
+        x.data.map((dessert) {
+          return DataRow(
+            key: ValueKey<int>(dessert.id),
+            selected: dessert.selected,
+            onSelectChanged: (value) {
+              if (value != null) {
+                setRowSelection(ValueKey<int>(dessert.id), value);
+              }
+            },
+            cells: [
+              DataCell(Text(dessert.name)),
+              DataCell(Text('${dessert.calories}')),
+              DataCell(Text(dessert.fat.toStringAsFixed(1))),
+              DataCell(Text('${dessert.carbs}')),
+              DataCell(Text(dessert.protein.toStringAsFixed(1))),
+              DataCell(Text('${dessert.sodium}')),
+              DataCell(Text((dessert.calcium / 100).toString())),
+              DataCell(Text((dessert.iron / 100).toString())),
+            ],
+          );
+        }).toList());
+
+    return r;
+  }
+}
+
+class DesertsFakeWebServiceResponse {
+  DesertsFakeWebServiceResponse(this.totalRecords, this.data);
+
+  /// THe total ammount of records on the server, e.g. 100
+  final int totalRecords;
+
+  /// One page, e.g. 10 reocrds
+  final List<Dessert> data;
+}
+
+class DesertsFakeWebService {
+  int Function(Dessert, Dessert)? _getComparisonFunction(
+      String column, bool ascending) {
+    var coef = ascending ? 1 : -1;
+    switch (column) {
+      case 'name':
+        return (Dessert d1, Dessert d2) => coef * d1.name.compareTo(d2.name);
+      case 'calories':
+        return (Dessert d1, Dessert d2) => coef * (d1.calories - d2.calories);
+      case 'fat':
+        return (Dessert d1, Dessert d2) => coef * (d1.fat - d2.fat).round();
+      case 'carbs':
+        return (Dessert d1, Dessert d2) => coef * (d1.carbs - d2.carbs);
+      case 'protein':
+        return (Dessert d1, Dessert d2) =>
+            coef * (d1.protein - d2.protein).round();
+      case 'sodium':
+        return (Dessert d1, Dessert d2) => coef * (d1.sodium - d2.sodium);
+      case 'calcium':
+        return (Dessert d1, Dessert d2) => coef * (d1.calcium - d2.calcium);
+      case 'iron':
+        return (Dessert d1, Dessert d2) => coef * (d1.iron - d2.iron);
+    }
+
+    return null;
+  }
+
+  Future<DesertsFakeWebServiceResponse> getData(int startingAt, int count,
+      RangeValues? caloriesFilter, String sortedBy, bool sortedAsc) async {
+    return Future.delayed(
+        Duration(
+            milliseconds: startingAt == 0
+                ? 2650
+                : startingAt < 20
+                    ? 2000
+                    : 400), () {
+      var result = _dessertsX3;
+
+      if (caloriesFilter != null) {
+        result = result
+            .where((e) =>
+                e.calories >= caloriesFilter.start &&
+                e.calories <= caloriesFilter.end)
+            .toList();
+      }
+
+      result.sort(_getComparisonFunction(sortedBy, sortedAsc));
+      return DesertsFakeWebServiceResponse(
+          result.length, result.skip(startingAt).take(count).toList());
+    });
+  }
+}
+
 int _selectedCount = 0;
+
+List<Dessert> _dessertsX3 = _desserts.toList()
+  ..addAll(_desserts.map((i) => Dessert('${i.name} x2', i.calories, i.fat,
+      i.carbs, i.protein, i.sodium, i.calcium, i.iron)))
+  ..addAll(_desserts.map((i) => Dessert('${i.name} x3', i.calories, i.fat,
+      i.carbs, i.protein, i.sodium, i.calcium, i.iron)));
 
 List<Dessert> _desserts = <Dessert>[
   Dessert(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thesis_client/demo/data_table2_scrollup.dart';
+import 'package:thesis_client/demo/async_paginated_demo.dart';
 import 'package:thesis_client/pages/demo_page.dart';
 import 'package:thesis_client/pages/page_list.dart';
 import 'package:thesis_client/pages/home.dart';
@@ -17,7 +17,9 @@ import 'package:thesis_client/pages/typography_screen.dart';
 
 import 'package:thesis_client/constants.dart';
 
+import 'package:thesis_client/demo/data_table2_scrollup.dart';
 import 'package:thesis_client/demo/paginated_data_table_demo.dart';
+import 'package:thesis_client/demo/paginated_data_table2_demo.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({
@@ -101,6 +103,10 @@ class _NavigationState extends State<Navigation>
         return const DemoPage(internal: DataTable2ScrollupDemo());
       case PageSelected.demo2:
         return const DemoPage(internal: PaginatedDataTableDemo());
+      case PageSelected.demo3:
+        return const DemoPage(internal: PaginatedDataTable2Demo());
+      case PageSelected.demo4:
+        return const DemoPage(internal: AsyncPaginatedDataTable2Demo());
       default:
         return FirstComponentList(scaffoldKey: scaffoldKey);
     }
@@ -198,6 +204,21 @@ class _NavigationState extends State<Navigation>
   }
 }
 
+enum PageSelected {
+  component(0),
+  color(1),
+  typography(2),
+  elevation(3),
+  list(4),
+  demo1(5),
+  demo2(6),
+  demo3(7),
+  demo4(7);
+
+  const PageSelected(this.value);
+  final int value;
+}
+
 const List<NavigationDestination> navDestinations = [
   NavigationDestination(
     tooltip: '',
@@ -239,6 +260,18 @@ const List<NavigationDestination> navDestinations = [
     tooltip: '',
     icon: Icon(Icons.developer_mode_outlined),
     label: 'Demo 2',
+    selectedIcon: Icon(Icons.developer_mode),
+  ),
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.developer_mode_outlined),
+    label: 'Demo 3',
+    selectedIcon: Icon(Icons.developer_mode),
+  ),
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.developer_mode_outlined),
+    label: 'Demo 4',
     selectedIcon: Icon(Icons.developer_mode),
   )
 ];

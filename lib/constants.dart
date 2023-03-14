@@ -25,19 +25,6 @@ enum ColorSeed {
   final Color color;
 }
 
-enum PageSelected {
-  component(0),
-  color(1),
-  typography(2),
-  elevation(3),
-  list(4),
-  demo1(5),
-  demo2(6);
-
-  const PageSelected(this.value);
-  final int value;
-}
-
 const rowDivider = SizedBox(width: 20);
 const colDivider = SizedBox(height: 10);
 const tinySpacing = 3.0;
