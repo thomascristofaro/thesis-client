@@ -10,11 +10,18 @@ class PaginatedDataTableDemo extends StatefulWidget {
 
 class PaginatedDataTableDemoState extends State<PaginatedDataTableDemo> {
   late DessertDataSource _dessertsDataSource;
+  late List<DataColumn> _columns;
 
   @override
   void initState() {
     super.initState();
     _dessertsDataSource = DessertDataSource(context);
+    _columns = List.generate(
+      8,
+      (index) => DataColumn(
+        label: Text("Col $index"),
+      ),
+    );
   }
 
   @override
@@ -27,32 +34,7 @@ class PaginatedDataTableDemoState extends State<PaginatedDataTableDemo> {
   Widget build(BuildContext context) {
     return PaginatedDataTable(
       onSelectAll: (val) => setState(() => _dessertsDataSource.selectAll(val)),
-      columns: const [
-        DataColumn(
-          label: Text('Desert'),
-        ),
-        DataColumn(
-          label: Text('Calories'),
-        ),
-        DataColumn(
-          label: Text('Fat (gm)'),
-        ),
-        DataColumn(
-          label: Text('Carbs (gm)'),
-        ),
-        DataColumn(
-          label: Text('Protein (gm)'),
-        ),
-        DataColumn(
-          label: Text('Sodium (mg)'),
-        ),
-        DataColumn(
-          label: Text('Calcium (%)'),
-        ),
-        DataColumn(
-          label: Text('Iron (%)'),
-        ),
-      ],
+      columns: _columns,
       source: _dessertsDataSource,
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thesis_client/component/repeater.dart';
+import 'package:thesis_client/widgets/repeater.dart';
 
 class PageList extends StatefulWidget {
   const PageList({Key? key}) : super(key: key);
