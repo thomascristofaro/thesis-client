@@ -12,7 +12,7 @@ class _TableButtonState extends State<TableButton> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      ButtonHeader(),
+      TableButtonHeader(),
       Expanded(
         child: TableButtonData(),
       ),
@@ -20,14 +20,14 @@ class _TableButtonState extends State<TableButton> {
   }
 }
 
-class ButtonHeader extends StatefulWidget {
-  const ButtonHeader({super.key});
+class TableButtonHeader extends StatefulWidget {
+  const TableButtonHeader({super.key});
 
   @override
-  State<ButtonHeader> createState() => _ButtonHeaderState();
+  State<TableButtonHeader> createState() => _TableButtonHeaderState();
 }
 
-class _ButtonHeaderState extends State<ButtonHeader> {
+class _TableButtonHeaderState extends State<TableButtonHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,15 +61,14 @@ class TableButtonData extends StatefulWidget {
 }
 
 class _TableButtonDataState extends State<TableButtonData> {
-  final List<Map<String, dynamic>> _dataList = [];
-  // List.generate(
-  //   100,
-  //   (index) => {
-  //     'name': 'name',
-  //     'email': 'email',
-  //     'phone': 'phoneNumber',
-  //   },
-  // );
+  final List<Map<String, dynamic>> _dataList = List.generate(
+    100,
+    (index) => {
+      'name': 'name',
+      'email': 'email',
+      'phone': 'phoneNumber',
+    },
+  );
 
   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   @override

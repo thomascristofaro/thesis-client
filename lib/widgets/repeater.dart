@@ -44,15 +44,17 @@ class _RepeaterState extends State<Repeater> {
 
   @override
   Widget build(BuildContext context) {
-    return PaginatedDataTable2(
-      minWidth: 1000,
-      onSelectAll: (val) => setState(() => _dataSource.selectAll(val)),
-      columns: _columns,
-      source: _dataSource,
-      rowsPerPage: 10,
-      // onPageChanged: (pageIndex) {
-      //   _dataSource.loadNextPage(_repeaterCtrl.getAllRecords);
-      // },
+    return Expanded(
+      child: PaginatedDataTable2(
+        minWidth: 1000,
+        onSelectAll: (val) => setState(() => _dataSource.selectAll(val)),
+        columns: _columns,
+        source: _dataSource,
+        rowsPerPage: 10,
+        // onPageChanged: (pageIndex) {
+        //   _dataSource.loadNextPage(_repeaterCtrl.getAllRecords);
+        // },
+      ),
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thesis_client/widgets/repeater.dart';
+import 'package:thesis_client/widgets/button_header.dart';
+import 'package:thesis_client/widgets/title_text.dart';
 
 class PageList extends StatefulWidget {
   const PageList({super.key});
@@ -9,11 +11,15 @@ class PageList extends StatefulWidget {
 }
 
 class _PageListState extends State<PageList> {
+  // questi mi arrivano dallo schema della pagina
+  final String _title = "Page list test";
   List<String> columns = [];
+  List<String> buttons = [];
 
   @override
   void initState() {
     columns = List.generate(10, (index) => "Column $index");
+    buttons = List.generate(10, (index) => "Button $index");
     super.initState();
   }
 
@@ -24,45 +30,9 @@ class _PageListState extends State<PageList> {
     // una pagina ha un solo repeater
     return Expanded(
         child: Column(children: [
-      ButtonHeader(),
-      Expanded(
-        child: Repeater(
-          columns: columns,
-        ),
-      ),
+      TitleText(name: _title),
+      ButtonHeader(buttons: buttons),
+      Repeater(columns: columns),
     ]));
-  }
-}
-
-class ButtonHeader extends StatefulWidget {
-  const ButtonHeader({super.key});
-
-  @override
-  State<ButtonHeader> createState() => _ButtonHeaderState();
-}
-
-class _ButtonHeaderState extends State<ButtonHeader> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextButton(
-            child: Text('Button 1'),
-            onPressed: () {},
-          ),
-          TextButton(
-            child: Text('Button 2'),
-            onPressed: () {},
-          ),
-          TextButton(
-            child: Text('Button 3'),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
   }
 }
