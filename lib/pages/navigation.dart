@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thesis_client/demo/async_paginated_demo.dart';
+import 'package:thesis_client/demo/table_button.dart';
 import 'package:thesis_client/pages/demo_page.dart';
 import 'package:thesis_client/pages/page_list.dart';
 import 'package:thesis_client/pages/home.dart';
@@ -100,7 +101,7 @@ class _NavigationState extends State<Navigation>
       case PageSelected.list:
         return const PageList();
       case PageSelected.demo1:
-        return const DemoPage(internal: DataTable2ScrollupDemo());
+        return const DemoPage(internal: TableButton());
       case PageSelected.demo2:
         return const DemoPage(internal: PaginatedDataTableDemo());
       case PageSelected.demo3:

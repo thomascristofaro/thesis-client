@@ -1,4 +1,10 @@
 {
+  "field":
+    {
+      "id": "col1",
+      "value": "value",
+      "label": "label"
+    },
   "data": [
     {
       "col1": "Row1 Col1","col2": "Row1 Col2","col3": "Row1 Col3","col4": "Row1 Col4","col5": "Row1 Col5",
