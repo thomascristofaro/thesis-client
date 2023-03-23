@@ -28,6 +28,13 @@ class _PageListState extends State<PageList> {
     // TODO prima del repeater devo mettere la barra dei button
     // NON DEVO METTERLI NEL REPEATER, sono collegati alla pagina
     // una pagina ha un solo repeater
+
+    // Con questo muore tutto, ma mi piace il suo stile
+    // return ComponentGroupDecoration(label: 'Actions', children: <Widget>[
+    //   TitleText(name: _title),
+    //   ButtonHeader(buttons: buttons),
+    //   Repeater(columns: columns),
+    // ]);
     return Expanded(
         child: Column(children: [
       TitleText(name: _title),

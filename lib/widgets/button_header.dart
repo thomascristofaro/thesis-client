@@ -21,11 +21,16 @@ class _ButtonHeaderState extends State<ButtonHeader> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                ElevatedButton.icon(
+                FilledButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.add),
                   label: const Text('Icon'),
                   // style: make button outlineVariant,
+                ),
+                FilledButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.add),
+                  label: const Text('Icon'),
                 ),
                 ElevatedButton.icon(
                   onPressed: () {},

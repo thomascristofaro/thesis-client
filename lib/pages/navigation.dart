@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thesis_client/demo/async_paginated_demo.dart';
-import 'package:thesis_client/demo/table_button.dart';
-import 'package:thesis_client/pages/demo_page.dart';
 import 'package:thesis_client/pages/page_list.dart';
-import 'package:thesis_client/pages/home.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
@@ -17,10 +13,6 @@ import 'package:thesis_client/pages/elevation_screen.dart';
 import 'package:thesis_client/pages/typography_screen.dart';
 
 import 'package:thesis_client/constants.dart';
-
-import 'package:thesis_client/demo/data_table2_scrollup.dart';
-import 'package:thesis_client/demo/paginated_data_table_demo.dart';
-import 'package:thesis_client/demo/paginated_data_table2_demo.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({
@@ -52,7 +44,7 @@ class _NavigationState extends State<Navigation>
   bool showLargeSizeLayout = false;
   bool extendedRail = false;
 
-  int pageIndex = PageSelected.component.value;
+  int pageIndex = PageSelected.list.value;
 
   @override
   void didChangeDependencies() {
@@ -100,14 +92,14 @@ class _NavigationState extends State<Navigation>
         return const ElevationScreen();
       case PageSelected.list:
         return const PageList();
-      case PageSelected.demo1:
-        return const DemoPage(internal: TableButton());
-      case PageSelected.demo2:
-        return const DemoPage(internal: PaginatedDataTableDemo());
-      case PageSelected.demo3:
-        return const DemoPage(internal: PaginatedDataTable2Demo());
-      case PageSelected.demo4:
-        return const DemoPage(internal: AsyncPaginatedDataTable2Demo());
+      // case PageSelected.demo1:
+      //   return const DemoPage(internal: TableButton());
+      // case PageSelected.demo2:
+      //   return const DemoPage(internal: PaginatedDataTableDemo());
+      // case PageSelected.demo3:
+      //   return const DemoPage(internal: PaginatedDataTable2Demo());
+      // case PageSelected.demo4:
+      //   return const DemoPage(internal: AsyncPaginatedDataTable2Demo());
       default:
         return FirstComponentList(scaffoldKey: scaffoldKey);
     }
@@ -206,11 +198,11 @@ class _NavigationState extends State<Navigation>
 }
 
 enum PageSelected {
-  component(0),
-  color(1),
-  typography(2),
-  elevation(3),
-  list(4),
+  list(0),
+  component(1),
+  color(2),
+  typography(3),
+  elevation(4),
   demo1(5),
   demo2(6),
   demo3(7),
@@ -221,6 +213,12 @@ enum PageSelected {
 }
 
 const List<NavigationDestination> navDestinations = [
+  NavigationDestination(
+    tooltip: '',
+    icon: Icon(Icons.table_chart_outlined),
+    label: 'Table',
+    selectedIcon: Icon(Icons.table_chart),
+  ),
   NavigationDestination(
     tooltip: '',
     icon: Icon(Icons.widgets_outlined),
@@ -245,36 +243,30 @@ const List<NavigationDestination> navDestinations = [
     label: 'Elevation',
     selectedIcon: Icon(Icons.opacity),
   ),
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.table_chart_outlined),
-    label: 'Table',
-    selectedIcon: Icon(Icons.table_chart),
-  ),
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.developer_mode_outlined),
-    label: 'Demo 1',
-    selectedIcon: Icon(Icons.developer_mode),
-  ),
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.developer_mode_outlined),
-    label: 'Demo 2',
-    selectedIcon: Icon(Icons.developer_mode),
-  ),
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.developer_mode_outlined),
-    label: 'Demo 3',
-    selectedIcon: Icon(Icons.developer_mode),
-  ),
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.developer_mode_outlined),
-    label: 'Demo 4',
-    selectedIcon: Icon(Icons.developer_mode),
-  )
+  // NavigationDestination(
+  //   tooltip: '',
+  //   icon: Icon(Icons.developer_mode_outlined),
+  //   label: 'Demo 1',
+  //   selectedIcon: Icon(Icons.developer_mode),
+  // ),
+  // NavigationDestination(
+  //   tooltip: '',
+  //   icon: Icon(Icons.developer_mode_outlined),
+  //   label: 'Demo 2',
+  //   selectedIcon: Icon(Icons.developer_mode),
+  // ),
+  // NavigationDestination(
+  //   tooltip: '',
+  //   icon: Icon(Icons.developer_mode_outlined),
+  //   label: 'Demo 3',
+  //   selectedIcon: Icon(Icons.developer_mode),
+  // ),
+  // NavigationDestination(
+  //   tooltip: '',
+  //   icon: Icon(Icons.developer_mode_outlined),
+  //   label: 'Demo 4',
+  //   selectedIcon: Icon(Icons.developer_mode),
+  // )
 ];
 
 final List<NavigationRailDestination> navRailDestinations = navDestinations
