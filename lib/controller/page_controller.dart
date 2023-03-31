@@ -5,11 +5,11 @@ import 'package:thesis_client/controller/virtual_db.dart';
 
 import 'layout.dart';
 
-class PageController {
+class PageAppController {
   final String _pageId;
   late IPageRepository _pageRepo;
 
-  PageController(this._pageId) {
+  PageAppController(this._pageId) {
     _pageRepo = PageFakeRepository(VirtualDB(), _pageId);
   }
 

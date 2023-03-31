@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../controller/layout.dart';
 
 class ButtonHeader extends StatefulWidget {
-  final List<String> buttons;
+  final List<Button> buttons;
 
   const ButtonHeader({super.key, required this.buttons});
 
@@ -20,29 +21,27 @@ class _ButtonHeaderState extends State<ButtonHeader> {
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                FilledButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
-                  label: const Text('Icon'),
-                  // style: make button outlineVariant,
-                ),
-                FilledButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
-                  label: const Text('Icon'),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
-                  label: const Text('Icon'),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add),
-                  label: const Text('Icon'),
-                ),
-              ],
+              children: widget.buttons
+                  .map((button) => FilledButton.icon(
+                        onPressed: () => throw UnimplementedError(),
+                        icon: const Icon(Icons.add),
+                        label: Text(button.caption),
+                        // style: make button outlineVariant,
+                      ))
+                  .toList(),
+              // <Widget>[
+              //   FilledButton.icon(
+              //     onPressed: () {},
+              //     icon: const Icon(Icons.add),
+              //     label: const Text('Icon'),
+              //     // style: make button outlineVariant,
+              //   ),
+              // ElevatedButton.icon(
+              //   onPressed: () {},
+              //   icon: const Icon(Icons.add),
+              //   label: const Text('Icon'),
+              // ),
+              // ],
             ),
           )),
     );
