@@ -14,20 +14,14 @@ class PageList extends StatefulWidget {
 }
 
 class _PageListState extends State<PageList> {
-  // questi mi arrivano dallo schema della pagina
-  final String _title = "Page list test";
   late PageAppController _pageController;
   Future<Layout>? layout;
-  List<String> columns = [];
-  List<String> buttons = [];
 
   @override
   void initState() {
     _pageController = PageAppController(widget.pageId);
     layout =
         _pageController.getLayout(); // utilizzare questo nel future builder
-    columns = List.generate(10, (index) => "Column $index");
-    buttons = List.generate(10, (index) => "Button $index");
     super.initState();
   }
 
@@ -48,10 +42,15 @@ class _PageListState extends State<PageList> {
       future: layout,
       builder: (BuildContext context, AsyncSnapshot<Layout> snapshot) {
         if (snapshot.hasData) {
+          Layout layout = snapshot.data!;
           return Column(children: [
-            TitleText(name: _title),
-            ButtonHeader(buttons: snapshot.data!.buttons),
-            Repeater(columns: snapshot.data.buttons),
+            TitleText(name: layout.caption),
+            ButtonHeader(buttons: layout.buttons),
+            for (var component in layout.area)
+              if (component.type == AreaComponentType.repeater)
+                Repeater(repeater: component, pageCtrl: _pageController)
+            // else if (component.type == AreaComponentType.group)
+            //   Group(component: component)
           ]);
         } else {
           return Column(

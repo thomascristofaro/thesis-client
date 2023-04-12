@@ -33,6 +33,63 @@
   ],
   "area": [
     {
+      "id": "repeater1",
+      "type": "repeater",
+      "caption": "Repeater 1",
+      "fields": [
+        {
+          "id": "col1",
+          "type": "string",
+          "label": "Column 1"
+        },
+        {
+          "id": "col2",
+          "type": "number",
+          "label": "Column 2"
+        },
+        {
+          "id": "col3",
+          "type": "number",
+          "label": "Column 3"
+        },
+        {
+          "id": "col4",
+          "type": "number",
+          "label": "Column 4"
+        },
+        {
+          "id": "col5",
+          "type": "number",
+          "label": "Column 5"
+        },
+        {
+          "id": "col6",
+          "type": "number",
+          "label": "Column 6"
+        },
+        {
+          "id": "col7",
+          "type": "number",
+          "label": "Column 7"
+        },
+        {
+          "id": "col8",
+          "type": "number",
+          "label": "Column 8"
+        },
+        {
+          "id": "col9",
+          "type": "number",
+          "label": "Column 9"
+        },
+        {
+          "id": "col10",
+          "type": "number",
+          "label": "Column 10"
+        }
+      ]
+    },
+    {
       "id": "grp1",
       "type": "group",
       "caption": "Group 1",
@@ -59,62 +116,5 @@
         }
       ]
     }
-  ],
-  "repeater": {
-    "id": "repeater1",
-    "type": "repeater",
-    "caption": "Repeater 1",
-    "fields": [
-      {
-        "id": "col1",
-        "type": "string",
-        "label": "Column 1"
-      },
-      {
-        "id": "col2",
-        "type": "number",
-        "label": "Column 2"
-      },
-      {
-        "id": "col3",
-        "type": "number",
-        "label": "Column 3"
-      },
-      {
-        "id": "col4",
-        "type": "number",
-        "label": "Column 4"
-      },
-      {
-        "id": "col5",
-        "type": "number",
-        "label": "Column 5"
-      },
-      {
-        "id": "col6",
-        "type": "number",
-        "label": "Column 6"
-      },
-      {
-        "id": "col7",
-        "type": "number",
-        "label": "Column 7"
-      },
-      {
-        "id": "col8",
-        "type": "number",
-        "label": "Column 8"
-      },
-      {
-        "id": "col9",
-        "type": "number",
-        "label": "Column 9"
-      },
-      {
-        "id": "col10",
-        "type": "number",
-        "label": "Column 10"
-      }
-    ]
-  }
+  ]
 }

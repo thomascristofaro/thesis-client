@@ -1,16 +1,15 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/controller/record.dart';
-import 'package:thesis_client/controller/repeater_controller.dart';
+import 'package:thesis_client/controller/layout.dart';
 
 class RepeaterDataSource extends DataTableSource {
-  final List<String> _columns;
+  final List<Field> _fields;
   List<Record> _data = [];
   int _selectedRowCount = 0;
   bool hasMoreData = true;
 
-  RepeaterDataSource(this._columns);
+  RepeaterDataSource(this._fields);
 
   @override
   bool get isRowCountApproximate => false;
@@ -34,7 +33,7 @@ class RepeaterDataSource extends DataTableSource {
           notifyListeners();
         }
       },
-      cells: toDataCell(record, _columns),
+      cells: toDataCell(record),
     );
   }
 
@@ -46,27 +45,27 @@ class RepeaterDataSource extends DataTableSource {
     notifyListeners();
   }
 
-  List<DataCell> toDataCell(Record record, List<String> columns) {
-    return columns
-        .map((column) => DataCell(Text(record.fields[column].toString())))
+  List<DataCell> toDataCell(Record record) {
+    return _fields
+        .map((field) => DataCell(Text(record.fields[field.id].toString())))
         .toList();
   }
 
-  Future<void> loadData(RepeaterController repeaterCtrl) async {
+  Future<void> loadData(PageAppController pageCtrl) async {
     if (hasMoreData) {
-      _data.addAll(await repeaterCtrl.getAllRecords());
+      _data.addAll(await pageCtrl.getAllRecords());
       hasMoreData = false;
       notifyListeners();
     }
   }
 
-  void syncLoadData() {
-    _data = List.generate(
-        200,
-        (index) => Record(_columns
-            .asMap()
-            .map((key, value) => MapEntry(value, "Cell $index"))));
-  }
+  // void syncLoadData() {
+  //   _data = List.generate(
+  //       200,
+  //       (index) => Record(_columns
+  //           .asMap()
+  //           .map((key, value) => MapEntry(value, "Cell $index"))));
+  // }
 
   // Future<void> loadNextPage(Future<List<Record>> Function() fetchData) async {
   //   if (hasMoreData) {

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:thesis_client/controller/repeater_controller.dart';
+import 'package:thesis_client/controller/layout.dart';
+import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/controller/repeater_data_source.dart';
 import 'package:data_table_2/data_table_2.dart';
 
 class Repeater extends StatefulWidget {
-  final List<String> columns;
+  final AreaComponent repeater;
+  final PageAppController pageCtrl;
 
-  const Repeater({super.key, required this.columns});
+  const Repeater({super.key, required this.repeater, required this.pageCtrl});
 
   @override
   State<Repeater> createState() => _RepeaterState();
@@ -14,25 +16,21 @@ class Repeater extends StatefulWidget {
 
 class _RepeaterState extends State<Repeater> {
   late RepeaterDataSource _dataSource;
-  late RepeaterController _repeaterCtrl;
   late List<DataColumn> _columns;
 
   @override
   void initState() {
     dataTableShowLogs = false;
-    _dataSource = RepeaterDataSource(widget.columns);
-    _repeaterCtrl = RepeaterController(widget.columns);
+    _dataSource = RepeaterDataSource(widget.repeater.fields);
 
-    _columns = widget.columns
-        .map((column) => DataColumn(
-              label: Text(column),
+    _columns = widget.repeater.fields
+        .map((field) => DataColumn(
+              label: Text(field.caption),
             ))
         .toList();
 
     // TODO da capire se disaccoppiare oppure integrare il controller in datasource
-    // credo che integrerò dentro, perchè dataSource ha il controllo di data
-    // eliminare il livello del repeater controller?
-    _dataSource.loadData(_repeaterCtrl);
+    _dataSource.loadData(widget.pageCtrl);
     super.initState();
   }
 

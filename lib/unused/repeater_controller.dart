@@ -1,6 +1,6 @@
 import 'package:thesis_client/controller/record.dart';
-import 'package:thesis_client/controller/record_interface.dart';
-import 'package:thesis_client/controller/record_fake_repository.dart';
+import 'package:thesis_client/unused/record_interface.dart';
+import 'package:thesis_client/unused/record_fake_repository.dart';
 
 class RepeaterController {
   late IRecordRepository _recordRepo;
