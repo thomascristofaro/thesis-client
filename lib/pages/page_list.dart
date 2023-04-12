@@ -4,6 +4,7 @@ import 'package:thesis_client/widgets/repeater.dart';
 import 'package:thesis_client/widgets/button_header.dart';
 import 'package:thesis_client/widgets/title_text.dart';
 import 'package:thesis_client/controller/page_controller.dart';
+import 'package:thesis_client/widgets/future_progress.dart';
 
 class PageList extends StatefulWidget {
   final String pageId;
@@ -19,10 +20,10 @@ class _PageListState extends State<PageList> {
 
   @override
   void initState() {
+    super.initState();
     _pageController = PageAppController(widget.pageId);
     layout =
         _pageController.getLayout(); // utilizzare questo nel future builder
-    super.initState();
   }
 
   @override
@@ -37,37 +38,20 @@ class _PageListState extends State<PageList> {
     //   ButtonHeader(buttons: buttons),
     //   Repeater(columns: columns),
     // ]);
-    return Expanded(
-        child: FutureBuilder<Layout>(
+    return FutureProgress<Layout>(
       future: layout,
-      builder: (BuildContext context, AsyncSnapshot<Layout> snapshot) {
-        if (snapshot.hasData) {
-          Layout layout = snapshot.data!;
-          return Column(children: [
-            TitleText(name: layout.caption),
-            ButtonHeader(buttons: layout.buttons),
-            for (var component in layout.area)
-              if (component.type == AreaComponentType.repeater)
-                Repeater(repeater: component, pageCtrl: _pageController)
-            // else if (component.type == AreaComponentType.group)
-            //   Group(component: component)
-          ]);
-        } else {
-          return Column(
-            children: const [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
-              ),
-            ],
-          );
-        }
+      builder: (Layout layout) {
+        return Expanded(
+            child: Column(children: [
+          TitleText(name: layout.caption),
+          ButtonHeader(buttons: layout.buttons),
+          for (var component in layout.area)
+            if (component.type == AreaComponentType.repeater)
+              Repeater(repeater: component, pageCtrl: _pageController)
+          // else if (component.type == AreaComponentType.group)
+          //   Group(component: component)
+        ]));
       },
-    ));
+    );
   }
 }

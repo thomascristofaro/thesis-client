@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:thesis_client/controller/page_controller.dart';
+import 'package:thesis_client/controller/record.dart';
+import 'package:thesis_client/pages/home.dart';
 import 'package:thesis_client/pages/page_list.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
+import 'package:thesis_client/widgets/future_progress.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
 import 'package:thesis_client/widgets/color_seed_button.dart';
 import 'package:thesis_client/widgets/trailing_actions.dart';
@@ -43,8 +47,17 @@ class _NavigationState extends State<Navigation>
   bool showMediumSizeLayout = false;
   bool showLargeSizeLayout = false;
   bool extendedRail = false;
+  late PageAppController pageCtrl;
+  late Future<List<Record>> records;
 
   int pageIndex = PageSelected.list.value;
+
+  @override
+  void initState() {
+    super.initState();
+    pageCtrl = PageAppController('NavigationInfo');
+    records = pageCtrl.getAllRecords();
+  }
 
   @override
   void didChangeDependencies() {
@@ -134,7 +147,7 @@ class _NavigationState extends State<Navigation>
     );
   }
 
-  NavigationDrawer buildNavigationDrawer(BuildContext context) {
+  NavigationDrawer buildNavigationDrawer(List<NavigationInfo> navInfoList) {
     return NavigationDrawer(
         selectedIndex: pageIndex,
         onDestinationSelected: (index) {
@@ -149,14 +162,43 @@ class _NavigationState extends State<Navigation>
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-          ...navDrawerDestinations
+          ...(navInfoList
+              .map(
+                (navInfo) => NavigationDrawerDestination(
+                  icon: Tooltip(
+                    message: navInfo.caption,
+                    child: navInfo.icon,
+                  ),
+                  selectedIcon: Tooltip(
+                    message: navInfo.caption,
+                    child: navInfo.selectedIcon,
+                  ),
+                  label: Text(navInfo.caption),
+                ),
+              )
+              .toList())
         ]);
   }
 
-  NavigationRail buildNavigationRail() {
+  NavigationRail buildNavigationRail(List<NavigationInfo> navInfoList) {
+    final List<NavigationRailDestination> railDestinations = navInfoList
+        .map(
+          (navInfo) => NavigationRailDestination(
+              icon: Tooltip(
+                message: navInfo.caption,
+                child: navInfo.icon,
+              ),
+              selectedIcon: Tooltip(
+                message: navInfo.caption,
+                child: navInfo.selectedIcon,
+              ),
+              label: Text(navInfo.caption)),
+        )
+        .toList();
+
     return NavigationRail(
       extended: extendedRail,
-      destinations: navRailDestinations,
+      destinations: railDestinations,
       selectedIndex: pageIndex,
       onDestinationSelected: (index) {
         handlePageChanged(index);
@@ -186,17 +228,50 @@ class _NavigationState extends State<Navigation>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: scaffoldKey,
-        appBar: buildAppBar(),
-        body: Row(
-          children: <Widget>[
-            if (!showSmallSizeLayout) buildNavigationRail(),
-            createPageFor(PageSelected.values[pageIndex]),
-          ],
-        ),
-        drawer: showSmallSizeLayout ? buildNavigationDrawer(context) : null);
+    return FutureProgress<List<Record>>(
+        future: records,
+        builder: (records) {
+          List<NavigationInfo> navInfoList = records
+              .map((record) => NavigationInfo.fromMap(record.fields))
+              .toList();
+          return Scaffold(
+              key: scaffoldKey,
+              appBar: buildAppBar(),
+              body: Row(
+                children: <Widget>[
+                  if (!showSmallSizeLayout) buildNavigationRail(navInfoList),
+                  const Home()
+                  //createPageFor(PageSelected.values[pageIndex]),
+                ],
+              ),
+              drawer: showSmallSizeLayout
+                  ? buildNavigationDrawer(navInfoList)
+                  : null);
+        });
   }
+}
+
+class NavigationInfo {
+  final String caption;
+  final String tooltip;
+  final Icon icon;
+  final Icon selectedIcon;
+  final String pageId;
+
+  const NavigationInfo({
+    required this.icon,
+    required this.caption,
+    required this.tooltip,
+    required this.selectedIcon,
+    required this.pageId,
+  });
+
+  NavigationInfo.fromMap(Map<String, dynamic> data)
+      : icon = data['icon'], // TODO da capire come prendere l'icon
+        caption = data['caption'],
+        tooltip = data['tooltip'],
+        selectedIcon = data['selected_icon'],
+        pageId = data['page_id'];
 }
 
 enum PageSelected {
@@ -270,35 +345,3 @@ const List<NavigationDestination> navDestinations = [
   //   selectedIcon: Icon(Icons.developer_mode),
   // )
 ];
-
-final List<NavigationRailDestination> navRailDestinations = navDestinations
-    .map(
-      (destination) => NavigationRailDestination(
-        icon: Tooltip(
-          message: destination.label,
-          child: destination.icon,
-        ),
-        selectedIcon: Tooltip(
-          message: destination.label,
-          child: destination.selectedIcon,
-        ),
-        label: Text(destination.label),
-      ),
-    )
-    .toList();
-
-final List<NavigationDrawerDestination> navDrawerDestinations = navDestinations
-    .map(
-      (destination) => NavigationDrawerDestination(
-        icon: Tooltip(
-          message: destination.label,
-          child: destination.icon,
-        ),
-        selectedIcon: Tooltip(
-          message: destination.label,
-          child: destination.selectedIcon,
-        ),
-        label: Text(destination.label),
-      ),
-    )
-    .toList();
