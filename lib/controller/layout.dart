@@ -3,15 +3,17 @@ class Layout {
   final String type; //TODO può diventare enum se servirà
   final String caption;
   final List<Button> buttons;
+  final String repeater;
 
-  Layout(this.id, this.type, this.caption, this.buttons);
+  Layout(this.id, this.type, this.caption, this.buttons, this.repeater);
 
   Layout.fromMap(Map<String, dynamic> data)
       : id = data['id'],
         type = data['type'],
         caption = data['caption'],
         buttons =
-            data['buttons'].map((button) => Button.fromMap(button)).toList();
+            data['buttons'].map((button) => Button.fromMap(button)).toList(),
+        repeater = data['repeater'];
 
   Map<String, dynamic> toMap() => {
         'id': id,
@@ -42,4 +44,6 @@ class Button {
         'icon': icon,
         'buttons': buttons.map((button) => button.toMap()).toList()
       };
+
+  // inserire metodo build
 }

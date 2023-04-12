@@ -1,12 +1,5 @@
 {
-  "data": {
-    "grp1": {
-      "input1": "Text 1",
-      "input2": "Text 2",
-      "input3": "Text 3",
-      "input4": "Text 4"
-    },
-    "repeater1": [
+  "recordset": [
       {
         "col1": "Row1 Col1",
         "col2": "Row1 Col2",
@@ -347,6 +340,5 @@
         "col14": "Row20 Col14",
         "col15": "Row20 Col15"
       }
-    ]
-  }
+  ]
 }
