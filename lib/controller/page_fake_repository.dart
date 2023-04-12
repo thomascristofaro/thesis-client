@@ -31,25 +31,14 @@ class PageFakeRepository implements IPageRepository {
   }
 
   @override
-  Future<List<Record>> getAll(String pageId) async {
-    final String file =
-        await rootBundle.loadString('assets/page/$pageId/page_data.json');
-    final Map<String, dynamic> map = await json.decode(file);
-    List<Map<String, dynamic>> list = map['recordset'];
-    return list.map((e) => Record.fromMap(e)).toList();
+  Future<List<Record>> getAll(String pageId) {
+    return get(pageId, {});
   }
 
   @override
   Future<Record?> getOne(String pageId, Map<String, dynamic> filter) async {
-    // implementare il filtro e prendere quello che trovi
-    final String file =
-        await rootBundle.loadString('assets/page/$pageId/page_data.json');
-    final Map<String, dynamic> map = await json.decode(file);
-    List<Map<String, dynamic>> list = map['recordset'];
-    return list
-        .map((e) => Record.fromMap(e))
-        .toList()
-        .first; // da prendere quello giusto
+    List<Record> list = await get(pageId, filter);
+    return list.first; // da prendere quello giusto
   }
 
   @override
