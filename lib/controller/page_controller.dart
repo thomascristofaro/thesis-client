@@ -21,6 +21,10 @@ class PageAppController {
     return _pageRepo.getAll();
   }
 
+  Future<Record?> getOneRecord(Map<String, dynamic> filter) {
+    return _pageRepo.getOne(filter);
+  }
+
   Future<void> addRecord(Record record) {
     return _pageRepo.insert(record);
   }
