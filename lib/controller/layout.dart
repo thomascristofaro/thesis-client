@@ -42,8 +42,9 @@ class Button {
       : id = data['id'],
         caption = data['caption'],
         icon = data['icon'],
-        buttons =
-            data['buttons'].map((button) => Button.fromMap(button)).toList();
+        buttons = data.containsKey('buttons')
+            ? data['buttons'].map((button) => Button.fromMap(button)).toList()
+            : [];
 
   Map<String, dynamic> toMap() => {
         'id': id,

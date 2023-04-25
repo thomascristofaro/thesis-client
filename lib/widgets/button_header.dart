@@ -11,6 +11,46 @@ class ButtonHeader extends StatefulWidget {
 }
 
 class _ButtonHeaderState extends State<ButtonHeader> {
+  Widget createMenu(Button button) {
+    return button.buttons.isEmpty
+        ? createButton(button, () => throw UnimplementedError())
+        : MenuAnchor(
+            builder: (context, controller, child) {
+              return createButton(button, () {
+                if (controller.isOpen) {
+                  controller.close();
+                } else {
+                  controller.open();
+                }
+              });
+            },
+            menuChildren: createMenuItem(button.buttons));
+  }
+
+  List<Widget> createMenuItem(List<Button> buttons) {
+    return buttons
+        .map((button) => button.buttons.isEmpty
+            ? MenuItemButton(
+                leadingIcon: const Icon(Icons.more_vert),
+                onPressed: () => throw UnimplementedError(),
+                child: Text(button.caption),
+              )
+            : SubmenuButton(
+                leadingIcon: const Icon(Icons.refresh),
+                menuChildren: createMenuItem(button.buttons),
+                child: Text(button.caption),
+              ))
+        .toList();
+  }
+
+  Widget createButton(Button button, void Function() onPressed) {
+    return FilledButton.tonalIcon(
+      label: Text(button.caption),
+      icon: const Icon(Icons.more_vert),
+      onPressed: onPressed,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // bisogna mettere da qualche parte lo scroll orizzontale
@@ -21,27 +61,8 @@ class _ButtonHeaderState extends State<ButtonHeader> {
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: widget.buttons
-                  .map((button) => FilledButton.icon(
-                        onPressed: () => throw UnimplementedError(),
-                        icon: const Icon(Icons.add),
-                        label: Text(button.caption),
-                        // style: make button outlineVariant,
-                      ))
-                  .toList(),
-              // <Widget>[
-              //   FilledButton.icon(
-              //     onPressed: () {},
-              //     icon: const Icon(Icons.add),
-              //     label: const Text('Icon'),
-              //     // style: make button outlineVariant,
-              //   ),
-              // ElevatedButton.icon(
-              //   onPressed: () {},
-              //   icon: const Icon(Icons.add),
-              //   label: const Text('Icon'),
-              // ),
-              // ],
+              children:
+                  widget.buttons.map((button) => createMenu(button)).toList(),
             ),
           )),
     );

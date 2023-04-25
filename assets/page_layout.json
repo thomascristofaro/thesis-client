@@ -1,120 +1,120 @@
 {
-  "id": "page1",
-  "type": "list",
-  "caption": "Page List Test",
-  "buttons": [
-    {
-      "id": "btn1",
-      "caption": "Button 1",
-      "icon": "icon-1"
-    },
-    {
-      "id": "btn2",
-      "caption": "Button 2",
-      "icon": "icon-1",
-      "buttons": [
+    "id": "page1",
+    "type": "list",
+    "caption": "Page List Test",
+    "buttons": [
         {
-          "id": "btn4",
-          "caption": "Button 4",
-          "icon": "icon-1"
+            "id": "btn1",
+            "caption": "Button 1",
+            "icon": "icon-1"
         },
         {
-          "id": "btn5",
-          "caption": "Button 5",
-          "icon": "icon-1"
+            "id": "btn2",
+            "caption": "Button 2",
+            "icon": "icon-1",
+            "buttons": [
+                {
+                    "id": "btn21",
+                    "caption": "Button 2.1",
+                    "icon": "icon-1"
+                },
+                {
+                    "id": "btn22",
+                    "caption": "Button 2.2",
+                    "icon": "icon-1"
+                }
+            ]
+        },
+        {
+            "id": "btn3",
+            "caption": "Button 3",
+            "icon": "icon-1"
         }
-      ]
-    },
-    {
-      "id": "btn3",
-      "caption": "Button 3",
-      "icon": "icon-1"
-    }
-  ],
-  "area": [
-    {
-      "id": "repeater1",
-      "type": "repeater",
-      "caption": "Repeater 1",
-      "fields": [
+    ],
+    "area": [
         {
-          "id": "col1",
-          "type": "string",
-          "label": "Column 1"
+            "id": "repeater1",
+            "type": "repeater",
+            "caption": "Repeater 1",
+            "fields": [
+                {
+                    "id": "col1",
+                    "type": "string",
+                    "label": "Column 1"
+                },
+                {
+                    "id": "col2",
+                    "type": "number",
+                    "label": "Column 2"
+                },
+                {
+                    "id": "col3",
+                    "type": "number",
+                    "label": "Column 3"
+                },
+                {
+                    "id": "col4",
+                    "type": "number",
+                    "label": "Column 4"
+                },
+                {
+                    "id": "col5",
+                    "type": "number",
+                    "label": "Column 5"
+                },
+                {
+                    "id": "col6",
+                    "type": "number",
+                    "label": "Column 6"
+                },
+                {
+                    "id": "col7",
+                    "type": "number",
+                    "label": "Column 7"
+                },
+                {
+                    "id": "col8",
+                    "type": "number",
+                    "label": "Column 8"
+                },
+                {
+                    "id": "col9",
+                    "type": "number",
+                    "label": "Column 9"
+                },
+                {
+                    "id": "col10",
+                    "type": "number",
+                    "label": "Column 10"
+                }
+            ]
         },
         {
-          "id": "col2",
-          "type": "number",
-          "label": "Column 2"
-        },
-        {
-          "id": "col3",
-          "type": "number",
-          "label": "Column 3"
-        },
-        {
-          "id": "col4",
-          "type": "number",
-          "label": "Column 4"
-        },
-        {
-          "id": "col5",
-          "type": "number",
-          "label": "Column 5"
-        },
-        {
-          "id": "col6",
-          "type": "number",
-          "label": "Column 6"
-        },
-        {
-          "id": "col7",
-          "type": "number",
-          "label": "Column 7"
-        },
-        {
-          "id": "col8",
-          "type": "number",
-          "label": "Column 8"
-        },
-        {
-          "id": "col9",
-          "type": "number",
-          "label": "Column 9"
-        },
-        {
-          "id": "col10",
-          "type": "number",
-          "label": "Column 10"
+            "id": "grp1",
+            "type": "group",
+            "caption": "Group 1",
+            "fields": [
+                {
+                    "id": "input1",
+                    "type": "string",
+                    "label": "Input 1"
+                },
+                {
+                    "id": "input2",
+                    "type": "string",
+                    "label": "Input 2"
+                },
+                {
+                    "id": "input3",
+                    "type": "string",
+                    "label": "Input 3"
+                },
+                {
+                    "id": "input4",
+                    "type": "string",
+                    "label": "Input 4"
+                }
+            ]
         }
-      ]
-    },
-    {
-      "id": "grp1",
-      "type": "group",
-      "caption": "Group 1",
-      "fields": [
-        {
-          "id": "input1",
-          "type": "string",
-          "label": "Input 1"
-        },
-        {
-          "id": "input2",
-          "type": "string",
-          "label": "Input 2"
-        },
-        {
-          "id": "input3",
-          "type": "string",
-          "label": "Input 3"
-        },
-        {
-          "id": "input4",
-          "type": "string",
-          "label": "Input 4"
-        }
-      ]
-    }
-  ]
+    ]
 }
