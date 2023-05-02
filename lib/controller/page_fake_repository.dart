@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/services.dart';
+
 import 'package:thesis_client/controller/layout.dart';
 import 'package:thesis_client/controller/page_interface.dart';
 import 'package:thesis_client/controller/record.dart';
@@ -12,13 +12,15 @@ class PageFakeRepository implements IPageRepository {
 
   PageFakeRepository(this._db, this._pageId);
 
+  Future<void> loadPageFromFile() async {}
+
   Future<void> loadDataFromFile() async {
     final String file =
         await rootBundle.loadString('assets/page/$_pageId/page_data.json');
     final Map<String, dynamic> map = await json.decode(file);
     List<Map<String, dynamic>> list = map['recordset'];
     list.map((e) async {
-      await _db.insert(e);
+      await _db.insert(_pageId, e);
     });
   }
 
@@ -31,34 +33,38 @@ class PageFakeRepository implements IPageRepository {
   }
 
   @override
-  Future<List<Record>> get(Map<String, dynamic> filter) async {
-    throw UnimplementedError();
+  Future<List<Record>> get(List<Filter> filters) async {
+    var founded =
+        await _db.find(_pageId, filters.map((e) => e.toMap()).toList());
+    return founded.map((e) => Record.fromMap(e)).toList();
   }
 
   @override
   Future<List<Record>> getAll() async {
-    var list = await _db.list();
-    return list.map((e) => Record.fromMap(e)).toList();
+    var founded = await _db.list(_pageId);
+    return founded.map((e) => Record.fromMap(e)).toList();
   }
 
   @override
-  Future<Record?> getOne(Map<String, dynamic> filter) async {
-    var record = await _db.findOne(filter);
-    return record != null ? Record.fromMap(record) : null;
+  Future<Record> getOne(List<Filter> filters) async {
+    var founded =
+        await _db.findOne(_pageId, filters.map((e) => e.toMap()).toList());
+    return Record.fromMap(founded);
   }
 
   @override
-  Future<void> insert(Record record) async {
-    await _db.insert(record.toMap());
+  Future<Record> insert(Record record) async {
+    var inserted = await _db.insert(_pageId, record.toMap());
+    return Record.fromMap(inserted);
   }
 
   @override
   Future<void> update(Record record) async {
-    await _db.update(record.toMap());
+    _db.update(_pageId, record.toMap());
   }
 
   @override
-  Future<void> delete(Map<String, dynamic> filter) async {
-    await _db.remove(filter);
+  Future<void> delete(List<Filter> filters) async {
+    _db.remove(_pageId, filters.map((e) => e.toMap()).toList());
   }
 }

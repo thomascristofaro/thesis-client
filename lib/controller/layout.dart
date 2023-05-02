@@ -10,8 +10,9 @@ class Layout {
   final String caption;
   final List<Button> buttons;
   final List<AreaComponent> area;
+  final List<String> keys;
 
-  Layout(this.id, this.type, this.caption, this.buttons, this.area);
+  Layout(this.id, this.type, this.caption, this.buttons, this.area, this.keys);
 
   Layout.fromMap(Map<String, dynamic> data)
       : id = data['id'],
@@ -19,7 +20,8 @@ class Layout {
         caption = data['caption'],
         buttons =
             data['buttons'].map((button) => Button.fromMap(button)).toList(),
-        area = data['area'].map((area) => AreaComponent.fromMap(area)).toList();
+        area = data['area'].map((area) => AreaComponent.fromMap(area)).toList(),
+        keys = data['keys'];
 
   Map<String, dynamic> toMap() => {
         'id': id,
@@ -27,6 +29,7 @@ class Layout {
         'caption': caption,
         'buttons': buttons.map((button) => button.toMap()).toList(),
         'area': area.map((area) => area.toMap()).toList(),
+        'keys': keys,
       };
 }
 
@@ -56,22 +59,22 @@ class Button {
   // inserire metodo build
 }
 
-class Field {
+class PageField {
   final String id;
   final String caption;
   final FieldType type;
 
-  Field(this.id, this.caption, this.type);
+  PageField(this.id, this.caption, this.type);
 
-  Field.fromMap(Map<String, dynamic> data)
+  PageField.fromMap(Map<String, dynamic> data)
       : id = data['id'],
         caption = data['caption'],
-        type = data['type'];
+        type = FieldType.values[data['type']];
 
   Map<String, dynamic> toMap() => {
         'id': id,
         'caption': caption,
-        'type': type,
+        'type': type.index,
       };
 }
 
@@ -79,20 +82,21 @@ class AreaComponent {
   final String id;
   final String caption;
   final AreaComponentType type;
-  final List<Field> fields;
+  final List<PageField> fields;
 
   AreaComponent(this.id, this.caption, this.type, this.fields);
 
   AreaComponent.fromMap(Map<String, dynamic> data)
       : id = data['id'],
         caption = data['caption'],
-        type = data['type'],
-        fields = data['fields'].map((field) => Field.fromMap(field)).toList();
+        type = AreaComponentType.values[data['type']],
+        fields =
+            data['fields'].map((field) => PageField.fromMap(field)).toList();
 
   Map<String, dynamic> toMap() => {
         'id': id,
         'caption': caption,
-        'type': type,
+        'type': type.index,
         'fields': fields.map((field) => field.toMap()).toList()
       };
 }

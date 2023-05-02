@@ -7,6 +7,7 @@ import 'layout.dart';
 
 class PageAppController {
   final String _pageId;
+  List<Filter> currentFilters = [];
   late IPageRepository _pageRepo;
 
   PageAppController(this._pageId) {
@@ -21,15 +22,15 @@ class PageAppController {
     return _pageRepo.getAll();
   }
 
-  Future<Record?> getOneRecord(Map<String, dynamic> filter) {
-    return _pageRepo.getOne(filter);
+  Future<Record?> getOneRecord() {
+    return _pageRepo.getOne(currentFilters);
   }
 
   Future<void> addRecord(Record record) {
     return _pageRepo.insert(record);
   }
 
-  Future<void> removeRecord(Map<String, dynamic> filter) {
-    return _pageRepo.delete(filter);
+  Future<void> removeRecord() {
+    return _pageRepo.delete(currentFilters);
   }
 }

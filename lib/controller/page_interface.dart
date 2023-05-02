@@ -4,10 +4,10 @@ import 'package:thesis_client/controller/record.dart';
 abstract class IPageRepository {
   Future<Layout> getLayout();
   Future<List<Record>> getAll();
-  Future<List<Record>> get(Map<String, dynamic> filter);
-  Future<Record?> getOne(Map<String, dynamic> filter);
+  Future<List<Record>> get(List<Filter> filters);
+  Future<Record> getOne(List<Filter> filters);
   // TODO come gestire il valore di ritorno dell'API
-  Future<void> insert(Record record);
+  Future<Record> insert(Record record);
   Future<void> update(Record record);
-  Future<void> delete(Map<String, dynamic> filter);
+  Future<void> delete(List<Filter> filters);
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/pages/home.dart';
-import 'package:thesis_client/pages/page_list.dart';
+import 'package:thesis_client/pages/page.dart' as page;
 
 import 'package:thesis_client/widgets/brightness_button.dart';
 import 'package:thesis_client/widgets/future_progress.dart';
@@ -104,7 +104,7 @@ class _NavigationState extends State<Navigation>
       case PageSelected.elevation:
         return const ElevationScreen();
       case PageSelected.list:
-        return const PageList(
+        return const page.Page(
           pageId: 'TEST',
         );
       // case PageSelected.demo1:

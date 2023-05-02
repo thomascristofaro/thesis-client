@@ -4,7 +4,7 @@ import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/controller/layout.dart';
 
 class RepeaterDataSource extends DataTableSource {
-  final List<Field> _fields;
+  final List<PageField> _fields;
   List<Record> _data = [];
   int _selectedRowCount = 0;
   bool hasMoreData = true;
