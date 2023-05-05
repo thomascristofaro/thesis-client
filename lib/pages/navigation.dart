@@ -11,11 +11,6 @@ import 'package:thesis_client/widgets/color_seed_button.dart';
 import 'package:thesis_client/widgets/trailing_actions.dart';
 import 'package:thesis_client/widgets/expanded_trailing_actions.dart';
 
-import 'package:thesis_client/pages/color_palettes_screen.dart';
-import 'package:thesis_client/pages/component_screen.dart';
-import 'package:thesis_client/pages/elevation_screen.dart';
-import 'package:thesis_client/pages/typography_screen.dart';
-
 import 'package:thesis_client/constants.dart';
 
 class Navigation extends StatefulWidget {
@@ -93,20 +88,24 @@ class _NavigationState extends State<Navigation>
   // );
   // https://medium.com/codechai/navigation-drawer-using-flutter-cc8a5cfcab90
 
-  Widget createPageFor(PageSelected pageSelected) {
-    switch (pageSelected) {
-      case PageSelected.component:
-        return FirstComponentList(scaffoldKey: scaffoldKey);
-      case PageSelected.color:
-        return const ColorPalettesScreen();
-      case PageSelected.typography:
-        return const TypographyScreen();
-      case PageSelected.elevation:
-        return const ElevationScreen();
-      case PageSelected.list:
-        return const page.Page(
-          pageId: 'TEST',
-        );
+  Widget createPageFor(List<NavigationInfo> navInfoList) {
+    switch (pageIndex) {
+      case 0:
+        return const Home();
+      default:
+        return page.Page(pageId: navInfoList[pageIndex].pageId);
+      // case PageSelected.component:
+      //   return FirstComponentList(scaffoldKey: scaffoldKey);
+      // case PageSelected.color:
+      //   return const ColorPalettesScreen();
+      // case PageSelected.typography:
+      //   return const TypographyScreen();
+      // case PageSelected.elevation:
+      //   return const ElevationScreen();
+      // case PageSelected.list:
+      //   return const page.Page(
+      //     pageId: 'TEST',
+      //   );
       // case PageSelected.demo1:
       //   return const DemoPage(internal: TableButton());
       // case PageSelected.demo2:
@@ -115,8 +114,8 @@ class _NavigationState extends State<Navigation>
       //   return const DemoPage(internal: PaginatedDataTable2Demo());
       // case PageSelected.demo4:
       //   return const DemoPage(internal: AsyncPaginatedDataTable2Demo());
-      default:
-        return FirstComponentList(scaffoldKey: scaffoldKey);
+      // default:
+      //   return FirstComponentList(scaffoldKey: scaffoldKey);
     }
   }
 
@@ -167,11 +166,11 @@ class _NavigationState extends State<Navigation>
                 (navInfo) => NavigationDrawerDestination(
                   icon: Tooltip(
                     message: navInfo.caption,
-                    child: navInfo.icon,
+                    child: navInfo.getIconWidget(),
                   ),
                   selectedIcon: Tooltip(
                     message: navInfo.caption,
-                    child: navInfo.selectedIcon,
+                    child: navInfo.getIconSelectedWidget(),
                   ),
                   label: Text(navInfo.caption),
                 ),
@@ -186,11 +185,11 @@ class _NavigationState extends State<Navigation>
           (navInfo) => NavigationRailDestination(
               icon: Tooltip(
                 message: navInfo.caption,
-                child: navInfo.icon,
+                child: navInfo.getIconWidget(),
               ),
               selectedIcon: Tooltip(
                 message: navInfo.caption,
-                child: navInfo.selectedIcon,
+                child: navInfo.getIconSelectedWidget(),
               ),
               label: Text(navInfo.caption)),
         )
@@ -228,34 +227,44 @@ class _NavigationState extends State<Navigation>
 
   @override
   Widget build(BuildContext context) {
-    return FutureProgress<List<Record>>(
-        future: records,
-        builder: (records) {
-          List<NavigationInfo> navInfoList = records
-              .map((record) => NavigationInfo.fromMap(record.fields))
-              .toList();
-          return Scaffold(
-              key: scaffoldKey,
-              appBar: buildAppBar(),
-              body: Row(
+    return Scaffold(
+        key: scaffoldKey,
+        appBar: buildAppBar(),
+        body: FutureProgress<List<Record>>(
+            future: records,
+            builder: (records) {
+              // List<NavigationInfo> navInfoList = records
+              //     .map((record) => NavigationInfo.fromMap(record.fields))
+              //     .toList();
+              var navInfoList = NavigationInfo.createFromList(records);
+              return Row(
                 children: <Widget>[
                   if (!showSmallSizeLayout) buildNavigationRail(navInfoList),
-                  const Home()
-                  //createPageFor(PageSelected.values[pageIndex]),
+                  // const Home()
+                  createPageFor(navInfoList),
                 ],
-              ),
-              drawer: showSmallSizeLayout
-                  ? buildNavigationDrawer(navInfoList)
-                  : null);
-        });
+              );
+            }),
+        drawer: FutureBuilder<List<Record>>(
+            future: records,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
+              if (snapshot.hasData) {
+                var navInfoList = NavigationInfo.createFromList(snapshot.data!);
+                return showSmallSizeLayout
+                    ? buildNavigationDrawer(navInfoList)
+                    : Container();
+              }
+              return Container();
+            }));
   }
 }
 
 class NavigationInfo {
   final String caption;
   final String tooltip;
-  final Icon icon;
-  final Icon selectedIcon;
+  final String icon;
+  final String selectedIcon;
   final String pageId;
 
   const NavigationInfo({
@@ -272,6 +281,28 @@ class NavigationInfo {
         tooltip = data['tooltip'],
         selectedIcon = data['selected_icon'],
         pageId = data['page_id'];
+
+  Icon getIconWidget() {
+    return const Icon(Icons.table_chart_outlined);
+  }
+
+  Icon getIconSelectedWidget() {
+    return const Icon(Icons.table_chart);
+  }
+
+  static List<NavigationInfo> createFromList(List<Record> records) {
+    List<NavigationInfo> navInfoList =
+        records.map((record) => NavigationInfo.fromMap(record.fields)).toList();
+    navInfoList.insert(
+        0,
+        const NavigationInfo(
+            icon: 'home',
+            caption: 'Home',
+            tooltip: 'test Home',
+            selectedIcon: 'home',
+            pageId: 'Home'));
+    return navInfoList;
+  }
 }
 
 enum PageSelected {

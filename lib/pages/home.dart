@@ -5,7 +5,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const <Widget>[

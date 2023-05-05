@@ -1,0 +1,16 @@
+{
+    "recordset": [
+        {
+            "name": "Amazon",
+            "vat": "IT0912345654",
+            "address": "Via test 32",
+            "amount": "32"
+        },
+        {
+            "name": "Microsoft",
+            "vat": "US0912343435",
+            "address": "Via redmond 65",
+            "amount": "32"
+        }
+    ]
+}

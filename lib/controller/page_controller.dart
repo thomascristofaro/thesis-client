@@ -19,6 +19,7 @@ class PageAppController {
   }
 
   Future<List<Record>> getAllRecords() {
+    Future.delayed(const Duration(seconds: 3));
     return _pageRepo.getAll();
   }
 

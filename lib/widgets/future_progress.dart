@@ -18,8 +18,7 @@ class FutureProgress<T> extends StatelessWidget {
           if (snapshot.hasData) {
             return builder(snapshot.data as T);
           } else {
-            return Expanded(
-                child: Column(
+            return Column(
               children: const [
                 SizedBox(
                   width: 60,
@@ -31,7 +30,7 @@ class FutureProgress<T> extends StatelessWidget {
                   child: Text('Awaiting result...'),
                 ),
               ],
-            ));
+            );
           }
         });
   }

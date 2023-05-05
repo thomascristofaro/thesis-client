@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:thesis_client/controller/record.dart';
 
@@ -15,6 +16,14 @@ class VirtualDB {
 
   factory VirtualDB() {
     return _db;
+  }
+
+  bool tableLoaded(String table) {
+    return _database.containsKey(table);
+  }
+
+  void insertTable(String table) {
+    if (!_database.containsKey(table)) _database.addAll({table: []});
   }
 
   Future<Map<String, dynamic>> insert(
