@@ -70,6 +70,7 @@ class _AppState extends State<App> {
         handleBrightnessChange: handleBrightnessChange,
         handleMaterialVersionChange: handleMaterialVersionChange,
         handleColorSelect: handleColorSelect,
+        index: 0,
       ),
     );
   }

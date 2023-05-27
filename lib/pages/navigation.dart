@@ -22,8 +22,10 @@ class Navigation extends StatefulWidget {
     required this.handleBrightnessChange,
     required this.handleMaterialVersionChange,
     required this.handleColorSelect,
+    required this.index,
   });
 
+  final int index;
   final bool useLightMode;
   final bool useMaterial3;
   final ColorSeed colorSelected;
@@ -44,12 +46,13 @@ class _NavigationState extends State<Navigation>
   bool extendedRail = false;
   late PageAppController pageCtrl;
   late Future<List<Record>> records;
-
-  int pageIndex = PageSelected.list.value;
+  List<NavigationInfo>? navigationInfoList;
+  int pageIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    pageIndex = widget.index;
     pageCtrl = PageAppController('NavigationInfo');
     records = pageCtrl.getAllRecords();
   }
@@ -70,9 +73,26 @@ class _NavigationState extends State<Navigation>
   }
 
   void handlePageChanged(int pageSelected) {
-    setState(() {
-      pageIndex = pageSelected;
-    });
+    // setState(() {
+    //   pageIndex = pageSelected;
+    // });
+    pageIndex = pageSelected;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            // page.Page(pageId: navigationInfoList![pageIndex].pageId),
+            Navigation(
+          useLightMode: widget.useLightMode,
+          useMaterial3: widget.useMaterial3,
+          colorSelected: widget.colorSelected,
+          handleBrightnessChange: widget.handleBrightnessChange,
+          handleMaterialVersionChange: widget.handleMaterialVersionChange,
+          handleColorSelect: widget.handleColorSelect,
+          index: pageIndex,
+        ),
+      ),
+    );
   }
 
   void handleRailChanged() {
@@ -88,12 +108,14 @@ class _NavigationState extends State<Navigation>
   // );
   // https://medium.com/codechai/navigation-drawer-using-flutter-cc8a5cfcab90
 
-  Widget createPageFor(List<NavigationInfo> navInfoList) {
+  Widget createPageFor() {
     switch (pageIndex) {
       case 0:
         return const Home();
       default:
-        return page.Page(pageId: navInfoList[pageIndex].pageId);
+        // return const Home();
+        return page.Page(pageId: navigationInfoList![pageIndex].pageId);
+
       // case PageSelected.component:
       //   return FirstComponentList(scaffoldKey: scaffoldKey);
       // case PageSelected.color:
@@ -146,7 +168,7 @@ class _NavigationState extends State<Navigation>
     );
   }
 
-  NavigationDrawer buildNavigationDrawer(List<NavigationInfo> navInfoList) {
+  NavigationDrawer buildNavigationDrawer() {
     return NavigationDrawer(
         selectedIndex: pageIndex,
         onDestinationSelected: (index) {
@@ -161,7 +183,7 @@ class _NavigationState extends State<Navigation>
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-          ...(navInfoList
+          ...(navigationInfoList!
               .map(
                 (navInfo) => NavigationDrawerDestination(
                   icon: Tooltip(
@@ -179,8 +201,8 @@ class _NavigationState extends State<Navigation>
         ]);
   }
 
-  NavigationRail buildNavigationRail(List<NavigationInfo> navInfoList) {
-    final List<NavigationRailDestination> railDestinations = navInfoList
+  NavigationRail buildNavigationRail() {
+    final List<NavigationRailDestination> railDestinations = navigationInfoList!
         .map(
           (navInfo) => NavigationRailDestination(
               icon: Tooltip(
@@ -228,35 +250,37 @@ class _NavigationState extends State<Navigation>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: scaffoldKey,
-        appBar: buildAppBar(),
-        body: FutureProgress<List<Record>>(
-            future: records,
-            builder: (records) {
-              // List<NavigationInfo> navInfoList = records
-              //     .map((record) => NavigationInfo.fromMap(record.fields))
-              //     .toList();
-              var navInfoList = NavigationInfo.createFromList(records);
-              return Row(
-                children: <Widget>[
-                  if (!showSmallSizeLayout) buildNavigationRail(navInfoList),
-                  // const Home()
-                  createPageFor(navInfoList),
-                ],
-              );
-            }),
-        drawer: FutureBuilder<List<Record>>(
-            future: records,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
-              if (snapshot.hasData) {
-                var navInfoList = NavigationInfo.createFromList(snapshot.data!);
-                return showSmallSizeLayout
-                    ? buildNavigationDrawer(navInfoList)
-                    : Container();
-              }
-              return Container();
-            }));
+      key: scaffoldKey,
+      appBar: buildAppBar(),
+      body: FutureProgress<List<Record>>(
+          future: records,
+          builder: (records) {
+            // List<NavigationInfo> navInfoList = records
+            //     .map((record) => NavigationInfo.fromMap(record.fields))
+            //     .toList();
+            navigationInfoList ??= NavigationInfo.createFromList(records);
+            return Row(
+              children: <Widget>[
+                if (!showSmallSizeLayout) buildNavigationRail(),
+                // const Home()
+                createPageFor(),
+              ],
+            );
+          }),
+      drawer: showSmallSizeLayout
+          ? FutureBuilder<List<Record>>(
+              future: records,
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
+                if (snapshot.hasData) {
+                  navigationInfoList ??=
+                      NavigationInfo.createFromList(snapshot.data!);
+                  return buildNavigationDrawer();
+                }
+                return Container();
+              })
+          : null,
+    );
   }
 }
 

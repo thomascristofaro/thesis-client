@@ -8,7 +8,7 @@ class Layout {
   final String id;
   final PageType type;
   final String caption;
-  final List<Button> buttons;
+  late List<Button> buttons;
   late List<AreaComponent> area;
   final List<String> keys;
 
@@ -19,15 +19,18 @@ class Layout {
         type = PageType.values[data['type']],
         caption = data['caption'],
         buttons = [],
-        // data['buttons'].map((button) => Button.fromMap(button)).toList(),
-        // area = data['area'].map((area) => AreaComponent.fromMap(area)).toList(),
         keys = [] //data['keys'];
   {
+    // Questo va in errore da chiedere su stack overflow
+    // area = data['area'].map((e) => AreaComponent.fromMap(e)).toList();
     List<dynamic> jsonarea = data['area'];
-    area = [];
-    for (var item in jsonarea) {
-      area.add(AreaComponent.fromMap(item));
-    }
+    area = jsonarea
+        .map((jcomponent) => AreaComponent.fromMap(jcomponent))
+        .toList();
+
+    // data['buttons'].map((button) => Button.fromMap(button)).toList(),
+    List<dynamic> jsonbuttons = data['buttons'];
+    buttons = jsonbuttons.map((jbutton) => Button.fromMap(jbutton)).toList();
   }
 
   Map<String, dynamic> toMap() => {
@@ -44,18 +47,19 @@ class Button {
   final String id;
   final String caption;
   final String icon;
-  final List<Button> buttons;
+  List<Button> buttons = [];
 
   Button(this.id, this.caption, this.icon, this.buttons);
 
   Button.fromMap(Map<String, dynamic> data)
       : id = data['id'],
         caption = data['caption'],
-        icon = data['icon'],
-        buttons = [];
-  // data.containsKey('buttons')
-  //     ? data['buttons'].map((button) => Button.fromMap(button)).toList()
-  //     : [];
+        icon = data['icon'] {
+    if (data.containsKey('buttons')) {
+      List<dynamic> jsonbuttons = data['buttons'];
+      buttons = jsonbuttons.map((jbutton) => Button.fromMap(jbutton)).toList();
+    }
+  }
 
   Map<String, dynamic> toMap() => {
         'id': id,
@@ -63,8 +67,6 @@ class Button {
         'icon': icon,
         'buttons': buttons.map((button) => button.toMap()).toList()
       };
-
-  // inserire metodo build
 }
 
 class PageField {
@@ -99,10 +101,7 @@ class AreaComponent {
         caption = data['caption'],
         type = AreaComponentType.values[data['type']] {
     List<dynamic> jsonfields = data['fields'];
-    fields = [];
-    for (var item in jsonfields) {
-      fields.add(PageField.fromMap(item));
-    }
+    fields = jsonfields.map((jfield) => PageField.fromMap(jfield)).toList();
   }
 
   Map<String, dynamic> toMap() => {
