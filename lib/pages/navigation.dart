@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:thesis_client/controller/page_controller.dart';
-import 'package:thesis_client/controller/record.dart';
-import 'package:thesis_client/pages/home.dart';
-import 'package:thesis_client/pages/page.dart' as page;
+import 'package:go_router/go_router.dart';
+import 'package:thesis_client/controller/navigation_model.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
-import 'package:thesis_client/widgets/future_progress.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
 import 'package:thesis_client/widgets/color_seed_button.dart';
 import 'package:thesis_client/widgets/trailing_actions.dart';
@@ -22,16 +19,18 @@ class Navigation extends StatefulWidget {
     required this.handleBrightnessChange,
     required this.handleMaterialVersionChange,
     required this.handleColorSelect,
-    required this.index,
+    required this.navigationList,
+    required this.child,
   });
 
-  final int index;
   final bool useLightMode;
   final bool useMaterial3;
   final ColorSeed colorSelected;
   final void Function(bool useLightMode) handleBrightnessChange;
   final void Function() handleMaterialVersionChange;
   final void Function(int value) handleColorSelect;
+  final List<NavigationModel> navigationList;
+  final Widget child;
 
   @override
   State<Navigation> createState() => _NavigationState();
@@ -44,18 +43,7 @@ class _NavigationState extends State<Navigation>
   bool showMediumSizeLayout = false;
   bool showLargeSizeLayout = false;
   bool extendedRail = false;
-  late PageAppController pageCtrl;
-  late Future<List<Record>> records;
-  List<NavigationInfo>? navigationInfoList;
   int pageIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    pageIndex = widget.index;
-    pageCtrl = PageAppController('NavigationInfo');
-    records = pageCtrl.getAllRecords();
-  }
 
   @override
   void didChangeDependencies() {
@@ -73,72 +61,16 @@ class _NavigationState extends State<Navigation>
   }
 
   void handlePageChanged(int pageSelected) {
-    // setState(() {
-    //   pageIndex = pageSelected;
-    // });
-    pageIndex = pageSelected;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            // page.Page(pageId: navigationInfoList![pageIndex].pageId),
-            Navigation(
-          useLightMode: widget.useLightMode,
-          useMaterial3: widget.useMaterial3,
-          colorSelected: widget.colorSelected,
-          handleBrightnessChange: widget.handleBrightnessChange,
-          handleMaterialVersionChange: widget.handleMaterialVersionChange,
-          handleColorSelect: widget.handleColorSelect,
-          index: pageIndex,
-        ),
-      ),
-    );
+    setState(() {
+      pageIndex = pageSelected;
+    });
+    context.go('/${widget.navigationList[pageSelected].pageId}');
   }
 
   void handleRailChanged() {
     setState(() {
       extendedRail = !extendedRail;
     });
-  }
-
-  // Replace with:
-  // Navigator.push(
-  //   context,
-  //   MaterialPageRoute(builder: (context) => AboutUs()),
-  // );
-  // https://medium.com/codechai/navigation-drawer-using-flutter-cc8a5cfcab90
-
-  Widget createPageFor() {
-    switch (pageIndex) {
-      case 0:
-        return const Home();
-      default:
-        // return const Home();
-        return page.Page(pageId: navigationInfoList![pageIndex].pageId);
-
-      // case PageSelected.component:
-      //   return FirstComponentList(scaffoldKey: scaffoldKey);
-      // case PageSelected.color:
-      //   return const ColorPalettesScreen();
-      // case PageSelected.typography:
-      //   return const TypographyScreen();
-      // case PageSelected.elevation:
-      //   return const ElevationScreen();
-      // case PageSelected.list:
-      //   return const page.Page(
-      //     pageId: 'TEST',
-      //   );
-      // case PageSelected.demo1:
-      //   return const DemoPage(internal: TableButton());
-      // case PageSelected.demo2:
-      //   return const DemoPage(internal: PaginatedDataTableDemo());
-      // case PageSelected.demo3:
-      //   return const DemoPage(internal: PaginatedDataTable2Demo());
-      // case PageSelected.demo4:
-      //   return const DemoPage(internal: AsyncPaginatedDataTable2Demo());
-      // default:
-      //   return FirstComponentList(scaffoldKey: scaffoldKey);
-    }
   }
 
   PreferredSizeWidget buildAppBar() {
@@ -183,18 +115,18 @@ class _NavigationState extends State<Navigation>
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-          ...(navigationInfoList!
+          ...(widget.navigationList
               .map(
-                (navInfo) => NavigationDrawerDestination(
+                (element) => NavigationDrawerDestination(
                   icon: Tooltip(
-                    message: navInfo.caption,
-                    child: navInfo.getIconWidget(),
+                    message: element.caption,
+                    child: element.getIconWidget(),
                   ),
                   selectedIcon: Tooltip(
-                    message: navInfo.caption,
-                    child: navInfo.getIconSelectedWidget(),
+                    message: element.caption,
+                    child: element.getIconSelectedWidget(),
                   ),
-                  label: Text(navInfo.caption),
+                  label: Text(element.caption),
                 ),
               )
               .toList())
@@ -202,20 +134,21 @@ class _NavigationState extends State<Navigation>
   }
 
   NavigationRail buildNavigationRail() {
-    final List<NavigationRailDestination> railDestinations = navigationInfoList!
-        .map(
-          (navInfo) => NavigationRailDestination(
-              icon: Tooltip(
-                message: navInfo.caption,
-                child: navInfo.getIconWidget(),
-              ),
-              selectedIcon: Tooltip(
-                message: navInfo.caption,
-                child: navInfo.getIconSelectedWidget(),
-              ),
-              label: Text(navInfo.caption)),
-        )
-        .toList();
+    final List<NavigationRailDestination> railDestinations =
+        widget.navigationList
+            .map(
+              (element) => NavigationRailDestination(
+                  icon: Tooltip(
+                    message: element.caption,
+                    child: element.getIconWidget(),
+                  ),
+                  selectedIcon: Tooltip(
+                    message: element.caption,
+                    child: element.getIconSelectedWidget(),
+                  ),
+                  label: Text(element.caption)),
+            )
+            .toList();
 
     return NavigationRail(
       extended: extendedRail,
@@ -252,151 +185,41 @@ class _NavigationState extends State<Navigation>
     return Scaffold(
       key: scaffoldKey,
       appBar: buildAppBar(),
-      body: FutureProgress<List<Record>>(
-          future: records,
-          builder: (records) {
-            // List<NavigationInfo> navInfoList = records
-            //     .map((record) => NavigationInfo.fromMap(record.fields))
-            //     .toList();
-            navigationInfoList ??= NavigationInfo.createFromList(records);
-            return Row(
-              children: <Widget>[
-                if (!showSmallSizeLayout) buildNavigationRail(),
-                // const Home()
-                createPageFor(),
-              ],
-            );
-          }),
-      drawer: showSmallSizeLayout
-          ? FutureBuilder<List<Record>>(
-              future: records,
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
-                if (snapshot.hasData) {
-                  navigationInfoList ??=
-                      NavigationInfo.createFromList(snapshot.data!);
-                  return buildNavigationDrawer();
-                }
-                return Container();
-              })
-          : null,
+      body: Row(
+        children: <Widget>[
+          // NavigationRail(
+          //   selectedIndex: 0,
+          //   groupAlignment: -1.0,
+          //   onDestinationSelected: (int index) {},
+          //   labelType: NavigationRailLabelType.all,
+          //   destinations: const <NavigationRailDestination>[
+          //     NavigationRailDestination(
+          //       icon: Icon(Icons.favorite_border),
+          //       selectedIcon: Icon(Icons.favorite),
+          //       label: Text('First'),
+          //     ),
+          //     NavigationRailDestination(
+          //       icon: Icon(Icons.bookmark_border),
+          //       selectedIcon: Icon(Icons.book),
+          //       label: Text('Second'),
+          //     ),
+          //     NavigationRailDestination(
+          //       icon: Icon(Icons.star_border),
+          //       selectedIcon: Icon(Icons.star),
+          //       label: Text('Third'),
+          //     ),
+          //   ],
+          // ),
+          if (!showSmallSizeLayout) buildNavigationRail(),
+          if (!showSmallSizeLayout)
+            const VerticalDivider(thickness: 1, width: 1),
+          // This is the main content.
+          Expanded(
+            child: widget.child,
+          ),
+        ],
+      ),
+      drawer: showSmallSizeLayout ? buildNavigationDrawer() : null,
     );
   }
 }
-
-class NavigationInfo {
-  final String caption;
-  final String tooltip;
-  final String icon;
-  final String selectedIcon;
-  final String pageId;
-
-  const NavigationInfo({
-    required this.icon,
-    required this.caption,
-    required this.tooltip,
-    required this.selectedIcon,
-    required this.pageId,
-  });
-
-  NavigationInfo.fromMap(Map<String, dynamic> data)
-      : icon = data['icon'], // TODO da capire come prendere l'icon
-        caption = data['caption'],
-        tooltip = data['tooltip'],
-        selectedIcon = data['selected_icon'],
-        pageId = data['page_id'];
-
-  Icon getIconWidget() {
-    return const Icon(Icons.table_chart_outlined);
-  }
-
-  Icon getIconSelectedWidget() {
-    return const Icon(Icons.table_chart);
-  }
-
-  static List<NavigationInfo> createFromList(List<Record> records) {
-    List<NavigationInfo> navInfoList =
-        records.map((record) => NavigationInfo.fromMap(record.fields)).toList();
-    navInfoList.insert(
-        0,
-        const NavigationInfo(
-            icon: 'home',
-            caption: 'Home',
-            tooltip: 'test Home',
-            selectedIcon: 'home',
-            pageId: 'Home'));
-    return navInfoList;
-  }
-}
-
-enum PageSelected {
-  list(0),
-  component(1),
-  color(2),
-  typography(3),
-  elevation(4),
-  demo1(5),
-  demo2(6),
-  demo3(7),
-  demo4(7);
-
-  const PageSelected(this.value);
-  final int value;
-}
-
-const List<NavigationDestination> navDestinations = [
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.table_chart_outlined),
-    label: 'Table',
-    selectedIcon: Icon(Icons.table_chart),
-  ),
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.widgets_outlined),
-    label: 'Components',
-    selectedIcon: Icon(Icons.widgets),
-  ),
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.format_paint_outlined),
-    label: 'Color',
-    selectedIcon: Icon(Icons.format_paint),
-  ),
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.text_snippet_outlined),
-    label: 'Typography',
-    selectedIcon: Icon(Icons.text_snippet),
-  ),
-  NavigationDestination(
-    tooltip: '',
-    icon: Icon(Icons.invert_colors_on_outlined),
-    label: 'Elevation',
-    selectedIcon: Icon(Icons.opacity),
-  ),
-  // NavigationDestination(
-  //   tooltip: '',
-  //   icon: Icon(Icons.developer_mode_outlined),
-  //   label: 'Demo 1',
-  //   selectedIcon: Icon(Icons.developer_mode),
-  // ),
-  // NavigationDestination(
-  //   tooltip: '',
-  //   icon: Icon(Icons.developer_mode_outlined),
-  //   label: 'Demo 2',
-  //   selectedIcon: Icon(Icons.developer_mode),
-  // ),
-  // NavigationDestination(
-  //   tooltip: '',
-  //   icon: Icon(Icons.developer_mode_outlined),
-  //   label: 'Demo 3',
-  //   selectedIcon: Icon(Icons.developer_mode),
-  // ),
-  // NavigationDestination(
-  //   tooltip: '',
-  //   icon: Icon(Icons.developer_mode_outlined),
-  //   label: 'Demo 4',
-  //   selectedIcon: Icon(Icons.developer_mode),
-  // )
-];

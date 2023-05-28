@@ -19,6 +19,7 @@ class FutureProgress<T> extends StatelessWidget {
             return builder(snapshot.data as T);
           } else {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: const [
                 SizedBox(
                   width: 60,

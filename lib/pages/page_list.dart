@@ -19,14 +19,13 @@ class _PageListState extends State<PageList> {
   Widget build(BuildContext context) {
     // Con questo muore tutto, ma mi piace il suo stile
     // return ComponentGroupDecoration(label: 'Actions', children: <Widget>[
-    return Expanded(
-        child: Column(children: [
+    return Column(children: [
       TitleText(name: widget.layout.caption),
       ButtonHeader(buttons: widget.layout.buttons),
       Repeater(
           repeater: widget.layout.area.firstWhere(
               (element) => element.type == AreaComponentType.repeater),
           pageCtrl: widget.pageCtrl),
-    ]));
+    ]);
   }
 }
