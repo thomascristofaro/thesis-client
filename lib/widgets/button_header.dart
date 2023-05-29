@@ -11,9 +11,24 @@ class ButtonHeader extends StatefulWidget {
 }
 
 class _ButtonHeaderState extends State<ButtonHeader> {
+  void unimplementedSnackbar(Button button) {
+    final snackBar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      width: 400.0,
+      content: Text('${button.caption} not implemented'),
+      action: SnackBarAction(
+        label: 'Close',
+        onPressed: () {},
+      ),
+    );
+
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   Widget createMenu(Button button) {
     return button.buttons.isEmpty
-        ? createButton(button, () => throw UnimplementedError())
+        ? createButton(button, () => unimplementedSnackbar(button))
         : MenuAnchor(
             builder: (context, controller, child) {
               return createButton(button, () {
@@ -32,7 +47,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
         .map((button) => button.buttons.isEmpty
             ? MenuItemButton(
                 leadingIcon: const Icon(Icons.more_vert),
-                onPressed: () => throw UnimplementedError(),
+                onPressed: () => unimplementedSnackbar(button),
                 child: Text(button.caption),
               )
             : SubmenuButton(

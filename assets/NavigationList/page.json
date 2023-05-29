@@ -4,22 +4,22 @@
             "page_id": "Home",
             "caption": "Home Page",
             "tooltip": "Home Page tooltip",
-            "icon": "test",
-            "selected_icon": "test"
+            "icon": 61703,
+            "selected_icon": 58136
         },
         {
             "page_id": "CustomerList",
             "caption": "Clienti",
             "tooltip": "Clienti tooltip",
-            "icon": "test",
-            "selected_icon": "test"
+            "icon": 62493,
+            "selected_icon": 58938
         },
         {
             "page_id": "VendorList",
             "caption": "Fornitori",
             "tooltip": "Fornitori tooltip",
-            "icon": "test",
-            "selected_icon": "test"
+            "icon": 62493,
+            "selected_icon": 58938
         }
     ]
 }

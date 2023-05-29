@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:thesis_client/controller/record.dart';
 
 class NavigationModel {
   final String pageId;
   final String caption;
   final String tooltip;
-  final String icon;
-  final String selectedIcon;
+  final int icon;
+  final int selectedIcon;
 
   const NavigationModel({
     required this.pageId,
@@ -20,14 +19,15 @@ class NavigationModel {
       : pageId = data['page_id'],
         caption = data['caption'],
         tooltip = data['tooltip'],
-        icon = data['icon'], // TODO da capire come prendere l'icon
+        icon = data['icon'],
         selectedIcon = data['selected_icon'];
 
   Icon getIconWidget() {
-    return const Icon(Icons.table_chart_outlined);
+    return Icon(IconData(icon, fontFamily: 'MaterialIcons'));
+    // return const Icon(Icons.table_chart_outlined);
   }
 
   Icon getIconSelectedWidget() {
-    return const Icon(Icons.table_chart);
+    return Icon(IconData(selectedIcon, fontFamily: 'MaterialIcons'));
   }
 }
