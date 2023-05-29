@@ -11,6 +11,12 @@
             "vat": "US0912343435",
             "address": "Via redmond 65",
             "amount": "32"
+        },
+        {
+            "name": "Google Vendor",
+            "vat": "FB0912343435",
+            "address": "Via REST 65",
+            "amount": "2190"
         }
     ]
 }

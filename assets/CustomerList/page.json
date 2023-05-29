@@ -17,6 +17,12 @@
             "vat": "FB0912343435",
             "address": "Via CUPERTINO 99",
             "amount": "3200"
+        },
+        {
+            "name": "IBM",
+            "vat": "FR0912343435",
+            "address": "Via TEST 17",
+            "amount": "4200"
         }
     ]
 }

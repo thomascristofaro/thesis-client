@@ -70,6 +70,7 @@ flutter:
     - assets/CustomerList/layout.json
     - assets/VendorList/page.json
     - assets/VendorList/layout.json
+    - assets/Home/layout.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thesis_client/controller/layout.dart';
+import 'package:thesis_client/pages/home.dart';
 import 'package:thesis_client/pages/page_card.dart';
 import 'package:thesis_client/pages/page_list.dart';
 import 'package:thesis_client/controller/page_controller.dart';
@@ -29,13 +30,17 @@ class _PageState extends State<Page> {
     return FutureProgress<Layout>(
       future: layout,
       builder: (Layout layout) {
-        if (layout.type == PageType.list) {
-          return PageList(layout: layout, pageCtrl: _pageController);
+        switch (layout.type) {
+          case PageType.home:
+            // TODO prima o poi sarà da implementare come tipologia di pagina dal backend
+            return const Home();
+          case PageType.list:
+            return PageList(layout: layout, pageCtrl: _pageController);
+          case PageType.card:
+            return PageCard(layout: layout, pageCtrl: _pageController);
+          default:
+            throw Exception('Page type not supported');
         }
-        if (layout.type == PageType.card) {
-          return PageCard(layout: layout, pageCtrl: _pageController);
-        }
-        throw Exception('Page type not supported');
       },
     );
   }

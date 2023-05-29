@@ -1,4 +1,4 @@
-enum PageType { list, card }
+enum PageType { list, card, home }
 
 enum AreaComponentType { repeater, group }
 
@@ -18,19 +18,20 @@ class Layout {
       : id = data['id'],
         type = PageType.values[data['type']],
         caption = data['caption'],
-        buttons = [],
         keys = [] //data['keys'];
   {
-    // Questo va in errore da chiedere su stack overflow
-    // area = data['area'].map((e) => AreaComponent.fromMap(e)).toList();
-    List<dynamic> jsonarea = data['area'];
-    area = jsonarea
-        .map((jcomponent) => AreaComponent.fromMap(jcomponent))
-        .toList();
+    if (type != PageType.home) {
+      // Questo va in errore da chiedere su stack overflow
+      // area = data['area'].map((e) => AreaComponent.fromMap(e)).toList();
+      List<dynamic> jsonarea = data['area'];
+      area = jsonarea
+          .map((jcomponent) => AreaComponent.fromMap(jcomponent))
+          .toList();
 
-    // data['buttons'].map((button) => Button.fromMap(button)).toList(),
-    List<dynamic> jsonbuttons = data['buttons'];
-    buttons = jsonbuttons.map((jbutton) => Button.fromMap(jbutton)).toList();
+      // data['buttons'].map((button) => Button.fromMap(button)).toList(),
+      List<dynamic> jsonbuttons = data['buttons'];
+      buttons = jsonbuttons.map((jbutton) => Button.fromMap(jbutton)).toList();
+    }
   }
 
   Map<String, dynamic> toMap() => {
