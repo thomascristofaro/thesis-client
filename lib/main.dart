@@ -91,7 +91,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    pageCtrl = PageAppController('NavigationList');
+    pageCtrl = PageAppController('navigationlist');
     futureRecords = pageCtrl.getAllRecords();
   }
 

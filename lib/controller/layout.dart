@@ -47,7 +47,7 @@ class Layout {
 class Button {
   final String id;
   final String caption;
-  final String icon;
+  final int icon;
   List<Button> buttons = [];
 
   Button(this.id, this.caption, this.icon, this.buttons);
@@ -79,7 +79,7 @@ class PageField {
 
   PageField.fromMap(Map<String, dynamic> data)
       : id = data['id'],
-        caption = data['label'],
+        caption = data['caption'],
         type = FieldType.values[data['type']];
 
   Map<String, dynamic> toMap() => {

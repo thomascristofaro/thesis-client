@@ -40,22 +40,22 @@
                 {
                     "id": "name",
                     "type": 0,
-                    "label": "Name"
+                    "caption": "Name"
                 },
                 {
                     "id": "vat",
                     "type": 0,
-                    "label": "VAT"
+                    "caption": "VAT"
                 },
                 {
                     "id": "address",
                     "type": 0,
-                    "label": "Address"
+                    "caption": "Address"
                 },
                 {
                     "id": "amount",
                     "type": 0,
-                    "label": "Amount"
+                    "caption": "Amount"
                 }
             ]
         }

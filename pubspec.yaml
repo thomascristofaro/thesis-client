@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   json_dynamic_widget: '^6.0.0'
-  http: ^0.13.4
+  http: ^0.13.6
   data_table_2: ^2.3.0
   provider: ^6.0.0
   path_provider: ^2.0.14
