@@ -6,29 +6,29 @@
         {
             "id": "btn1",
             "caption": "Button 1",
-            "icon": "icon-1"
+            "icon": 61703
         },
         {
             "id": "btn2",
             "caption": "Button 2",
-            "icon": "icon-1",
+            "icon": 61703,
             "buttons": [
                 {
                     "id": "btn21",
                     "caption": "Button 2.1",
-                    "icon": "icon-1"
+                    "icon": 61703
                 },
                 {
                     "id": "btn22",
                     "caption": "Button 2.2",
-                    "icon": "icon-1"
+                    "icon": 61703
                 }
             ]
         },
         {
             "id": "btn3",
             "caption": "Button 3",
-            "icon": "icon-1"
+            "icon": 61703
         }
     ],
     "area": [

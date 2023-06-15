@@ -1,7 +1,7 @@
 {
-    "id": "CustomerList",
-    "type": 0,
-    "caption": "Customer List",
+    "id": "CustomerCard",
+    "type": 1,
+    "caption": "Customer Card",
     "buttons": [
         {
             "id": "btn1",
@@ -33,29 +33,29 @@
     ],
     "area": [
         {
-            "id": "repeater1",
-            "type": 0,
-            "caption": "Repeater 1",
+            "id": "grp1",
+            "type": 1,
+            "caption": "Group 1",
             "fields": [
                 {
-                    "id": "name",
+                    "id": "input1",
                     "type": 0,
-                    "caption": "Name"
+                    "caption": "Input 1"
                 },
                 {
-                    "id": "vat",
+                    "id": "input2",
                     "type": 0,
-                    "caption": "VAT"
+                    "caption": "Input 2"
                 },
                 {
-                    "id": "address",
+                    "id": "input3",
                     "type": 0,
-                    "caption": "Address"
+                    "caption": "Input 3"
                 },
                 {
-                    "id": "amount",
+                    "id": "input4",
                     "type": 0,
-                    "caption": "Amount"
+                    "caption": "Input 4"
                 }
             ]
         }

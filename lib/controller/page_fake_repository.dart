@@ -59,6 +59,7 @@ class PageFakeRepository implements IPageRepository {
 
   @override
   Future<Record> getOne(List<Filter> filters) async {
+    await checkTable();
     var founded =
         await _db.findOne(_pageId, filters.map((e) => e.toMap()).toList());
     return Record.fromMap(founded);

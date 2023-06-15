@@ -68,6 +68,8 @@ flutter:
     - assets/NavigationList/page.json
     - assets/CustomerList/page.json
     - assets/CustomerList/layout.json
+    - assets/CustomerCard/page.json
+    - assets/CustomerCard/layout.json
     - assets/VendorList/page.json
     - assets/VendorList/layout.json
     - assets/Home/layout.json

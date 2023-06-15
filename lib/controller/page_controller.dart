@@ -1,4 +1,6 @@
 import 'package:thesis_client/controller/page_api_repository.dart';
+import 'package:thesis_client/controller/page_fake_repository.dart';
+import 'package:thesis_client/controller/virtual_db.dart';
 import 'package:thesis_client/controller/page_interface.dart';
 import 'package:thesis_client/controller/record.dart';
 
@@ -10,8 +12,8 @@ class PageAppController {
   late IPageRepository _pageRepo;
 
   PageAppController(this._pageId) {
-    // _pageRepo = PageFakeRepository(VirtualDB(), _pageId);
-    _pageRepo = PageAPIRepository(_pageId);
+    _pageRepo = PageFakeRepository(VirtualDB(), _pageId);
+    // _pageRepo = PageAPIRepository(_pageId);
   }
 
   Future<Layout> getLayout() {

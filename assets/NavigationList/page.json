@@ -15,6 +15,13 @@
             "selected_icon": 58938
         },
         {
+            "page_id": "CustomerCard",
+            "caption": "Clienti Card",
+            "tooltip": "Clienti tooltip",
+            "icon": 62493,
+            "selected_icon": 58938
+        },
+        {
             "page_id": "VendorList",
             "caption": "Fornitori",
             "tooltip": "Fornitori tooltip",

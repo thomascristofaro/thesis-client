@@ -40,52 +40,52 @@
                 {
                     "id": "col1",
                     "type": "string",
-                    "label": "Column 1"
+                    "caption": "Column 1"
                 },
                 {
                     "id": "col2",
                     "type": "number",
-                    "label": "Column 2"
+                    "caption": "Column 2"
                 },
                 {
                     "id": "col3",
                     "type": "number",
-                    "label": "Column 3"
+                    "caption": "Column 3"
                 },
                 {
                     "id": "col4",
                     "type": "number",
-                    "label": "Column 4"
+                    "caption": "Column 4"
                 },
                 {
                     "id": "col5",
                     "type": "number",
-                    "label": "Column 5"
+                    "caption": "Column 5"
                 },
                 {
                     "id": "col6",
                     "type": "number",
-                    "label": "Column 6"
+                    "caption": "Column 6"
                 },
                 {
                     "id": "col7",
                     "type": "number",
-                    "label": "Column 7"
+                    "caption": "Column 7"
                 },
                 {
                     "id": "col8",
                     "type": "number",
-                    "label": "Column 8"
+                    "caption": "Column 8"
                 },
                 {
                     "id": "col9",
                     "type": "number",
-                    "label": "Column 9"
+                    "caption": "Column 9"
                 },
                 {
                     "id": "col10",
                     "type": "number",
-                    "label": "Column 10"
+                    "caption": "Column 10"
                 }
             ]
         },
@@ -97,22 +97,22 @@
                 {
                     "id": "input1",
                     "type": "string",
-                    "label": "Input 1"
+                    "caption": "Input 1"
                 },
                 {
                     "id": "input2",
                     "type": "string",
-                    "label": "Input 2"
+                    "caption": "Input 2"
                 },
                 {
                     "id": "input3",
                     "type": "string",
-                    "label": "Input 3"
+                    "caption": "Input 3"
                 },
                 {
                     "id": "input4",
                     "type": "string",
-                    "label": "Input 4"
+                    "caption": "Input 4"
                 }
             ]
         }

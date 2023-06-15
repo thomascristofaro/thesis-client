@@ -28,26 +28,44 @@ class _PageCardState extends State<PageCard> {
   Widget build(BuildContext context) {
     // Con questo muore tutto, ma mi piace il suo stile
     // return ComponentGroupDecoration(label: 'Actions', children: <Widget>[
-    return Expanded(
-        child: Column(children: [
+    return Column(children: [
       TitleText(name: widget.layout.caption),
       ButtonHeader(buttons: widget.layout.buttons),
-      for (var component in widget.layout.area)
-        if (component.type == AreaComponentType.group)
-          ComponentGroup(label: component.caption, children: [])
+      FutureBuilder<Record?>(
+          future: record,
+          builder: (BuildContext context, AsyncSnapshot<Record?> snapshot) {
+            return Column(
+              children: [
+                for (var component in widget.layout.area)
+                  if (component.type == AreaComponentType.group)
+                    if (snapshot.hasData)
+                      ComponentGroup(
+                          label: component.caption,
+                          record: snapshot.data as Record,
+                          children: [])
+                    else
+                      ComponentGroup(
+                          label: component.caption, record: null, children: [])
+              ],
+            );
+          }),
       // component.components
       //     .map((e) =>
       //         ComponentFactory(component: e, pageCtrl: widget.pageCtrl))
       //     .toList()),
-    ]));
+    ]);
   }
 }
 
 class ComponentGroup extends StatelessWidget {
   const ComponentGroup(
-      {super.key, required this.label, required this.children});
+      {super.key,
+      required this.label,
+      required this.record,
+      required this.children});
 
   final String label;
+  final Record? record;
   final List<Widget> children;
 
   @override
