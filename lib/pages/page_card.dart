@@ -40,12 +40,9 @@ class _PageCardState extends State<PageCard> {
                   if (component.type == AreaComponentType.group)
                     if (snapshot.hasData)
                       ComponentGroup(
-                          label: component.caption,
-                          record: snapshot.data as Record,
-                          children: [])
+                          component: component, record: snapshot.data as Record)
                     else
-                      ComponentGroup(
-                          label: component.caption, record: null, children: [])
+                      ComponentGroup(component: component, record: null)
               ],
             );
           }),
@@ -59,34 +56,32 @@ class _PageCardState extends State<PageCard> {
 
 class ComponentGroup extends StatelessWidget {
   const ComponentGroup(
-      {super.key,
-      required this.label,
-      required this.record,
-      required this.children});
+      {super.key, required this.component, required this.record});
 
-  final String label;
+  final AreaComponent component;
   final Record? record;
-  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
     // Fully traverse this component group before moving on
-    return FocusTraversalGroup(
-      child: Card(
-        margin: EdgeInsets.zero,
-        elevation: 0,
-        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          child: Center(
-            child: Column(
-              children: [
-                Text(label, style: Theme.of(context).textTheme.titleLarge),
-                colDivider,
-                ...children
-              ],
-            ),
-          ),
+    return Card(
+      elevation: 1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(component.caption,
+                style: Theme.of(context).textTheme.titleLarge),
+            colDivider,
+            TextField(
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(),
+                labelText: component.fields[0].caption,
+              ),
+              // controller: ,
+            )
+          ],
         ),
       ),
     );
