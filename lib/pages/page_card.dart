@@ -17,6 +17,15 @@ class PageCard extends StatefulWidget {
 
 class _PageCardState extends State<PageCard> {
   Future<Record?> record = Future.value(null);
+  // questo sarà da spostare dentro il record
+  Map<String, TextEditingController> editCtrl = {};
+
+  // se fosse un altro tipo di variabile e non solo testo?
+  void fromFieldsToEditCtrl(Record record) {
+    record.fields.forEach((key, value) {
+      editCtrl[key] = TextEditingController(text: value.toString());
+    });
+  }
 
   @override
   void initState() {
@@ -34,6 +43,9 @@ class _PageCardState extends State<PageCard> {
       FutureBuilder<Record?>(
           future: record,
           builder: (BuildContext context, AsyncSnapshot<Record?> snapshot) {
+            if (snapshot.hasData) {
+              fromFieldsToEditCtrl(snapshot.data as Record);
+            }
             return Column(
               children: [
                 for (var component in widget.layout.area)
@@ -74,13 +86,16 @@ class ComponentGroup extends StatelessWidget {
             Text(component.caption,
                 style: Theme.of(context).textTheme.titleLarge),
             colDivider,
-            TextField(
-              decoration: InputDecoration(
-                border: const UnderlineInputBorder(),
-                labelText: component.fields[0].caption,
-              ),
-              // controller: ,
-            )
+            for (var field in component.fields)
+              TextField(
+                decoration: InputDecoration(
+                  border: const UnderlineInputBorder(),
+                  labelText: field.caption,
+                ),
+                controller: record != null
+                    ? TextEditingController(text: record!.fields[field.id])
+                    : null,
+              )
           ],
         ),
       ),

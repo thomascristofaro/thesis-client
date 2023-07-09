@@ -21,7 +21,7 @@ class _RepeaterState extends State<Repeater> {
   @override
   void initState() {
     dataTableShowLogs = false;
-    _dataSource = RepeaterDataSource(widget.repeater.fields);
+    _dataSource = RepeaterDataSource(widget.repeater.fields, widget.pageCtrl);
 
     _columns = widget.repeater.fields
         .map((field) => DataColumn(
@@ -42,6 +42,7 @@ class _RepeaterState extends State<Repeater> {
 
   @override
   Widget build(BuildContext context) {
+    _dataSource.addContext(context);
     return Expanded(
       child: PaginatedDataTable2(
         minWidth: 1000,

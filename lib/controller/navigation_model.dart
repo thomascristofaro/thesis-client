@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class NavigationModel {
   final String pageId;
   final String caption;
+  // aggiungere il menu
   final String tooltip;
   final int icon;
   final int selectedIcon;

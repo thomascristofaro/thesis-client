@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thesis_client/controller/layout.dart';
+import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/pages/home.dart';
 import 'package:thesis_client/pages/page_card.dart';
 import 'package:thesis_client/pages/page_list.dart';
@@ -8,7 +9,8 @@ import 'package:thesis_client/widgets/future_progress.dart';
 
 class Page extends StatefulWidget {
   final String pageId;
-  const Page({super.key, required this.pageId});
+  final List<Filter> filters;
+  const Page({super.key, required this.pageId, this.filters = const []});
 
   @override
   State<Page> createState() => _PageState();
@@ -22,6 +24,7 @@ class _PageState extends State<Page> {
   void initState() {
     super.initState();
     _pageController = PageAppController(widget.pageId);
+    _pageController.addFilterFromList(widget.filters);
     layout = _pageController.getLayout();
   }
 

@@ -36,4 +36,14 @@ class PageAppController {
   Future<void> removeRecord() {
     return _pageRepo.delete(currentFilters);
   }
+
+  void addFilter(Filter filter) {
+    currentFilters.add(filter);
+  }
+
+  void addFilterFromList(List<Filter> filters) {
+    for (var filter in filters) {
+      currentFilters.add(filter);
+    }
+  }
 }

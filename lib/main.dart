@@ -76,7 +76,7 @@ class _AppState extends State<App> {
         },
         routes: navigation
             .map((element) => GoRoute(
-                name: element.caption,
+                name: element.pageId,
                 path: "/${element.pageId}",
                 // server solo per le transizioni
                 pageBuilder: (context, state) => NoTransitionPage<void>(

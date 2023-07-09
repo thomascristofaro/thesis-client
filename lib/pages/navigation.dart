@@ -64,7 +64,10 @@ class _NavigationState extends State<Navigation>
     setState(() {
       pageIndex = pageSelected;
     });
-    context.go('/${widget.navigationList[pageSelected].pageId}');
+    while (context.canPop()) {
+      context.pop();
+    }
+    context.goNamed(widget.navigationList[pageSelected].pageId);
   }
 
   void handleRailChanged() {

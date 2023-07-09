@@ -38,24 +38,24 @@
             "caption": "Group 1",
             "fields": [
                 {
-                    "id": "input1",
+                    "id": "name",
                     "type": 0,
-                    "caption": "Input 1"
+                    "caption": "Name"
                 },
                 {
-                    "id": "input2",
+                    "id": "vat",
                     "type": 0,
-                    "caption": "Input 2"
+                    "caption": "VAT"
                 },
                 {
-                    "id": "input3",
+                    "id": "address",
                     "type": 0,
-                    "caption": "Input 3"
+                    "caption": "Address"
                 },
                 {
-                    "id": "input4",
+                    "id": "amount",
                     "type": 0,
-                    "caption": "Input 4"
+                    "caption": "Amount"
                 }
             ]
         }
