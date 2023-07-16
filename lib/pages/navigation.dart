@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:thesis_client/base_setup.dart';
 import 'package:thesis_client/controller/navigation_model.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
@@ -13,22 +14,12 @@ import 'package:thesis_client/constants.dart';
 class Navigation extends StatefulWidget {
   const Navigation({
     super.key,
-    required this.useLightMode,
-    required this.useMaterial3,
-    required this.colorSelected,
-    required this.handleBrightnessChange,
-    required this.handleMaterialVersionChange,
-    required this.handleColorSelect,
+    required this.baseSetup,
     required this.navigationList,
     required this.child,
   });
 
-  final bool useLightMode;
-  final bool useMaterial3;
-  final ColorSeed colorSelected;
-  final void Function(bool useLightMode) handleBrightnessChange;
-  final void Function() handleMaterialVersionChange;
-  final void Function(int value) handleColorSelect;
+  final BaseSetup baseSetup;
   final List<NavigationModel> navigationList;
   final Widget child;
 
@@ -89,14 +80,15 @@ class _NavigationState extends State<Navigation>
       actions: showSmallSizeLayout
           ? [
               BrightnessButton(
-                handleBrightnessChange: widget.handleBrightnessChange,
+                handleBrightnessChange: widget.baseSetup.handleBrightnessChange,
               ),
               Material3Button(
-                handleMaterialVersionChange: widget.handleMaterialVersionChange,
+                handleMaterialVersionChange:
+                    widget.baseSetup.handleMaterialVersionChange,
               ),
               ColorSeedButton(
-                handleColorSelect: widget.handleColorSelect,
-                colorSelected: widget.colorSelected,
+                handleColorSelect: widget.baseSetup.handleColorSelect,
+                colorSelected: widget.baseSetup.colorSelected,
               ),
             ]
           : [Container()],
@@ -165,19 +157,21 @@ class _NavigationState extends State<Navigation>
           padding: const EdgeInsets.only(bottom: 20),
           child: extendedRail
               ? ExpandedTrailingActions(
-                  useLightMode: widget.useLightMode,
-                  useMaterial3: widget.useMaterial3,
-                  colorSelected: widget.colorSelected,
-                  handleBrightnessChange: widget.handleBrightnessChange,
+                  useLightMode: widget.baseSetup.useLightMode,
+                  useMaterial3: widget.baseSetup.useMaterial3,
+                  colorSelected: widget.baseSetup.colorSelected,
+                  handleBrightnessChange:
+                      widget.baseSetup.handleBrightnessChange,
                   handleMaterialVersionChange:
-                      widget.handleMaterialVersionChange,
-                  handleColorSelect: widget.handleColorSelect)
+                      widget.baseSetup.handleMaterialVersionChange,
+                  handleColorSelect: widget.baseSetup.handleColorSelect)
               : TrailingActions(
-                  colorSelected: widget.colorSelected,
-                  handleBrightnessChange: widget.handleBrightnessChange,
+                  colorSelected: widget.baseSetup.colorSelected,
+                  handleBrightnessChange:
+                      widget.baseSetup.handleBrightnessChange,
                   handleMaterialVersionChange:
-                      widget.handleMaterialVersionChange,
-                  handleColorSelect: widget.handleColorSelect),
+                      widget.baseSetup.handleMaterialVersionChange,
+                  handleColorSelect: widget.baseSetup.handleColorSelect),
         ),
       ),
     );
