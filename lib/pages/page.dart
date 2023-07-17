@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thesis_client/controller/layout.dart';
 import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/pages/home.dart';
@@ -8,24 +9,24 @@ import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/widgets/future_progress.dart';
 
 class Page extends StatefulWidget {
-  final String pageId;
-  final List<Filter> filters;
-  const Page({super.key, required this.pageId, this.filters = const []});
+  // final String pageId;
+  // final List<Filter> filters;
+  const Page({super.key});
 
   @override
   State<Page> createState() => _PageState();
 }
 
 class _PageState extends State<Page> {
-  late PageAppController _pageController;
+  // late PageAppController _pageController;
   Future<Layout>? layout;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageAppController(widget.pageId);
-    _pageController.addFilterFromList(widget.filters);
-    layout = _pageController.getLayout();
+    // _pageController = PageAppController(pageId: widget.pageId);
+    // _pageController.addFilterFromList(widget.filters);
+    layout = Provider.of<PageAppController>(context, listen: false).getLayout();
   }
 
   @override
@@ -38,9 +39,9 @@ class _PageState extends State<Page> {
             // TODO prima o poi sarà da implementare come tipologia di pagina dal backend
             return const Home();
           case PageType.list:
-            return PageList(layout: layout, pageCtrl: _pageController);
+            return const PageList();
           case PageType.card:
-            return PageCard(layout: layout, pageCtrl: _pageController);
+            return const PageCard();
           default:
             throw Exception('Page type not supported');
         }

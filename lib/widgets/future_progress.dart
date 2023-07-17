@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thesis_client/widgets/progress.dart';
 
 class FutureProgress<T> extends StatelessWidget {
   final Future<T>? future;
@@ -18,20 +19,7 @@ class FutureProgress<T> extends StatelessWidget {
           if (snapshot.hasData) {
             return builder(snapshot.data as T);
           } else {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: CircularProgressIndicator(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting result...'),
-                ),
-              ],
-            );
+            return const Progress();
           }
         });
   }

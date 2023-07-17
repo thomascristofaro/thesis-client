@@ -8,16 +8,20 @@ class Layout {
   final String id;
   final PageType type;
   final String caption;
+  final String cardPageId;
   late List<Button> buttons;
   late List<AreaComponent> area;
   final List<String> keys;
 
-  Layout(this.id, this.type, this.caption, this.buttons, this.area, this.keys);
+  Layout(this.id, this.type, this.caption, this.cardPageId, this.buttons,
+      this.area, this.keys);
 
   Layout.fromMap(Map<String, dynamic> data)
       : id = data['id'],
         type = PageType.values[data['type']],
         caption = data['caption'],
+        cardPageId =
+            data.containsKey('card_page_id') ? data['card_page_id'] : '',
         keys = [] //data['keys'];
   {
     if (type != PageType.home) {
@@ -42,6 +46,11 @@ class Layout {
         'area': area.map((area) => area.toMap()).toList(),
         'keys': keys,
       };
+
+  AreaComponent getRepeaterComponent() {
+    return area
+        .firstWhere((element) => element.type == AreaComponentType.repeater);
+  }
 }
 
 class Button {

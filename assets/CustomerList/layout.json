@@ -2,6 +2,7 @@
     "id": "CustomerList",
     "type": 0,
     "caption": "Customer List",
+    "card_page_id": "CustomerCard",
     "buttons": [
         {
             "id": "btn1",

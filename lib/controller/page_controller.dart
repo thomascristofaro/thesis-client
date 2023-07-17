@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:thesis_client/controller/page_api_repository.dart';
 import 'package:thesis_client/controller/page_fake_repository.dart';
 import 'package:thesis_client/controller/virtual_db.dart';
@@ -6,18 +7,21 @@ import 'package:thesis_client/controller/record.dart';
 
 import 'layout.dart';
 
-class PageAppController {
-  final String _pageId;
-  List<Filter> currentFilters = [];
+class PageAppController extends ChangeNotifier {
+  final String pageId;
+  List<Filter> currentFilters;
   late IPageRepository _pageRepo;
+  late Layout layout;
 
-  PageAppController(this._pageId) {
-    _pageRepo = PageFakeRepository(VirtualDB(), _pageId);
+  PageAppController({required this.pageId, this.currentFilters = const []}) {
+    _pageRepo = PageFakeRepository(VirtualDB(), pageId);
     // _pageRepo = PageAPIRepository(_pageId);
   }
 
-  Future<Layout> getLayout() {
-    return _pageRepo.getLayout();
+  Future<Layout> getLayout() async {
+    var lateLayout = _pageRepo.getLayout();
+    layout = await lateLayout;
+    return lateLayout;
   }
 
   Future<List<Record>> getAllRecords() {

@@ -48,7 +48,15 @@ class _AppState extends State<App> {
                 // server solo per le transizioni
                 pageBuilder: (context, state) => NoTransitionPage<void>(
                       key: state.pageKey,
-                      child: page.Page(pageId: element.pageId),
+                      child: ChangeNotifierProvider(
+                        create: (context) => PageAppController(
+                          pageId: element.pageId,
+                          currentFilters: state.extra == null
+                              ? []
+                              : state.extra as List<Filter>,
+                        ),
+                        child: const page.Page(),
+                      ),
                     )))
             .toList(),
       ),
@@ -58,7 +66,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    pageCtrl = PageAppController('navigationlist');
+    pageCtrl = PageAppController(pageId: 'navigationlist');
     futureRecords = pageCtrl.getAllRecords();
   }
 

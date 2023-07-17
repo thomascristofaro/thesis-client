@@ -7,15 +7,14 @@ import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/constants.dart';
 
 class PageCard extends StatefulWidget {
-  final Layout layout;
-  final PageAppController pageCtrl;
-  const PageCard({super.key, required this.layout, required this.pageCtrl});
+  const PageCard({super.key});
 
   @override
   State<PageCard> createState() => _PageCardState();
 }
 
 class _PageCardState extends State<PageCard> {
+  late PageAppController pageCtrl;
   Future<Record?> record = Future.value(null);
   // questo sarà da spostare dentro il record
   Map<String, TextEditingController> editCtrl = {};
@@ -30,7 +29,7 @@ class _PageCardState extends State<PageCard> {
   @override
   void initState() {
     super.initState();
-    record = widget.pageCtrl.getOneRecord();
+    record = pageCtrl.getOneRecord();
   }
 
   @override
@@ -38,8 +37,8 @@ class _PageCardState extends State<PageCard> {
     // Con questo muore tutto, ma mi piace il suo stile
     // return ComponentGroupDecoration(label: 'Actions', children: <Widget>[
     return Column(children: [
-      TitleText(name: widget.layout.caption),
-      ButtonHeader(buttons: widget.layout.buttons),
+      TitleText(name: pageCtrl.layout.caption),
+      ButtonHeader(buttons: pageCtrl.layout.buttons),
       FutureBuilder<Record?>(
           future: record,
           builder: (BuildContext context, AsyncSnapshot<Record?> snapshot) {
@@ -48,7 +47,7 @@ class _PageCardState extends State<PageCard> {
             }
             return Column(
               children: [
-                for (var component in widget.layout.area)
+                for (var component in pageCtrl.layout.area)
                   if (component.type == AreaComponentType.group)
                     if (snapshot.hasData)
                       ComponentGroup(
