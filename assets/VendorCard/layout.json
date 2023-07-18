@@ -1,8 +1,7 @@
 {
-    "id": "CustomerList",
-    "type": 0,
-    "caption": "Customer List",
-    "card_page_id": "CustomerCard",
+    "id": "VendorCard",
+    "type": 1,
+    "caption": "Vendor Card",
     "key": ["name"],
     "buttons": [
         {
@@ -35,9 +34,9 @@
     ],
     "area": [
         {
-            "id": "repeater1",
-            "type": 0,
-            "caption": "Repeater 1",
+            "id": "grp1",
+            "type": 1,
+            "caption": "General",
             "fields": [
                 {
                     "id": "name",

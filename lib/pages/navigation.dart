@@ -58,7 +58,10 @@ class _NavigationState extends State<Navigation>
     while (context.canPop()) {
       context.pop();
     }
-    context.goNamed(widget.navigationList[pageSelected].pageId);
+    context.goNamed(widget.navigationList
+        .where((e) => e.show)
+        .elementAt(pageSelected)
+        .pageId);
   }
 
   void handleRailChanged() {
@@ -111,6 +114,7 @@ class _NavigationState extends State<Navigation>
             ),
           ),
           ...(widget.navigationList
+              .where((e) => e.show)
               .map(
                 (element) => NavigationDrawerDestination(
                   icon: Tooltip(
@@ -131,6 +135,7 @@ class _NavigationState extends State<Navigation>
   NavigationRail buildNavigationRail() {
     final List<NavigationRailDestination> railDestinations =
         widget.navigationList
+            .where((e) => e.show)
             .map(
               (element) => NavigationRailDestination(
                   icon: Tooltip(

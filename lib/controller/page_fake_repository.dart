@@ -39,7 +39,7 @@ class PageFakeRepository implements IPageRepository {
     final String file =
         await rootBundle.loadString('assets/$_pageId/layout.json');
     final Map<String, dynamic> map = await json.decode(file);
-    await Future.delayed(const Duration(milliseconds: 2000));
+    // await Future.delayed(const Duration(milliseconds: 2000));
     return Layout.fromMap(map);
   }
 

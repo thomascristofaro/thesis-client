@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:thesis_client/controller/layout.dart';
-import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/widgets/repeater.dart';
 import 'package:thesis_client/widgets/button_header.dart';
 import 'package:thesis_client/widgets/title_text.dart';

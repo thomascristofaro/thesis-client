@@ -2,6 +2,7 @@
     "id": "CustomerCard",
     "type": 1,
     "caption": "Customer Card",
+    "key": ["name"],
     "buttons": [
         {
             "id": "btn1",
@@ -35,7 +36,7 @@
         {
             "id": "grp1",
             "type": 1,
-            "caption": "Group 1",
+            "caption": "General",
             "fields": [
                 {
                     "id": "name",

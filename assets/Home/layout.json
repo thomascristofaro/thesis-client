@@ -1,5 +1,6 @@
 {
     "id": "Home",
     "type": 2,
-    "caption": "Home Page"
+    "caption": "Home Page",
+    "key": []
 }

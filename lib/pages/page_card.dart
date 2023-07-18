@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thesis_client/controller/layout.dart';
 import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/widgets/button_header.dart';
@@ -29,6 +30,7 @@ class _PageCardState extends State<PageCard> {
   @override
   void initState() {
     super.initState();
+    pageCtrl = Provider.of<PageAppController>(context, listen: false);
     record = pageCtrl.getOneRecord();
   }
 

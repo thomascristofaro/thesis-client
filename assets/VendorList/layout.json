@@ -2,6 +2,8 @@
     "id": "VendorList",
     "type": 0,
     "caption": "Vendor List",
+    "card_page_id": "VendorCard",
+    "key": ["name"],
     "buttons": [
         {
             "id": "btn1",

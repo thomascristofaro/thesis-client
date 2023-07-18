@@ -11,10 +11,10 @@ class Layout {
   final String cardPageId;
   late List<Button> buttons;
   late List<AreaComponent> area;
-  final List<String> keys;
+  final List<String> key;
 
   Layout(this.id, this.type, this.caption, this.cardPageId, this.buttons,
-      this.area, this.keys);
+      this.area, this.key);
 
   Layout.fromMap(Map<String, dynamic> data)
       : id = data['id'],
@@ -22,8 +22,7 @@ class Layout {
         caption = data['caption'],
         cardPageId =
             data.containsKey('card_page_id') ? data['card_page_id'] : '',
-        keys = [] //data['keys'];
-  {
+        key = List<String>.from(data['key']) {
     if (type != PageType.home) {
       // Questo va in errore da chiedere su stack overflow
       // area = data['area'].map((e) => AreaComponent.fromMap(e)).toList();
@@ -44,7 +43,7 @@ class Layout {
         'caption': caption,
         'buttons': buttons.map((button) => button.toMap()).toList(),
         'area': area.map((area) => area.toMap()).toList(),
-        'keys': keys,
+        'keys': key,
       };
 
   AreaComponent getRepeaterComponent() {

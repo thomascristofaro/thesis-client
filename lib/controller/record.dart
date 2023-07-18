@@ -1,5 +1,6 @@
 class Record {
   final Map<String, dynamic> fields;
+  // final List<String> key;
   bool selected = false;
 
   Record(this.fields);
@@ -8,6 +9,14 @@ class Record {
 
   Map<String, dynamic> toMap() {
     return fields;
+  }
+
+  List<Filter> getKeyFilters(List<String> key) {
+    List<Filter> filters = [];
+    for (String k in key) {
+      filters.add(Filter(k, fields[k], FilterType.equalTo));
+    }
+    return filters;
   }
 }
 

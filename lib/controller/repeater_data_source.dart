@@ -10,7 +10,7 @@ class RepeaterDataSource extends DataTableSource {
   List<Record> _data = [];
   int _selectedRowCount = 0;
   bool hasMoreData = true;
-  final void Function(List<Filter> filters)? onDoubleTap;
+  final void Function(Record record)? onDoubleTap;
 
   RepeaterDataSource({required this.fields, this.onDoubleTap});
 
@@ -36,12 +36,7 @@ class RepeaterDataSource extends DataTableSource {
           notifyListeners();
         }
       },
-      onDoubleTap: () {
-        List<Filter> filters = [];
-        String key = 'name';
-        filters.add(Filter(key, record.fields[key], FilterType.equalTo));
-        onDoubleTap?.call(filters);
-      },
+      onDoubleTap: () => onDoubleTap?.call(record),
       cells: toDataCell(record),
     );
   }

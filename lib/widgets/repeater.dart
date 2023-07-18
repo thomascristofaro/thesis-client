@@ -22,9 +22,10 @@ class _RepeaterState extends State<Repeater> {
   late List<DataColumn> _columns;
   late PageAppController pageCtrl;
 
-  void openCard(List<Filter> filters) {
+  void openCard(Record record) {
     if (pageCtrl.layout.cardPageId == '') throw Exception('Card not available');
-    context.pushNamed(pageCtrl.layout.cardPageId, extra: filters);
+    context.pushNamed(pageCtrl.layout.cardPageId,
+        extra: record.getKeyFilters(pageCtrl.layout.key));
   }
 
   @override

@@ -41,6 +41,7 @@ class _AppState extends State<App> {
             child: child,
           );
         },
+        // sarebbe da fare i sottoroutes, al momento è gestito con un show menu
         routes: navigation
             .map((element) => GoRoute(
                 name: element.pageId,
