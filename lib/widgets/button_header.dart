@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import '../controller/layout.dart';
@@ -74,6 +75,15 @@ class _ButtonHeaderState extends State<ButtonHeader> {
     );
   }
 
+  Widget newButton() {
+    return createButton(Button("default_new", "New", 0xe404, []), () {
+      var pageCtrl = Provider.of<PageAppController>(context, listen: false);
+      if (pageCtrl.layout.cardPageId == '')
+        throw Exception('Card not available');
+      context.pushNamed(pageCtrl.layout.cardPageId);
+    });
+  }
+
   Widget insertButton() {
     return createButton(Button("default_insert", "Insert", 0xe404, []), () {
       Provider.of<PageAppController>(context, listen: false).addRecord();
@@ -106,7 +116,8 @@ class _ButtonHeaderState extends State<ButtonHeader> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  if (widget.pageType == PageType.list) insertButton(),
+                  if (widget.pageType == PageType.list) newButton(),
+                  if (widget.pageType == PageType.card) insertButton(),
                   if (widget.pageType == PageType.card) modifyButton(),
                   if (widget.pageType == PageType.card) deleteButton(),
                   ...widget.buttons.map((button) => createMenu(button)).toList()

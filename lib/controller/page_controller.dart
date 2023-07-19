@@ -31,6 +31,11 @@ class PageAppController extends ChangeNotifier {
   }
 
   Future<Record?> getOneRecord() async {
+    // da capire, lui sta creando in automatico se non trovo filtri
+    if (currentFilters.isEmpty) {
+      currentRecord = createNewRecord();
+      return currentRecord;
+    }
     var lateRecord = _pageRepo.getOne(currentFilters);
     currentRecord = await lateRecord;
     return lateRecord;

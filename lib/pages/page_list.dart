@@ -27,7 +27,29 @@ class _PageListState extends State<PageList> {
     return Column(children: [
       TitleText(name: pageCtrl.layout.caption),
       ButtonHeader(pageType: PageType.list, buttons: pageCtrl.layout.buttons),
-      Repeater(repeater: pageCtrl.layout.getRepeaterComponent()),
+      Repeater(repeater: pageCtrl.layout.getRepeaterComponent())
     ]);
+    // return Stack(children: [
+    //   Material(
+    //     child: Column(children: [
+    //       TitleText(name: pageCtrl.layout.caption),
+    //       ButtonHeader(
+    //           pageType: PageType.list, buttons: pageCtrl.layout.buttons),
+    //       Repeater(repeater: pageCtrl.layout.getRepeaterComponent()),
+    //     ]),
+    //   ),
+    //   Align(
+    //     alignment: Alignment.bottomRight,
+    //     child: Padding(
+    //       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 100.0),
+    //       child: FloatingActionButton(
+    //         onPressed: () {
+    //           // Add your onPressed code here!
+    //         },
+    //         child: const Icon(Icons.add),
+    //       ),
+    //     ),
+    //   ),
+    // ]);
   }
 }
