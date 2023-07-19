@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thesis_client/controller/layout.dart';
 import 'package:thesis_client/widgets/repeater.dart';
 import 'package:thesis_client/widgets/button_header.dart';
 import 'package:thesis_client/widgets/title_text.dart';
@@ -25,7 +26,7 @@ class _PageListState extends State<PageList> {
   Widget build(BuildContext context) {
     return Column(children: [
       TitleText(name: pageCtrl.layout.caption),
-      ButtonHeader(buttons: pageCtrl.layout.buttons),
+      ButtonHeader(pageType: PageType.list, buttons: pageCtrl.layout.buttons),
       Repeater(repeater: pageCtrl.layout.getRepeaterComponent()),
     ]);
   }

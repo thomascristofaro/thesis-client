@@ -48,7 +48,7 @@ class _AppState extends State<App> {
                 path: "/${element.pageId}",
                 // server solo per le transizioni
                 pageBuilder: (context, state) => NoTransitionPage<void>(
-                      key: state.pageKey,
+                      key: UniqueKey(),
                       child: ChangeNotifierProvider(
                         create: (context) => PageAppController(
                           pageId: element.pageId,

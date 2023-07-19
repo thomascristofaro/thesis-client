@@ -1,3 +1,5 @@
+import 'package:http/retry.dart';
+
 enum PageType { list, card, home }
 
 enum AreaComponentType { repeater, group }
@@ -49,6 +51,14 @@ class Layout {
   AreaComponent getRepeaterComponent() {
     return area
         .firstWhere((element) => element.type == AreaComponentType.repeater);
+  }
+
+  List<PageField> getAllFields() {
+    List<PageField> allFields = [];
+    for (var a in area) {
+      allFields.addAll(a.fields);
+    }
+    return allFields;
   }
 }
 

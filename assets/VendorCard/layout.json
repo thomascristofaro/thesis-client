@@ -2,7 +2,7 @@
     "id": "VendorCard",
     "type": 1,
     "caption": "Vendor Card",
-    "key": ["name"],
+    "key": ["id"],
     "buttons": [
         {
             "id": "btn1",
@@ -38,6 +38,11 @@
             "type": 1,
             "caption": "General",
             "fields": [
+                {
+                    "id": "id",
+                    "type": 0,
+                    "caption": "ID"
+                },
                 {
                     "id": "name",
                     "type": 0,

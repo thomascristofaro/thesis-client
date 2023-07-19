@@ -3,7 +3,7 @@
     "type": 0,
     "caption": "Customer List",
     "card_page_id": "CustomerCard",
-    "key": ["name"],
+    "key": ["id"],
     "buttons": [
         {
             "id": "btn1",
@@ -39,6 +39,11 @@
             "type": 0,
             "caption": "Repeater 1",
             "fields": [
+                {
+                    "id": "id",
+                    "type": 0,
+                    "caption": "ID"
+                },
                 {
                     "id": "name",
                     "type": 0,

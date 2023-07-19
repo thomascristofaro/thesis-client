@@ -18,16 +18,23 @@ class VirtualDB {
     return _db;
   }
 
+  String convertPageName(String pageName) {
+    return pageName.replaceAll("Card", "").replaceAll("List", "");
+  }
+
   bool tableLoaded(String table) {
+    table = convertPageName(table);
     return _database.containsKey(table);
   }
 
   void insertTable(String table) {
+    table = convertPageName(table);
     if (!_database.containsKey(table)) _database.addAll({table: []});
   }
 
   Future<Map<String, dynamic>> insert(
       String table, Map<String, dynamic> jsonRec) async {
+    table = convertPageName(table);
     if (!_database.containsKey(table)) _database.addAll({table: []});
     if (!_id.containsKey(table)) _id.addAll({table: 0});
     Record record = Record.fromMap(jsonRec);
@@ -39,12 +46,14 @@ class VirtualDB {
 
   Future<void> remove(
       String table, List<Map<String, dynamic>> jsonFilters) async {
+    table = convertPageName(table);
     if (!_database.containsKey(table)) throw 'Missing Table';
     List<Filter> filters = jsonFilters.map((e) => Filter.fromMap(e)).toList();
     _database[table]!.removeWhere((record) => checkFilters(record, filters));
   }
 
   Future<void> update(String table, Map<String, dynamic> jsonRec) async {
+    table = convertPageName(table);
     if (!_database.containsKey(table)) throw 'Missing Table';
     Record updatedRecord = Record.fromMap(jsonRec);
     int i = _database[table]!.indexWhere((record) =>
@@ -54,12 +63,14 @@ class VirtualDB {
   }
 
   Future<List<Map<String, dynamic>>> list(String table) async {
+    table = convertPageName(table);
     if (!_database.containsKey(table)) throw 'Missing Table';
     return _database[table]!.map((e) => e.toMap()).toList();
   }
 
   Future<Map<String, dynamic>> findOne(
       String table, List<Map<String, dynamic>> jsonFilters) async {
+    table = convertPageName(table);
     if (!_database.containsKey(table)) throw 'Missing Table';
     List<Filter> filters = jsonFilters.map((e) => Filter.fromMap(e)).toList();
     return _database[table]!
@@ -70,6 +81,7 @@ class VirtualDB {
 
   Future<List<Map<String, dynamic>>> find(
       String table, List<Map<String, dynamic>> jsonFilters) async {
+    table = convertPageName(table);
     if (!_database.containsKey(table)) throw 'Missing Table';
     List<Filter> filters = jsonFilters.map((e) => Filter.fromMap(e)).toList();
     return _database[table]!

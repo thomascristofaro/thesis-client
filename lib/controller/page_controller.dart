@@ -12,6 +12,7 @@ class PageAppController extends ChangeNotifier {
   List<Filter> currentFilters;
   late IPageRepository _pageRepo;
   late Layout layout;
+  late Record currentRecord;
 
   PageAppController({required this.pageId, this.currentFilters = const []}) {
     _pageRepo = PageFakeRepository(VirtualDB(), pageId);
@@ -29,16 +30,34 @@ class PageAppController extends ChangeNotifier {
     return _pageRepo.getAll();
   }
 
-  Future<Record?> getOneRecord() {
-    return _pageRepo.getOne(currentFilters);
+  Future<Record?> getOneRecord() async {
+    var lateRecord = _pageRepo.getOne(currentFilters);
+    currentRecord = await lateRecord;
+    return lateRecord;
   }
 
-  Future<void> addRecord(Record record) {
-    return _pageRepo.insert(record);
+  Future<void> addRecord() {
+    return _pageRepo.insert(currentRecord);
+  }
+
+  Future<void> modifyRecord() {
+    return _pageRepo.update(currentRecord);
   }
 
   Future<void> removeRecord() {
     return _pageRepo.delete(currentFilters);
+  }
+
+  Record createNewRecord() {
+    return Record({for (var e in layout.getAllFields()) e.id: ""});
+  }
+
+  void setCurrentRecord(Record record) {
+    currentRecord = record;
+  }
+
+  Record getCurrentRecord() {
+    return currentRecord;
   }
 
   void addFilter(Filter filter) {

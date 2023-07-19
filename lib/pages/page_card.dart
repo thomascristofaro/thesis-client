@@ -18,12 +18,14 @@ class _PageCardState extends State<PageCard> {
   late PageAppController pageCtrl;
   Future<Record?> record = Future.value(null);
   // questo sarà da spostare dentro il record
-  Map<String, TextEditingController> editCtrl = {};
+  Map<String, TextEditingController> editCtrlMap = {};
 
   // se fosse un altro tipo di variabile e non solo testo?
   void fromFieldsToEditCtrl(Record record) {
     record.fields.forEach((key, value) {
-      editCtrl[key] = TextEditingController(text: value.toString());
+      var editCtrl = TextEditingController(text: value.toString());
+      editCtrl.addListener(() => record.fields[key] = editCtrl.text);
+      editCtrlMap[key] = editCtrl;
     });
   }
 
@@ -40,7 +42,7 @@ class _PageCardState extends State<PageCard> {
     // return ComponentGroupDecoration(label: 'Actions', children: <Widget>[
     return Column(children: [
       TitleText(name: pageCtrl.layout.caption),
-      ButtonHeader(buttons: pageCtrl.layout.buttons),
+      ButtonHeader(pageType: PageType.card, buttons: pageCtrl.layout.buttons),
       FutureBuilder<Record?>(
           future: record,
           builder: (BuildContext context, AsyncSnapshot<Record?> snapshot) {
@@ -51,11 +53,10 @@ class _PageCardState extends State<PageCard> {
               children: [
                 for (var component in pageCtrl.layout.area)
                   if (component.type == AreaComponentType.group)
-                    if (snapshot.hasData)
-                      ComponentGroup(
-                          component: component, record: snapshot.data as Record)
-                    else
-                      ComponentGroup(component: component, record: null)
+                    ComponentGroup(
+                      component: component,
+                      editCtrlMap: editCtrlMap,
+                    )
               ],
             );
           }),
@@ -69,10 +70,10 @@ class _PageCardState extends State<PageCard> {
 
 class ComponentGroup extends StatelessWidget {
   const ComponentGroup(
-      {super.key, required this.component, required this.record});
+      {super.key, required this.component, required this.editCtrlMap});
 
   final AreaComponent component;
-  final Record? record;
+  final Map<String, TextEditingController> editCtrlMap;
 
   @override
   Widget build(BuildContext context) {
@@ -93,9 +94,7 @@ class ComponentGroup extends StatelessWidget {
                   border: const UnderlineInputBorder(),
                   labelText: field.caption,
                 ),
-                controller: record != null
-                    ? TextEditingController(text: record!.fields[field.id])
-                    : null,
+                controller: editCtrlMap[field.id],
               )
           ],
         ),
