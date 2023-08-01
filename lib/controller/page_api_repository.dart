@@ -7,14 +7,15 @@ import 'package:http/http.dart' as http;
 
 class PageAPIRepository implements IPageRepository {
   static const String URL =
-      'https://ir44yj26uh.execute-api.us-east-1.amazonaws.com/';
+      'https://2x0ktr02yk.execute-api.us-east-1.amazonaws.com/';
   final String _pageId;
 
   PageAPIRepository(this._pageId);
 
   @override
   Future<Layout> getLayout() async {
-    final response = await http.get(Uri.parse('$URL$_pageId/schema'));
+    var pageIdLower = _pageId.toLowerCase();
+    final response = await http.get(Uri.parse('$URL$pageIdLower/schema'));
 
     if (response.statusCode == 200) {
       return Layout.fromMap(await jsonDecode(response.body));
@@ -32,7 +33,8 @@ class PageAPIRepository implements IPageRepository {
 
   @override
   Future<List<Record>> getAll() async {
-    final response = await http.get(Uri.parse('$URL$_pageId'));
+    var pageIdLower = _pageId.toLowerCase();
+    final response = await http.get(Uri.parse('$URL$pageIdLower'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> map = await jsonDecode(response.body);
@@ -45,7 +47,17 @@ class PageAPIRepository implements IPageRepository {
 
   @override
   Future<Record> getOne(List<Filter> filters) async {
-    throw UnimplementedError();
+    // da modificare con i filtri
+    var pageIdLower = _pageId.toLowerCase();
+    final response = await http.get(Uri.parse('$URL$pageIdLower'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> map = await jsonDecode(response.body);
+      List<dynamic> recordset = map['recordset'];
+      return Record.fromMap(recordset.first);
+    } else {
+      throw Exception('Failed to load album');
+    }
   }
 
   @override

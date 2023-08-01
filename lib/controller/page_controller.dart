@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:thesis_client/controller/page_api_repository.dart';
-import 'package:thesis_client/controller/page_fake_repository.dart';
-import 'package:thesis_client/controller/virtual_db.dart';
+import 'package:thesis_client/controller/page_api_repository.dart';
+// import 'package:thesis_client/controller/page_fake_repository.dart';
+// import 'package:thesis_client/controller/virtual_db.dart';
 import 'package:thesis_client/controller/page_interface.dart';
 import 'package:thesis_client/controller/record.dart';
 
@@ -15,8 +15,8 @@ class PageAppController extends ChangeNotifier {
   late Record currentRecord;
 
   PageAppController({required this.pageId, this.currentFilters = const []}) {
-    _pageRepo = PageFakeRepository(VirtualDB(), pageId);
-    // _pageRepo = PageAPIRepository(_pageId);
+    // _pageRepo = PageFakeRepository(VirtualDB(), pageId);
+    _pageRepo = PageAPIRepository(pageId);
   }
 
   Future<Layout> getLayout() async {
@@ -26,7 +26,6 @@ class PageAppController extends ChangeNotifier {
   }
 
   Future<List<Record>> getAllRecords() {
-    Future.delayed(const Duration(seconds: 3));
     return _pageRepo.getAll();
   }
 
