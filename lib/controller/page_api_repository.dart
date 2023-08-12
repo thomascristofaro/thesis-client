@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class PageAPIRepository implements IPageRepository {
   static const String URL =
-      'https://2x0ktr02yk.execute-api.us-east-1.amazonaws.com/';
+      'https://ngb197hjce.execute-api.us-east-1.amazonaws.com/';
   final String _pageId;
 
   PageAPIRepository(this._pageId);

@@ -6,6 +6,7 @@ import 'package:thesis_client/controller/navigation_model.dart';
 import 'package:thesis_client/widgets/brightness_button.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
 import 'package:thesis_client/widgets/color_seed_button.dart';
+import 'package:thesis_client/widgets/pie_chart.dart';
 import 'package:thesis_client/widgets/trailing_actions.dart';
 import 'package:thesis_client/widgets/expanded_trailing_actions.dart';
 
