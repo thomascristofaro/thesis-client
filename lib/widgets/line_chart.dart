@@ -1,10 +1,16 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:thesis_client/constants.dart';
+import 'package:thesis_client/controller/layout.dart';
+import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/widgets/title_text.dart';
 
 class LineChartBuilder extends StatefulWidget {
-  const LineChartBuilder({super.key});
+  final AreaComponent component;
+  final List<Record> records;
+
+  const LineChartBuilder(
+      {super.key, required this.component, required this.records});
 
   @override
   State<LineChartBuilder> createState() => _LineChartBuilderState();
@@ -12,8 +18,8 @@ class LineChartBuilder extends StatefulWidget {
 
 class _LineChartBuilderState extends State<LineChartBuilder> {
   List<Color> gradientColors = [
-    AppColors.contentColorCyan,
-    AppColors.contentColorBlue,
+    const Color(0xFF50E4FF),
+    const Color(0xFF2196F3),
   ];
 
   @override
@@ -27,7 +33,7 @@ class _LineChartBuilderState extends State<LineChartBuilder> {
       ),
       child: Column(
         children: [
-          TitleText(name: "TEST LINE CHART"),
+          TitleText(name: widget.component.caption),
           Expanded(
             child: LineChart(
               mainData(),
@@ -43,21 +49,13 @@ class _LineChartBuilderState extends State<LineChartBuilder> {
       fontWeight: FontWeight.bold,
       fontSize: 16,
     );
-    Widget text;
-    switch (value.toInt()) {
-      case 2:
-        text = const Text('MAR', style: style);
-        break;
-      case 5:
-        text = const Text('JUN', style: style);
-        break;
-      case 8:
-        text = const Text('SEP', style: style);
-        break;
-      default:
-        text = const Text('', style: style);
-        break;
-    }
+    var data2 = widget.component.options['x']['data'] as List<dynamic>;
+    List<Map<String, dynamic>> data =
+        data2.map((element) => element as Map<String, dynamic>).toList();
+    Widget text = Text(
+        data.firstWhere((e) => e['value'].toDouble() == value,
+            orElse: () => {'label': ''})['label'],
+        style: style);
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -70,21 +68,14 @@ class _LineChartBuilderState extends State<LineChartBuilder> {
       fontWeight: FontWeight.bold,
       fontSize: 15,
     );
-    String text;
-    switch (value.toInt()) {
-      case 1:
-        text = '10K';
-        break;
-      case 3:
-        text = '30k';
-        break;
-      case 5:
-        text = '50k';
-        break;
-      default:
-        return Container();
+    var data2 = widget.component.options['y']['data'] as List<dynamic>;
+    List<Map<String, dynamic>> data =
+        data2.map((element) => element as Map<String, dynamic>).toList();
+    String text = data.firstWhere((e) => e['value'].toDouble() == value,
+        orElse: () => {'label': ''})['label'];
+    if (text == '') {
+      return Container();
     }
-
     return Text(text, style: style, textAlign: TextAlign.left);
   }
 
@@ -97,13 +88,13 @@ class _LineChartBuilderState extends State<LineChartBuilder> {
         verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return const FlLine(
-            color: AppColors.mainGridLineColor,
+            color: Colors.white10,
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
           return const FlLine(
-            color: AppColors.mainGridLineColor,
+            color: Colors.white10,
             strokeWidth: 1,
           );
         },
@@ -137,20 +128,18 @@ class _LineChartBuilderState extends State<LineChartBuilder> {
         show: true,
         border: Border.all(color: const Color(0xff37434d)),
       ),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
+      minX: widget.component.options['x']['min'].toDouble(),
+      maxX: widget.component.options['x']['max'].toDouble(),
+      minY: widget.component.options['y']['min'].toDouble(),
+      maxY: widget.component.options['y']['max'].toDouble(),
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
+          spots: [
+            for (var record in widget.records.where((record) =>
+                record.fields.containsKey('x') &&
+                record.fields.containsKey('y')))
+              FlSpot(
+                  record.fields['x'].toDouble(), record.fields['y'].toDouble()),
           ],
           isCurved: true,
           gradient: LinearGradient(
@@ -173,28 +162,4 @@ class _LineChartBuilderState extends State<LineChartBuilder> {
       ],
     );
   }
-}
-
-class AppColors {
-  static const Color primary = contentColorCyan;
-  static const Color menuBackground = Color(0xFF090912);
-  static const Color itemsBackground = Color(0xFF1B2339);
-  static const Color pageBackground = Color(0xFF282E45);
-  static const Color mainTextColor1 = Colors.white;
-  static const Color mainTextColor2 = Colors.white70;
-  static const Color mainTextColor3 = Colors.white38;
-  static const Color mainGridLineColor = Colors.white10;
-  static const Color borderColor = Colors.white54;
-  static const Color gridLinesColor = Color(0x11FFFFFF);
-
-  static const Color contentColorBlack = Colors.black;
-  static const Color contentColorWhite = Colors.white;
-  static const Color contentColorBlue = Color(0xFF2196F3);
-  static const Color contentColorYellow = Color(0xFFFFC300);
-  static const Color contentColorOrange = Color(0xFFFF683B);
-  static const Color contentColorGreen = Color(0xFF3BFF49);
-  static const Color contentColorPurple = Color(0xFF6E1BFF);
-  static const Color contentColorPink = Color(0xFFFF3AF2);
-  static const Color contentColorRed = Color(0xFFE80054);
-  static const Color contentColorCyan = Color(0xFF50E4FF);
 }

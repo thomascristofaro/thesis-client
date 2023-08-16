@@ -15,23 +15,44 @@
             "type": 3,
             "caption": "Line Chart 1",
             "options": {
-                "minX": 0,
-                "maxX": 11,
-                "minY": 0,
-                "maxY": 6
-            },
-            "fields": [
-                {
-                    "id": "x",
-                    "type": 0,
-                    "caption": "x"
+                "x": {
+                    "min": 0,
+                    "max": 11,
+                    "data": [
+                        {
+                            "label": "MAR",
+                            "value": 2
+                        },
+                        {
+                            "label": "JUN",
+                            "value": 5
+                        },
+                        {
+                            "label": "SEP",
+                            "value": 8
+                        }
+                    ]
                 },
-                {
-                    "id": "y",
-                    "type": 0,
-                    "caption": "y"
+                "y": {
+                    "min": 0,
+                    "max": 6,
+                    "data": [
+                        {
+                            "label": "10K",
+                            "value": 1
+                        },
+                        {
+                            "label": "30k",
+                            "value": 3
+                        },
+                        {
+                            "label": "50k",
+                            "value": 5
+                        }
+                    ]
                 }
-            ]
+            },
+            "fields": []
         }
     ]
 }

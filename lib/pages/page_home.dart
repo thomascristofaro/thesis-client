@@ -46,7 +46,10 @@ class _PageHomeState extends State<PageHome> {
                   case AreaComponentType.linechart:
                     return Container(
                       height: 400,
-                      child: LineChartBuilder(),
+                      child: LineChartBuilder(
+                        component: component,
+                        records: data,
+                      ),
                     );
                   default:
                     return Container();
