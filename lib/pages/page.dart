@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thesis_client/controller/layout.dart';
-import 'package:thesis_client/pages/home.dart';
+import 'package:thesis_client/pages/page_home.dart';
 import 'package:thesis_client/pages/page_card.dart';
 import 'package:thesis_client/pages/page_list.dart';
 import 'package:thesis_client/controller/page_controller.dart';
