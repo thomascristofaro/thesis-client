@@ -8,18 +8,7 @@
             "id": "pie_chart_1",
             "type": 2,
             "caption": "Pie Chart 1",
-            "fields": [
-                {
-                    "id": "label",
-                    "type": 0,
-                    "caption": "Label"
-                },
-                {
-                    "id": "percent",
-                    "type": 0,
-                    "caption": "Percent"
-                }
-            ]
+            "fields": []
         },
         {
             "id": "line_chart_1",

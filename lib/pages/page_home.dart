@@ -36,14 +36,17 @@ class _PageHomeState extends State<PageHome> {
               (component) {
                 switch (component.type) {
                   case AreaComponentType.piechart:
-                    return Container(
+                    return SizedBox(
                       height: 400,
-                      child: PieChartSample2(),
+                      child: PieChartBuilder(
+                        component: component,
+                        records: data,
+                      ),
                     );
                   case AreaComponentType.linechart:
                     return Container(
                       height: 400,
-                      child: LineChartSample2(),
+                      child: LineChartBuilder(),
                     );
                   default:
                     return Container();

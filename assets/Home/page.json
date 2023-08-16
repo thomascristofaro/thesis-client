@@ -2,19 +2,19 @@
     "recordset": [
         {
             "label": "first",
-            "percent": "40"
+            "value": 40.0
         },
         {
             "label": "second",
-            "percent": "30"
+            "value": 30.0
         },
         {
             "label": "third",
-            "percent": "20"
+            "value": 20.0
         },
         {
             "label": "fourth",
-            "percent": "10"
+            "value": 10.0
         },
         {
             "x": "10.5",

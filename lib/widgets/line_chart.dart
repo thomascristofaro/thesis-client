@@ -3,20 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:thesis_client/constants.dart';
 import 'package:thesis_client/widgets/title_text.dart';
 
-class LineChartSample2 extends StatefulWidget {
-  const LineChartSample2({super.key});
+class LineChartBuilder extends StatefulWidget {
+  const LineChartBuilder({super.key});
 
   @override
-  State<LineChartSample2> createState() => _LineChartSample2State();
+  State<LineChartBuilder> createState() => _LineChartBuilderState();
 }
 
-class _LineChartSample2State extends State<LineChartSample2> {
+class _LineChartBuilderState extends State<LineChartBuilder> {
   List<Color> gradientColors = [
     AppColors.contentColorCyan,
     AppColors.contentColorBlue,
   ];
-
-  bool showAvg = false;
 
   @override
   Widget build(BuildContext context) {
