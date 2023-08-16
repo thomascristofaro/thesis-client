@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thesis_client/constants.dart';
 
 class TitleText extends StatelessWidget {
   const TitleText({
@@ -11,7 +12,7 @@ class TitleText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(smallSpacing),
       child: Text(name, style: Theme.of(context).textTheme.headlineMedium),
     );
   }

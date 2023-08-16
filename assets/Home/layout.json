@@ -2,5 +2,47 @@
     "id": "Home",
     "type": 2,
     "caption": "Home Page",
-    "key": []
+    "key": [],
+    "area": [
+        {
+            "id": "pie_chart_1",
+            "type": 2,
+            "caption": "Pie Chart 1",
+            "fields": [
+                {
+                    "id": "label",
+                    "type": 0,
+                    "caption": "Label"
+                },
+                {
+                    "id": "percent",
+                    "type": 0,
+                    "caption": "Percent"
+                }
+            ]
+        },
+        {
+            "id": "line_chart_1",
+            "type": 3,
+            "caption": "Line Chart 1",
+            "options": {
+                "minX": 0,
+                "maxX": 11,
+                "minY": 0,
+                "maxY": 6
+            },
+            "fields": [
+                {
+                    "id": "x",
+                    "type": 0,
+                    "caption": "x"
+                },
+                {
+                    "id": "y",
+                    "type": 0,
+                    "caption": "y"
+                }
+            ]
+        }
+    ]
 }

@@ -1,5 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:thesis_client/constants.dart';
+import 'package:thesis_client/widgets/title_text.dart';
 
 class PieChartSample2 extends StatefulWidget {
   const PieChartSample2({super.key});
@@ -13,84 +15,85 @@ class PieChart2State extends State {
 
   @override
   Widget build(BuildContext context) {
-    // da capire per quanto riguarda il titolo del chart
     return Card(
         child: Padding(
       padding: const EdgeInsets.only(
-        right: 18,
-        left: 12,
-        top: 24,
-        bottom: 12,
+        right: smallSpacing,
+        left: smallSpacing,
+        bottom: smallSpacing,
       ),
-      child: Row(children: [
-        Expanded(
-          child: PieChart(
-            PieChartData(
-              pieTouchData: PieTouchData(
-                touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                  setState(() {
-                    if (!event.isInterestedForInteractions ||
-                        pieTouchResponse == null ||
-                        pieTouchResponse.touchedSection == null) {
-                      touchedIndex = -1;
-                      return;
-                    }
-                    touchedIndex =
-                        pieTouchResponse.touchedSection!.touchedSectionIndex;
-                  });
-                },
+      child: Column(
+        children: [
+          TitleText(name: "TEST PIE CHART"),
+          Expanded(
+              child: Row(children: [
+            Expanded(
+              child: PieChart(
+                PieChartData(
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      });
+                    },
+                  ),
+                  borderData: FlBorderData(
+                    show: false,
+                  ),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 40,
+                  sections: showingSections(),
+                ),
               ),
-              borderData: FlBorderData(
-                show: false,
-              ),
-              sectionsSpace: 0,
-              centerSpaceRadius: 40,
-              sections: showingSections(),
             ),
-          ),
-        ),
-        const Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Indicator(
-              color: AppColors.contentColorBlue,
-              text: 'First',
-              isSquare: true,
+            const Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Indicator(
+                  color: AppColors.contentColorBlue,
+                  text: 'First',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: AppColors.contentColorYellow,
+                  text: 'Second',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: AppColors.contentColorPurple,
+                  text: 'Third',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Indicator(
+                  color: AppColors.contentColorGreen,
+                  text: 'Fourth',
+                  isSquare: true,
+                ),
+                SizedBox(
+                  height: 18,
+                ),
+              ],
             ),
-            SizedBox(
-              height: 4,
-            ),
-            Indicator(
-              color: AppColors.contentColorYellow,
-              text: 'Second',
-              isSquare: true,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Indicator(
-              color: AppColors.contentColorPurple,
-              text: 'Third',
-              isSquare: true,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Indicator(
-              color: AppColors.contentColorGreen,
-              text: 'Fourth',
-              isSquare: true,
-            ),
-            SizedBox(
-              height: 18,
-            ),
-          ],
-        ),
-        const SizedBox(
-          width: 28,
-        ),
-      ]),
+          ])),
+        ],
+      ),
     ));
   }
 

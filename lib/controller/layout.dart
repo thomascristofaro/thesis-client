@@ -1,8 +1,6 @@
-import 'package:http/retry.dart';
-
 enum PageType { list, card, home }
 
-enum AreaComponentType { repeater, group }
+enum AreaComponentType { repeater, group, piechart, linechart }
 
 enum FieldType { text, number, boolean, date, time, datetime }
 
@@ -25,14 +23,14 @@ class Layout {
         cardPageId =
             data.containsKey('card_page_id') ? data['card_page_id'] : '',
         key = List<String>.from(data['key']) {
-    if (type != PageType.home) {
-      // Questo va in errore da chiedere su stack overflow
-      // area = data['area'].map((e) => AreaComponent.fromMap(e)).toList();
-      List<dynamic> jsonarea = data['area'];
-      area = jsonarea
-          .map((jcomponent) => AreaComponent.fromMap(jcomponent))
-          .toList();
+    // Questo va in errore da chiedere su stack overflow
+    // area = data['area'].map((e) => AreaComponent.fromMap(e)).toList();
+    List<dynamic> jsonarea = data['area'];
+    area = jsonarea
+        .map((jcomponent) => AreaComponent.fromMap(jcomponent))
+        .toList();
 
+    if (type != PageType.home) {
       // data['buttons'].map((button) => Button.fromMap(button)).toList(),
       List<dynamic> jsonbuttons = data['buttons'];
       buttons = jsonbuttons.map((jbutton) => Button.fromMap(jbutton)).toList();
@@ -112,13 +110,16 @@ class AreaComponent {
   final String caption;
   final AreaComponentType type;
   late List<PageField> fields;
+  final Map<String, dynamic> options;
 
-  AreaComponent(this.id, this.caption, this.type, this.fields);
+  AreaComponent(this.id, this.caption, this.type, this.fields,
+      {this.options = const {}});
 
   AreaComponent.fromMap(Map<String, dynamic> data)
       : id = data['id'],
         caption = data['caption'],
-        type = AreaComponentType.values[data['type']] {
+        type = AreaComponentType.values[data['type']],
+        options = data.containsKey('options') ? data['options'] : const {} {
     List<dynamic> jsonfields = data['fields'];
     fields = jsonfields.map((jfield) => PageField.fromMap(jfield)).toList();
   }
@@ -127,6 +128,7 @@ class AreaComponent {
         'id': id,
         'caption': caption,
         'type': type.index,
-        'fields': fields.map((field) => field.toMap()).toList()
+        'fields': fields.map((field) => field.toMap()).toList(),
+        'options': options,
       };
 }

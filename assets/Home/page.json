@@ -1,0 +1,32 @@
+{
+    "recordset": [
+        {
+            "label": "first",
+            "percent": "40"
+        },
+        {
+            "label": "second",
+            "percent": "30"
+        },
+        {
+            "label": "third",
+            "percent": "20"
+        },
+        {
+            "label": "fourth",
+            "percent": "10"
+        },
+        {
+            "x": "10.5",
+            "y": "32.1"
+        },
+        {
+            "x": "10.5",
+            "y": "32.1"
+        },
+        {
+            "x": "10.5",
+            "y": "32.1"
+        }
+    ]
+}

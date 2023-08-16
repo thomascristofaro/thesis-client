@@ -30,8 +30,7 @@ class _PageState extends State<Page> {
       builder: (Layout layout) {
         switch (layout.type) {
           case PageType.home:
-            // TODO prima o poi sarà da implementare come tipologia di pagina dal backend
-            return const Home();
+            return const PageHome();
           case PageType.list:
             return const PageList();
           case PageType.card:
