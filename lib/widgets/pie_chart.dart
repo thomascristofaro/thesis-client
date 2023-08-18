@@ -49,8 +49,8 @@ class _PieChartBuilderState extends State<PieChartBuilder> {
         .where((record) =>
             record.fields.containsKey('label') &&
             record.fields.containsKey('value'))
-        .map((record) =>
-            PieChartModel(record.fields['label'], record.fields['value']))
+        .map((record) => PieChartModel(
+            record.fields['label'], record.fields['value'].toDouble()))
         .toList();
   }
 

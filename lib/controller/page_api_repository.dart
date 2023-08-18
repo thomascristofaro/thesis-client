@@ -22,17 +22,11 @@ class PageAPIRepository implements IPageRepository {
     } else {
       throw Exception('Failed to load API');
     }
-    // final Map<String, dynamic> map = await json.decode(file);
-    // return Layout.fromMap(map);
   }
 
   @override
   Future<List<Record>> get(List<Filter> filters) async {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Record>> getAll() async {
+    // da modificare con i filtri
     var pageIdLower = _pageId.toLowerCase();
     final response = await http.get(Uri.parse('$URL$pageIdLower'));
 
@@ -41,39 +35,55 @@ class PageAPIRepository implements IPageRepository {
       List<dynamic> recordset = map['recordset'];
       return recordset.map((e) => Record.fromMap(e)).toList();
     } else {
-      throw Exception('Failed to load album');
+      throw Exception('Failed to load API');
     }
+  }
+
+  @override
+  Future<List<Record>> getAll() async {
+    return get([]);
   }
 
   @override
   Future<Record> getOne(List<Filter> filters) async {
-    // da modificare con i filtri
-    var pageIdLower = _pageId.toLowerCase();
-    final response = await http.get(Uri.parse('$URL$pageIdLower'));
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> map = await jsonDecode(response.body);
-      List<dynamic> recordset = map['recordset'];
-      return Record.fromMap(recordset.first);
-    } else {
-      throw Exception('Failed to load album');
-    }
+    var recordset = await get(filters);
+    return recordset.first;
   }
 
   @override
   Future<Record> insert(Record record) async {
-    throw UnimplementedError();
+    var pageIdLower = _pageId.toLowerCase();
+    final response = await http.post(Uri.parse('$URL$pageIdLower'),
+        body: jsonEncode(record.toMap()),
+        headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> map = await jsonDecode(response.body);
+      return Record.fromMap(map);
+    } else {
+      throw Exception('Failed to write to API');
+    }
   }
 
   @override
   Future<void> update(Record record) async {
-    throw UnimplementedError();
+    var pageIdLower = _pageId.toLowerCase();
+    final response = await http.patch(Uri.parse('$URL$pageIdLower'),
+        body: jsonEncode(record.toMap()),
+        headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to write to API');
+    }
   }
 
   @override
   Future<void> delete(List<Filter> filters) async {
-    throw UnimplementedError();
+    var pageIdLower = _pageId.toLowerCase();
+    final response = await http.delete(Uri.parse('$URL$pageIdLower'));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to write to API');
+    }
   }
 }
-
-class Test {}
