@@ -26,9 +26,10 @@ class PageAPIRepository implements IPageRepository {
 
   @override
   Future<List<Record>> get(List<Filter> filters) async {
-    // da modificare con i filtri
     var pageIdLower = _pageId.toLowerCase();
-    final response = await http.get(Uri.parse('$URL$pageIdLower'));
+    var address = Uri.https("ngb197hjce.execute-api.us-east-1.amazonaws.com",
+        "/$pageIdLower", {for (var filter in filters) filter.id: filter.value});
+    final response = await http.get(address);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> map = await jsonDecode(response.body);
@@ -80,7 +81,9 @@ class PageAPIRepository implements IPageRepository {
   @override
   Future<void> delete(List<Filter> filters) async {
     var pageIdLower = _pageId.toLowerCase();
-    final response = await http.delete(Uri.parse('$URL$pageIdLower'));
+    var address = Uri.https("ngb197hjce.execute-api.us-east-1.amazonaws.com",
+        "/$pageIdLower", {for (var filter in filters) filter.id: filter.value});
+    final response = await http.delete(address);
 
     if (response.statusCode != 200) {
       throw Exception('Failed to write to API');
