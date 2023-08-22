@@ -6,9 +6,6 @@ import 'package:thesis_client/controller/navigation_model.dart';
 import 'package:thesis_client/widgets/brightness_button.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
 import 'package:thesis_client/widgets/color_seed_button.dart';
-import 'package:thesis_client/widgets/pie_chart.dart';
-import 'package:thesis_client/widgets/trailing_actions.dart';
-import 'package:thesis_client/widgets/expanded_trailing_actions.dart';
 
 import 'package:thesis_client/constants.dart';
 
@@ -81,21 +78,19 @@ class _NavigationState extends State<Navigation>
               onPressed: () => handleRailChanged(),
             )
           : null,
-      actions: showSmallSizeLayout
-          ? [
-              BrightnessButton(
-                handleBrightnessChange: widget.baseSetup.handleBrightnessChange,
-              ),
-              Material3Button(
-                handleMaterialVersionChange:
-                    widget.baseSetup.handleMaterialVersionChange,
-              ),
-              ColorSeedButton(
-                handleColorSelect: widget.baseSetup.handleColorSelect,
-                colorSelected: widget.baseSetup.colorSelected,
-              ),
-            ]
-          : [Container()],
+      actions: [
+        BrightnessButton(
+          handleBrightnessChange: widget.baseSetup.handleBrightnessChange,
+        ),
+        Material3Button(
+          handleMaterialVersionChange:
+              widget.baseSetup.handleMaterialVersionChange,
+        ),
+        ColorSeedButton(
+          handleColorSelect: widget.baseSetup.handleColorSelect,
+          colorSelected: widget.baseSetup.colorSelected,
+        ),
+      ],
     );
   }
 
@@ -129,11 +124,11 @@ class _NavigationState extends State<Navigation>
                   label: Text(element.caption),
                 ),
               )
-              .toList())
+              .toList()),
         ]);
   }
 
-  NavigationRail buildNavigationRail() {
+  Widget buildScrollNavigationRail() {
     final List<NavigationRailDestination> railDestinations =
         widget.navigationList
             .where((e) => e.show)
@@ -151,36 +146,20 @@ class _NavigationState extends State<Navigation>
             )
             .toList();
 
-    return NavigationRail(
-      extended: extendedRail,
-      destinations: railDestinations,
-      selectedIndex: pageIndex,
-      onDestinationSelected: (index) {
-        handlePageChanged(index);
-      },
-      trailing: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: extendedRail
-              ? ExpandedTrailingActions(
-                  useLightMode: widget.baseSetup.useLightMode,
-                  useMaterial3: widget.baseSetup.useMaterial3,
-                  colorSelected: widget.baseSetup.colorSelected,
-                  handleBrightnessChange:
-                      widget.baseSetup.handleBrightnessChange,
-                  handleMaterialVersionChange:
-                      widget.baseSetup.handleMaterialVersionChange,
-                  handleColorSelect: widget.baseSetup.handleColorSelect)
-              : TrailingActions(
-                  colorSelected: widget.baseSetup.colorSelected,
-                  handleBrightnessChange:
-                      widget.baseSetup.handleBrightnessChange,
-                  handleMaterialVersionChange:
-                      widget.baseSetup.handleMaterialVersionChange,
-                  handleColorSelect: widget.baseSetup.handleColorSelect),
-        ),
-      ),
-    );
+    return SingleChildScrollView(
+        child: ConstrainedBox(
+            constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height -
+                    (MediaQuery.of(context).padding.top + kToolbarHeight)),
+            child: IntrinsicHeight(
+                child: NavigationRail(
+              extended: extendedRail,
+              destinations: railDestinations,
+              selectedIndex: pageIndex,
+              onDestinationSelected: (index) {
+                handlePageChanged(index);
+              },
+            ))));
   }
 
   @override
@@ -190,30 +169,7 @@ class _NavigationState extends State<Navigation>
       appBar: buildAppBar(),
       body: Row(
         children: <Widget>[
-          // NavigationRail(
-          //   selectedIndex: 0,
-          //   groupAlignment: -1.0,
-          //   onDestinationSelected: (int index) {},
-          //   labelType: NavigationRailLabelType.all,
-          //   destinations: const <NavigationRailDestination>[
-          //     NavigationRailDestination(
-          //       icon: Icon(Icons.favorite_border),
-          //       selectedIcon: Icon(Icons.favorite),
-          //       label: Text('First'),
-          //     ),
-          //     NavigationRailDestination(
-          //       icon: Icon(Icons.bookmark_border),
-          //       selectedIcon: Icon(Icons.book),
-          //       label: Text('Second'),
-          //     ),
-          //     NavigationRailDestination(
-          //       icon: Icon(Icons.star_border),
-          //       selectedIcon: Icon(Icons.star),
-          //       label: Text('Third'),
-          //     ),
-          //   ],
-          // ),
-          if (!showSmallSizeLayout) buildNavigationRail(),
+          if (!showSmallSizeLayout) buildScrollNavigationRail(),
           if (!showSmallSizeLayout)
             const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.

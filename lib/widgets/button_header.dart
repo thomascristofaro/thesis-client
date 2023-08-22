@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:thesis_client/constants.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import '../controller/layout.dart';
 
@@ -16,6 +17,8 @@ class ButtonHeader extends StatefulWidget {
 }
 
 class _ButtonHeaderState extends State<ButtonHeader> {
+  List<Widget> buttonsWidget = [];
+
   void sendSnackBar(String string) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -78,50 +81,94 @@ class _ButtonHeaderState extends State<ButtonHeader> {
   Widget newButton() {
     return createButton(Button("default_new", "New", 0xe404, []), () {
       var pageCtrl = Provider.of<PageAppController>(context, listen: false);
-      if (pageCtrl.layout.cardPageId == '')
-        throw Exception('Card not available');
-      context.pushNamed(pageCtrl.layout.cardPageId);
+      if (pageCtrl.layout.cardPageId.isEmpty) {
+        sendSnackBar('Card not available');
+      } else {
+        context.pushNamed(pageCtrl.layout.cardPageId);
+      }
     });
   }
 
   Widget insertButton() {
-    return createButton(Button("default_insert", "Insert", 0xe404, []), () {
-      Provider.of<PageAppController>(context, listen: false).addRecord();
-      sendSnackBar('Inserted');
+    return createButton(Button("default_insert", "Insert", 0xe404, []),
+        () async {
+      try {
+        await Provider.of<PageAppController>(context, listen: false)
+            .addRecord();
+        sendSnackBar('Inserted');
+      } catch (e) {
+        sendSnackBar(e.toString());
+      }
     });
   }
 
   Widget modifyButton() {
-    return createButton(Button("default_modify", "Modify", 0xe404, []), () {
-      Provider.of<PageAppController>(context, listen: false).modifyRecord();
-      sendSnackBar('Modified');
+    return createButton(Button("default_modify", "Modify", 0xe404, []),
+        () async {
+      try {
+        await Provider.of<PageAppController>(context, listen: false)
+            .modifyRecord();
+        sendSnackBar('Modified');
+      } catch (e) {
+        sendSnackBar(e.toString());
+      }
     });
   }
 
   Widget deleteButton() {
-    return createButton(Button("default_delete", "Delete", 0xe404, []), () {
-      Provider.of<PageAppController>(context, listen: false).removeRecord();
-      Navigator.pop(context); // dovrebbe chiudere la pagina
+    return createButton(Button("default_delete", "Delete", 0xe404, []),
+        () async {
+      // TODO qui arrivo senza filtri se faccio un insert
+      // quindi o tolgo il delete dal new o capisco come gestirlo
+      try {
+        await Provider.of<PageAppController>(context, listen: false)
+            .removeRecord();
+        if (!context.mounted) return;
+        Navigator.pop(context); // chiude la pagina
+      } catch (e) {
+        sendSnackBar(e.toString());
+      }
     });
+  }
+
+  void createButtonList() {
+    buttonsWidget = [
+      if (widget.pageType == PageType.list) newButton(),
+      if (widget.pageType == PageType.card) insertButton(),
+      if (widget.pageType == PageType.card) modifyButton(),
+      if (widget.pageType == PageType.card) deleteButton(),
+      ...widget.buttons.map((button) => createMenu(button)).toList()
+    ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    createButtonList();
   }
 
   @override
   Widget build(BuildContext context) {
-    // bisogna mettere da qualche parte lo scroll orizzontale
     return Card(
       elevation: 1,
       child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+          padding: const EdgeInsets.symmetric(
+              horizontal: smallSpacing / 2, vertical: smallSpacing),
           child: Center(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  if (widget.pageType == PageType.list) newButton(),
-                  if (widget.pageType == PageType.card) insertButton(),
-                  if (widget.pageType == PageType.card) modifyButton(),
-                  if (widget.pageType == PageType.card) deleteButton(),
-                  ...widget.buttons.map((button) => createMenu(button)).toList()
-                ]),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.only(left: smallSpacing * 2),
+                child: Row(
+                    children: buttonsWidget
+                        .map((e) => Padding(
+                              padding: const EdgeInsets.only(
+                                  right: smallSpacing * 2),
+                              child: e,
+                            ))
+                        .toList()),
+              ),
+            ),
           )),
     );
   }

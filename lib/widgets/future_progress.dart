@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thesis_client/widgets/error_indicator.dart';
 import 'package:thesis_client/widgets/progress.dart';
 
 class FutureProgress<T> extends StatelessWidget {
@@ -18,6 +19,8 @@ class FutureProgress<T> extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
           if (snapshot.hasData) {
             return builder(snapshot.data as T);
+          } else if (snapshot.hasError) {
+            return ErrorIndicator(error: snapshot.error.toString());
           } else {
             return const Progress();
           }

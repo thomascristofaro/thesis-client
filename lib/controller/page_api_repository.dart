@@ -20,7 +20,7 @@ class PageAPIRepository implements IPageRepository {
     if (response.statusCode == 200) {
       return Layout.fromMap(await jsonDecode(response.body));
     } else {
-      throw Exception('Failed to load API');
+      throw Exception(getErrorMessage(response.body));
     }
   }
 
@@ -32,11 +32,15 @@ class PageAPIRepository implements IPageRepository {
     final response = await http.get(address);
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> map = await jsonDecode(response.body);
-      List<dynamic> recordset = map['recordset'];
-      return recordset.map((e) => Record.fromMap(e)).toList();
+      try {
+        final Map<String, dynamic> map = await jsonDecode(response.body);
+        List<dynamic> recordset = map['recordset'];
+        return recordset.map((e) => Record.fromMap(e)).toList();
+      } catch (e) {
+        throw Exception("Failed to read body response from API");
+      }
     } else {
-      throw Exception('Failed to load API');
+      throw Exception(getErrorMessage(response.body));
     }
   }
 
@@ -62,7 +66,7 @@ class PageAPIRepository implements IPageRepository {
       final Map<String, dynamic> map = await jsonDecode(response.body);
       return Record.fromMap(map);
     } else {
-      throw Exception('Failed to write to API');
+      throw Exception(getErrorMessage(response.body));
     }
   }
 
@@ -74,7 +78,7 @@ class PageAPIRepository implements IPageRepository {
         headers: {'Content-Type': 'application/json'});
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to write to API');
+      throw Exception(getErrorMessage(response.body));
     }
   }
 
@@ -86,7 +90,16 @@ class PageAPIRepository implements IPageRepository {
     final response = await http.delete(address);
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to write to API');
+      throw Exception(getErrorMessage(response.body));
+    }
+  }
+
+  String getErrorMessage(String body) {
+    try {
+      final Map<String, dynamic> map = jsonDecode(body);
+      return map['message'];
+    } catch (e) {
+      return "Failed to read body response from API";
     }
   }
 }

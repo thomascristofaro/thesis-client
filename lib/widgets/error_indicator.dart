@@ -2,20 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:thesis_client/constants.dart';
 import 'package:thesis_client/widgets/title_text.dart';
 
-class Progress extends StatelessWidget {
-  const Progress({super.key});
+class ErrorIndicator extends StatelessWidget {
+  final String error;
+  const ErrorIndicator({super.key, required this.error});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
+        const SizedBox(
           width: indicatorSize,
           height: indicatorSize,
-          child: CircularProgressIndicator(),
+          child: Icon(
+            Icons.warning,
+            size: indicatorSize,
+            color: Colors.red,
+          ),
         ),
-        TitleText(name: "Awaiting result...")
+        TitleText(name: error)
       ],
     );
   }

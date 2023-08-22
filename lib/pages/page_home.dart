@@ -27,11 +27,11 @@ class _PageHomeState extends State<PageHome> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: FutureProgress<List<Record>>(
-          future: recordList,
-          builder: (List<Record> data) {
-            return Column(
+    return FutureProgress<List<Record>>(
+        future: recordList,
+        builder: (List<Record> data) {
+          return SingleChildScrollView(
+            child: Column(
                 children: pageCtrl.layout.area.map(
               (component) {
                 switch (component.type) {
@@ -55,8 +55,8 @@ class _PageHomeState extends State<PageHome> {
                     return Container();
                 }
               },
-            ).toList());
-          }),
-    );
+            ).toList()),
+          );
+        });
   }
 }

@@ -40,6 +40,9 @@ class PageAppController extends ChangeNotifier {
     return lateRecord;
   }
 
+  // TODO da capire come gestire un errore che proviene dalla gestione delle API
+  // vorrei che mi uscisse uno snackBar con il messaggio di errore
+  // e non continuasse l'esecuzione esternamente a questa funzione
   Future<void> addRecord() {
     return _pageRepo.insert(currentRecord);
   }
