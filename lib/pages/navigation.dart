@@ -99,7 +99,6 @@ class _NavigationState extends State<Navigation>
         selectedIndex: pageIndex,
         onDestinationSelected: (index) {
           handlePageChanged(index);
-          Navigator.pop(context);
         },
         children: <Widget>[
           Padding(
