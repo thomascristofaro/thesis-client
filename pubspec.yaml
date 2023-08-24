@@ -77,6 +77,10 @@ flutter:
     - assets/VendorCard/layout.json
     - assets/Home/layout.json
     - assets/Home/page.json
+    - assets/SalesLineList/page.json
+    - assets/SalesLineList/layout.json
+    - assets/SalesLineCard/page.json
+    - assets/SalesLineCard/layout.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

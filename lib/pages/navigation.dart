@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thesis_client/base_setup.dart';
 import 'package:thesis_client/controller/navigation_model.dart';
+import 'package:thesis_client/controller/utility.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
@@ -56,10 +57,12 @@ class _NavigationState extends State<Navigation>
     while (context.canPop()) {
       context.pop();
     }
-    context.goNamed(widget.navigationList
-        .where((e) => e.show)
-        .elementAt(pageSelected)
-        .pageId);
+    Utility.goPage(
+        context,
+        widget.navigationList
+            .where((e) => e.show)
+            .elementAt(pageSelected)
+            .pageId);
   }
 
   void handleRailChanged() {

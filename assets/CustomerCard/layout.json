@@ -2,7 +2,9 @@
     "id": "CustomerCard",
     "type": 1,
     "caption": "Customer Card",
-    "key": ["id"],
+    "key": [
+        "id"
+    ],
     "buttons": [
         {
             "id": "btn1",
@@ -52,7 +54,24 @@
                     "id": "vat",
                     "type": 0,
                     "caption": "VAT"
-                },
+                }
+            ]
+        },
+        {
+            "id": "sub1",
+            "type": 4,
+            "caption": "Subpage 1",
+            "fields": [],
+            "options": {
+                "page_id": "SalesLineList",
+                "height": 400
+            }
+        },
+        {
+            "id": "grp2",
+            "type": 1,
+            "caption": "Shipment",
+            "fields": [
                 {
                     "id": "address",
                     "type": 0,

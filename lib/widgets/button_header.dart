@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:thesis_client/constants.dart';
 import 'package:thesis_client/controller/page_controller.dart';
+import 'package:thesis_client/controller/utility.dart';
 import '../controller/layout.dart';
 
 class ButtonHeader extends StatefulWidget {
@@ -19,23 +20,8 @@ class ButtonHeader extends StatefulWidget {
 class _ButtonHeaderState extends State<ButtonHeader> {
   List<Widget> buttonsWidget = [];
 
-  void sendSnackBar(String string) {
-    final snackBar = SnackBar(
-      behavior: SnackBarBehavior.floating,
-      width: 400.0,
-      content: Text(string),
-      action: SnackBarAction(
-        label: 'Close',
-        onPressed: () {},
-      ),
-    );
-
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   void unimplementedSnackbar(Button button) {
-    sendSnackBar('${button.caption} not implemented');
+    Utility.sendSnackBar(context, '${button.caption} not implemented');
   }
 
   Widget createMenu(Button button) {
@@ -82,9 +68,9 @@ class _ButtonHeaderState extends State<ButtonHeader> {
     return createButton(Button("default_new", "New", 0xe404, []), () {
       var pageCtrl = Provider.of<PageAppController>(context, listen: false);
       if (pageCtrl.layout.cardPageId.isEmpty) {
-        sendSnackBar('Card not available');
+        Utility.sendSnackBar(context, 'Card not available');
       } else {
-        context.pushNamed(pageCtrl.layout.cardPageId);
+        Utility.pushPage(context, pageCtrl.layout.cardPageId);
       }
     });
   }
@@ -95,9 +81,9 @@ class _ButtonHeaderState extends State<ButtonHeader> {
       try {
         await Provider.of<PageAppController>(context, listen: false)
             .addRecord();
-        sendSnackBar('Inserted');
+        Utility.sendSnackBar(context, 'Inserted');
       } catch (e) {
-        sendSnackBar(e.toString());
+        Utility.sendSnackBar(context, e.toString());
       }
     });
   }
@@ -108,9 +94,9 @@ class _ButtonHeaderState extends State<ButtonHeader> {
       try {
         await Provider.of<PageAppController>(context, listen: false)
             .modifyRecord();
-        sendSnackBar('Modified');
+        Utility.sendSnackBar(context, 'Modified');
       } catch (e) {
-        sendSnackBar(e.toString());
+        Utility.sendSnackBar(context, e.toString());
       }
     });
   }
@@ -126,14 +112,21 @@ class _ButtonHeaderState extends State<ButtonHeader> {
         if (!context.mounted) return;
         Navigator.pop(context); // chiude la pagina
       } catch (e) {
-        sendSnackBar(e.toString());
+        Utility.sendSnackBar(context, e.toString());
       }
+    });
+  }
+
+  Widget closeButton() {
+    return createButton(Button("default_close", "Close", 0xe404, []), () {
+      if (context.canPop()) context.pop();
     });
   }
 
   void createButtonList() {
     buttonsWidget = [
       if (widget.pageType == PageType.list) newButton(),
+      if (widget.pageType == PageType.card) closeButton(),
       if (widget.pageType == PageType.card) insertButton(),
       if (widget.pageType == PageType.card) modifyButton(),
       if (widget.pageType == PageType.card) deleteButton(),

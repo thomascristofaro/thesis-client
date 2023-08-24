@@ -6,12 +6,14 @@ import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/controller/repeater_data_source.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:thesis_client/controller/utility.dart';
 
 class Repeater extends StatefulWidget {
   final AreaComponent repeater;
+  final bool header;
   // final Function openCard;
 
-  const Repeater({super.key, required this.repeater});
+  const Repeater({super.key, required this.repeater, this.header = false});
 
   @override
   State<Repeater> createState() => _RepeaterState();
@@ -24,7 +26,7 @@ class _RepeaterState extends State<Repeater> {
 
   void openCard(Record record) {
     if (pageCtrl.layout.cardPageId == '') throw Exception('Card not available');
-    context.pushNamed(pageCtrl.layout.cardPageId,
+    Utility.pushPage(context, pageCtrl.layout.cardPageId,
         extra: record.getKeyFilters(pageCtrl.layout.key));
   }
 
@@ -57,6 +59,7 @@ class _RepeaterState extends State<Repeater> {
     _dataSource.addContext(context);
     return Expanded(
       child: PaginatedDataTable2(
+        header: widget.header ? Text(widget.repeater.caption) : null,
         minWidth: 1000,
         onSelectAll: (val) => setState(() => _dataSource.selectAll(val)),
         columns: _columns,

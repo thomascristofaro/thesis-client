@@ -24,32 +24,25 @@ class _PageListState extends State<PageList> {
 
   @override
   Widget build(BuildContext context) {
+    // return Stack(children: [
     return Column(children: [
       TitleText(name: pageCtrl.layout.caption),
       ButtonHeader(pageType: PageType.list, buttons: pageCtrl.layout.buttons),
       Repeater(repeater: pageCtrl.layout.getRepeaterComponent())
     ]);
-    // return Stack(children: [
-    //   Material(
-    //     child: Column(children: [
-    //       TitleText(name: pageCtrl.layout.caption),
-    //       ButtonHeader(
-    //           pageType: PageType.list, buttons: pageCtrl.layout.buttons),
-    //       Repeater(repeater: pageCtrl.layout.getRepeaterComponent()),
-    //     ]),
-    //   ),
-    //   Align(
-    //     alignment: Alignment.bottomRight,
-    //     child: Padding(
-    //       padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 100.0),
-    //       child: FloatingActionButton(
-    //         onPressed: () {
-    //           // Add your onPressed code here!
-    //         },
-    //         child: const Icon(Icons.add),
-    //       ),
+    // Align(
+    //   alignment: Alignment.bottomRight,
+    //   child: Padding(
+    //     padding: const EdgeInsets.fromLTRB(8.0, 8.0, 49.5, 13.0),
+    //     child: FloatingActionButton(
+    //       mini: true,
+    //       onPressed: () {
+    //         // Add your onPressed code here!
+    //       },
+    //       child: const Icon(Icons.add, size: 20),
     //     ),
     //   ),
+    // ),
     // ]);
   }
 }

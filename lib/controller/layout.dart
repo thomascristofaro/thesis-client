@@ -1,6 +1,6 @@
-enum PageType { list, card, home }
+enum PageType { list, card, home, partlist }
 
-enum AreaComponentType { repeater, group, piechart, linechart }
+enum AreaComponentType { repeater, group, piechart, linechart, subpage }
 
 enum FieldType { text, number, boolean, date, time, datetime }
 

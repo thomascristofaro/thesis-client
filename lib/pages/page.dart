@@ -5,6 +5,7 @@ import 'package:thesis_client/pages/page_home.dart';
 import 'package:thesis_client/pages/page_card.dart';
 import 'package:thesis_client/pages/page_list.dart';
 import 'package:thesis_client/controller/page_controller.dart';
+import 'package:thesis_client/pages/part_list.dart';
 import 'package:thesis_client/widgets/future_progress.dart';
 
 class Page extends StatefulWidget {
@@ -35,6 +36,8 @@ class _PageState extends State<Page> {
             return const PageList();
           case PageType.card:
             return const PageCard();
+          case PageType.partlist:
+            return const PartList();
           default:
             throw Exception('Page type not supported');
         }

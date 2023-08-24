@@ -31,36 +31,54 @@ class _AppState extends State<App> {
         .map((record) => NavigationModel.fromMap(record.fields))
         .toList();
 
-    return GoRouter(initialLocation: "/${navigation[0].pageId}", routes: [
+    return GoRouter(initialLocation: "/page/${navigation[0].pageId}", routes: [
       ShellRoute(
-        // navigatorKey: mainNavigatorKey,
-        builder: (context, state, child) {
-          return Navigation(
-            baseSetup: baseSetup,
-            navigationList: navigation,
-            child: child,
-          );
-        },
-        // sarebbe da fare i sottoroutes, al momento è gestito con un show menu
-        routes: navigation
-            .map((element) => GoRoute(
-                name: element.pageId,
-                path: "/${element.pageId}",
+          // navigatorKey: mainNavigatorKey,
+          builder: (context, state, child) {
+            return Navigation(
+              baseSetup: baseSetup,
+              navigationList: navigation,
+              child: child,
+            );
+          },
+          // sarebbe da fare i sottoroutes, al momento è gestito con un show menu
+          routes: [
+            GoRoute(
+                name: 'page',
+                path: "/page/:pageId",
                 // server solo per le transizioni
                 pageBuilder: (context, state) => NoTransitionPage<void>(
                       key: UniqueKey(),
                       child: ChangeNotifierProvider(
                         create: (context) => PageAppController(
-                          pageId: element.pageId,
+                          pageId: state.pathParameters['pageId']!,
                           currentFilters: state.extra == null
                               ? []
                               : state.extra as List<Filter>,
                         ),
                         child: const page.Page(),
                       ),
-                    )))
-            .toList(),
-      ),
+                    ))
+          ]
+          // navigation
+          //     .map((element) => GoRoute(
+          //         name: element.pageId,
+          //         path: "/${element.pageId}",
+          //         // server solo per le transizioni
+          //         pageBuilder: (context, state) => NoTransitionPage<void>(
+          //               key: UniqueKey(),
+          //               child: ChangeNotifierProvider(
+          //                 create: (context) => PageAppController(
+          //                   pageId: element.pageId,
+          //                   currentFilters: state.extra == null
+          //                       ? []
+          //                       : state.extra as List<Filter>,
+          //                 ),
+          //                 child: const page.Page(),
+          //               ),
+          //             )))
+          //     .toList(),
+          ),
     ]);
   }
 

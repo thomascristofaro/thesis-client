@@ -6,6 +6,7 @@ import 'package:thesis_client/widgets/button_header.dart';
 import 'package:thesis_client/widgets/title_text.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/constants.dart';
+import 'package:thesis_client/pages/page.dart' as page;
 
 class PageCard extends StatefulWidget {
   const PageCard({super.key});
@@ -49,21 +50,32 @@ class _PageCardState extends State<PageCard> {
             if (snapshot.hasData) {
               fromFieldsToEditCtrl(snapshot.data as Record);
             }
-            return Column(
-              children: [
-                for (var component in pageCtrl.layout.area)
-                  if (component.type == AreaComponentType.group)
-                    ComponentGroup(
-                      component: component,
-                      editCtrlMap: editCtrlMap,
-                    )
-              ],
+            return Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    for (var component in pageCtrl.layout.area)
+                      if (component.type == AreaComponentType.group)
+                        ComponentGroup(
+                          component: component,
+                          editCtrlMap: editCtrlMap,
+                        )
+                      else if (component.type == AreaComponentType.subpage)
+                        SizedBox(
+                          height: component.options['height'].toDouble(),
+                          child: ChangeNotifierProvider(
+                            create: (context) => PageAppController(
+                              pageId: component.options['page_id'] as String,
+                              currentFilters: [],
+                            ),
+                            child: const page.Page(),
+                          ),
+                        )
+                  ],
+                ),
+              ),
             );
           }),
-      // component.components
-      //     .map((e) =>
-      //         ComponentFactory(component: e, pageCtrl: widget.pageCtrl))
-      //     .toList()),
     ]);
   }
 }

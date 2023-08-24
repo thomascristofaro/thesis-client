@@ -17,28 +17,12 @@
             "show": true
         },
         {
-            "page_id": "CustomerCard",
-            "caption": "Clienti Card",
-            "tooltip": "Clienti tooltip",
-            "icon": 62493,
-            "selected_icon": 58938,
-            "show": false
-        },
-        {
             "page_id": "VendorList",
             "caption": "Fornitori",
             "tooltip": "Fornitori tooltip",
             "icon": 62493,
             "selected_icon": 58938,
             "show": true
-        },
-        {
-            "page_id": "VendorCard",
-            "caption": "Vendor Card",
-            "tooltip": "Vendor tooltip",
-            "icon": 62493,
-            "selected_icon": 58938,
-            "show": false
         }
     ]
 }
