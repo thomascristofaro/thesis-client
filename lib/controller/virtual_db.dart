@@ -1,18 +1,15 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:thesis_client/controller/record.dart';
 
 class VirtualDB {
   Map<String, List<Record>> _database;
   Map<String, int> _id;
-  Map<String, List<String>> _keys;
   static final VirtualDB _db = VirtualDB._privateConstructor();
 
   VirtualDB._privateConstructor()
       : _database = {},
-        _id = {},
-        _keys = {};
+        _id = {};
 
   factory VirtualDB() {
     return _db;
