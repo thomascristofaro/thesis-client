@@ -66,21 +66,21 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/NavigationList/page.json
-    - assets/CustomerList/page.json
-    - assets/CustomerList/layout.json
-    - assets/CustomerCard/page.json
-    - assets/CustomerCard/layout.json
-    - assets/VendorList/page.json
-    - assets/VendorList/layout.json
-    - assets/VendorCard/page.json
-    - assets/VendorCard/layout.json
-    - assets/Home/layout.json
-    - assets/Home/page.json
-    - assets/SalesLineList/page.json
-    - assets/SalesLineList/layout.json
-    - assets/SalesLineCard/page.json
-    - assets/SalesLineCard/layout.json
+    - assets/navigationlist/page.json
+    - assets/customerlist/page.json
+    - assets/customerlist/layout.json
+    - assets/customercard/page.json
+    - assets/customercard/layout.json
+    - assets/vendorlist/page.json
+    - assets/vendorlist/layout.json
+    - assets/vendorcard/page.json
+    - assets/vendorcard/layout.json
+    - assets/home/layout.json
+    - assets/home/page.json
+    - assets/saleslinelist/page.json
+    - assets/saleslinelist/layout.json
+    - assets/saleslinecard/page.json
+    - assets/saleslinecard/layout.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
