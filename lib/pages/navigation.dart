@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thesis_client/base_setup.dart';
 import 'package:thesis_client/controller/navigation_model.dart';
+import 'package:thesis_client/controller/page_controller.dart';
+import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/controller/utility.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
@@ -14,12 +16,10 @@ class Navigation extends StatefulWidget {
   const Navigation({
     super.key,
     required this.baseSetup,
-    required this.navigationList,
     required this.child,
   });
 
   final BaseSetup baseSetup;
-  final List<NavigationModel> navigationList;
   final Widget child;
 
   @override
@@ -34,6 +34,17 @@ class _NavigationState extends State<Navigation>
   bool showLargeSizeLayout = false;
   bool extendedRail = false;
   int pageIndex = 0;
+
+  late PageAppController pageCtrl;
+  late Future<List<Record>> futureRecords;
+  List<NavigationModel> navigationList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    pageCtrl = PageAppController(pageId: 'navigationlist');
+    futureRecords = pageCtrl.getAllRecords();
+  }
 
   @override
   void didChangeDependencies() {
@@ -57,12 +68,8 @@ class _NavigationState extends State<Navigation>
     while (context.canPop()) {
       context.pop();
     }
-    Utility.goPage(
-        context,
-        widget.navigationList
-            .where((e) => e.show)
-            .elementAt(pageSelected)
-            .pageId);
+    Utility.goPage(context,
+        navigationList.where((e) => e.show).elementAt(pageSelected).pageId);
   }
 
   void handleRailChanged() {
@@ -111,7 +118,7 @@ class _NavigationState extends State<Navigation>
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-          ...(widget.navigationList
+          ...(navigationList
               .where((e) => e.show)
               .map(
                 (element) => NavigationDrawerDestination(
@@ -131,22 +138,21 @@ class _NavigationState extends State<Navigation>
   }
 
   Widget buildScrollNavigationRail() {
-    final List<NavigationRailDestination> railDestinations =
-        widget.navigationList
-            .where((e) => e.show)
-            .map(
-              (element) => NavigationRailDestination(
-                  icon: Tooltip(
-                    message: element.caption,
-                    child: element.getIconWidget(),
-                  ),
-                  selectedIcon: Tooltip(
-                    message: element.caption,
-                    child: element.getIconSelectedWidget(),
-                  ),
-                  label: Text(element.caption)),
-            )
-            .toList();
+    final List<NavigationRailDestination> railDestinations = navigationList
+        .where((e) => e.show)
+        .map(
+          (element) => NavigationRailDestination(
+              icon: Tooltip(
+                message: element.caption,
+                child: element.getIconWidget(),
+              ),
+              selectedIcon: Tooltip(
+                message: element.caption,
+                child: element.getIconSelectedWidget(),
+              ),
+              label: Text(element.caption)),
+        )
+        .toList();
 
     return SingleChildScrollView(
         child: ConstrainedBox(
@@ -166,21 +172,32 @@ class _NavigationState extends State<Navigation>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: buildAppBar(),
-      body: Row(
-        children: <Widget>[
-          if (!showSmallSizeLayout) buildScrollNavigationRail(),
-          if (!showSmallSizeLayout)
-            const VerticalDivider(thickness: 1, width: 1),
-          // This is the main content.
-          Expanded(
-            child: widget.child,
-          ),
-        ],
-      ),
-      drawer: showSmallSizeLayout ? buildNavigationDrawer() : null,
-    );
+    return FutureBuilder<List<Record>>(
+        future: futureRecords,
+        builder: (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
+          if (snapshot.hasData) {
+            navigationList = (snapshot.data as List<Record>)
+                .map((record) => NavigationModel.fromMap(record.fields))
+                .toList();
+            return Scaffold(
+              key: scaffoldKey,
+              appBar: buildAppBar(),
+              body: Row(
+                children: <Widget>[
+                  if (!showSmallSizeLayout) buildScrollNavigationRail(),
+                  if (!showSmallSizeLayout)
+                    const VerticalDivider(thickness: 1, width: 1),
+                  // This is the main content.
+                  Expanded(
+                    child: widget.child,
+                  ),
+                ],
+              ),
+              drawer: showSmallSizeLayout ? buildNavigationDrawer() : null,
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 }
