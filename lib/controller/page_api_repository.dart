@@ -16,6 +16,7 @@ class PageAPIRepository implements IPageRepository {
   Future<Layout> getLayout() async {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
+    print('getLayout ${_pageId.toLowerCase()}/schema');
     final response =
         await client.get(Uri.https(URL, '${_pageId.toLowerCase()}/schema'));
 
@@ -49,11 +50,13 @@ class PageAPIRepository implements IPageRepository {
 
   @override
   Future<List<Record>> getAll() async {
+    print('getAll ${_pageId.toLowerCase()}');
     return get([]);
   }
 
   @override
   Future<Record> getOne(List<Filter> filters) async {
+    print('getOne ${_pageId.toLowerCase()}');
     var recordset = await get(filters);
     return recordset.first;
   }

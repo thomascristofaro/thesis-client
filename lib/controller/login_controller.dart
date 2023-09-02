@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:oauth2/oauth2.dart';
 
@@ -17,7 +18,7 @@ class UserModel {
         email = json['email'];
 }
 
-class LoginController {
+class LoginController extends ChangeNotifier {
   static final LoginController _instance = LoginController._internal();
 
   final endpoint = 'https://ngb197hjce.auth.us-east-1.amazoncognito.com';
@@ -128,6 +129,7 @@ class LoginController {
       _saveCredentialsToStorage();
       _loadUserFromIdToken();
     }
+    notifyListeners();
   }
 
   void logout() async {

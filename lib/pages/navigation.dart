@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:thesis_client/base_setup.dart';
 import 'package:thesis_client/controller/login_controller.dart';
 import 'package:thesis_client/controller/navigation_model.dart';
@@ -8,6 +9,7 @@ import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/controller/utility.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
+import 'package:thesis_client/widgets/future_progress.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
 import 'package:thesis_client/widgets/color_seed_button.dart';
 
@@ -16,35 +18,60 @@ import 'package:thesis_client/constants.dart';
 class Navigation extends StatefulWidget {
   const Navigation({
     super.key,
-    required this.baseSetup,
+    this.pageStartIndex = 0,
     required this.child,
   });
 
-  final BaseSetup baseSetup;
   final Widget child;
+  final int pageStartIndex;
 
   @override
   State<Navigation> createState() => _NavigationState();
 }
 
-class _NavigationState extends State<Navigation>
-    with SingleTickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+class _NavigationState extends State<Navigation> {
+  // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool showSmallSizeLayout = true;
   bool showMediumSizeLayout = false;
   bool showLargeSizeLayout = false;
   bool extendedRail = false;
   int pageIndex = 0;
+  bool toHomePage = false;
 
   late PageAppController pageCtrl;
   late Future<List<Record>> futureRecords;
   List<NavigationModel> navigationList = [];
 
+  Future<List<Record>> getList() async {
+    if (LoginController().isLogged()) {
+      return pageCtrl.getAllRecords();
+    } else {
+      return Future.value([]);
+    }
+  }
+
+  void handleLogin() {
+    setState(() {
+      toHomePage = true;
+      futureRecords = getList();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    pageIndex = widget.pageStartIndex;
+
+    LoginController().addListener(handleLogin);
+
     pageCtrl = PageAppController(pageId: 'navigationlist');
-    futureRecords = pageCtrl.getAllRecords();
+    futureRecords = getList();
+  }
+
+  @override
+  void dispose() {
+    LoginController().removeListener(handleLogin);
+    super.dispose();
   }
 
   @override
@@ -69,8 +96,12 @@ class _NavigationState extends State<Navigation>
     while (context.canPop()) {
       context.pop();
     }
-    Utility.goPage(context,
-        navigationList.where((e) => e.show).elementAt(pageSelected).pageId);
+    if (pageSelected == 0) {
+      context.goNamed('user');
+    } else {
+      Utility.goPage(context,
+          navigationList.where((e) => e.show).elementAt(pageSelected).pageId);
+    }
   }
 
   void handleRailChanged() {
@@ -80,6 +111,7 @@ class _NavigationState extends State<Navigation>
   }
 
   PreferredSizeWidget buildAppBar() {
+    BaseSetup baseSetup = Provider.of<BaseSetup>(context);
     return AppBar(
       title: const Text('BLOX'),
       leading: !showSmallSizeLayout
@@ -91,15 +123,14 @@ class _NavigationState extends State<Navigation>
           : null,
       actions: [
         BrightnessButton(
-          handleBrightnessChange: widget.baseSetup.handleBrightnessChange,
+          handleBrightnessChange: baseSetup.handleBrightnessChange,
         ),
         Material3Button(
-          handleMaterialVersionChange:
-              widget.baseSetup.handleMaterialVersionChange,
+          handleMaterialVersionChange: baseSetup.handleMaterialVersionChange,
         ),
         ColorSeedButton(
-          handleColorSelect: widget.baseSetup.handleColorSelect,
-          colorSelected: widget.baseSetup.colorSelected,
+          handleColorSelect: baseSetup.handleColorSelect,
+          colorSelected: baseSetup.colorSelected,
         ),
       ],
     );
@@ -138,45 +169,7 @@ class _NavigationState extends State<Navigation>
         ]);
   }
 
-  Widget navigationRailLeading(UserModel user) {
-    return extendedRail
-        ? Container(
-            constraints: const BoxConstraints.tightFor(width: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondaryContainer,
-                        child: const Icon(
-                          Icons.person,
-                        ),
-                      ),
-                      Text(user.username)
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text('Material 3'),
-                      Expanded(child: Container()),
-                      Switch(value: true, onChanged: (_) {})
-                    ],
-                  ),
-                ]))
-        : CircleAvatar(
-            child: Icon(
-              Icons.person,
-            ),
-            backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-          );
-  }
-
   Widget buildScrollNavigationRail() {
-    final UserModel user = LoginController().user!;
     final List<NavigationRailDestination> railDestinations = navigationList
         .where((e) => e.show)
         .map(
@@ -200,7 +193,6 @@ class _NavigationState extends State<Navigation>
                     (MediaQuery.of(context).padding.top + kToolbarHeight)),
             child: IntrinsicHeight(
                 child: NavigationRail(
-              leading: navigationRailLeading(user),
               extended: extendedRail,
               destinations: railDestinations,
               selectedIndex: pageIndex,
@@ -210,34 +202,55 @@ class _NavigationState extends State<Navigation>
             ))));
   }
 
+  void buildNavigationList(List<Record> records) {
+    String user = LoginController().isLogged()
+        ? LoginController().user!.username
+        : 'User';
+    navigationList.clear();
+    navigationList.add(NavigationModel(
+        pageId: 'user',
+        caption: user,
+        tooltip: user,
+        icon: 0xf27b,
+        selectedIcon: 0xe491));
+    navigationList.add(const NavigationModel(
+        pageId: 'home',
+        caption: 'Home Page',
+        tooltip: 'Home Page',
+        icon: 61703,
+        selectedIcon: 58136));
+    navigationList.addAll(records
+        .map((record) => NavigationModel.fromMap(record.fields))
+        .toList());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Record>>(
-        future: futureRecords,
-        builder: (BuildContext context, AsyncSnapshot<List<Record>> snapshot) {
-          if (snapshot.hasData) {
-            navigationList = (snapshot.data as List<Record>)
-                .map((record) => NavigationModel.fromMap(record.fields))
-                .toList();
-            return Scaffold(
-              key: scaffoldKey,
-              appBar: buildAppBar(),
-              body: Row(
-                children: <Widget>[
-                  if (!showSmallSizeLayout) buildScrollNavigationRail(),
-                  if (!showSmallSizeLayout)
-                    const VerticalDivider(thickness: 1, width: 1),
-                  // This is the main content.
-                  Expanded(
-                    child: widget.child,
-                  ),
-                ],
-              ),
-              drawer: showSmallSizeLayout ? buildNavigationDrawer() : null,
+    return Scaffold(
+      // key: scaffoldKey,
+      appBar: buildAppBar(),
+      body: FutureProgress<List<Record>>(
+          future: futureRecords,
+          builder: (List<Record> records) {
+            buildNavigationList(records);
+            if (toHomePage) {
+              toHomePage = false;
+              WidgetsBinding.instance
+                  .addPostFrameCallback((_) => handlePageChanged(1));
+            }
+            return Row(
+              children: <Widget>[
+                if (!showSmallSizeLayout) buildScrollNavigationRail(),
+                if (!showSmallSizeLayout)
+                  const VerticalDivider(thickness: 1, width: 1),
+                // This is the main content.
+                Expanded(
+                  child: widget.child,
+                ),
+              ],
             );
-          } else {
-            return Container();
-          }
-        });
+          }),
+      drawer: showSmallSizeLayout ? buildNavigationDrawer() : null,
+    );
   }
 }

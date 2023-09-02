@@ -7,16 +7,18 @@ class Progress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: indicatorSize,
-          height: indicatorSize,
-          child: CircularProgressIndicator(),
-        ),
-        TitleText(name: "Awaiting result...")
-      ],
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: indicatorSize,
+            height: indicatorSize,
+            child: CircularProgressIndicator(),
+          ),
+          TitleText(name: "Awaiting result...")
+        ],
+      ),
     );
   }
 }

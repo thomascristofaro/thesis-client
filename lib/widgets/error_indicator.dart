@@ -8,20 +8,22 @@ class ErrorIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(
-          width: indicatorSize,
-          height: indicatorSize,
-          child: Icon(
-            Icons.warning,
-            size: indicatorSize,
-            color: Colors.red,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+            width: indicatorSize,
+            height: indicatorSize,
+            child: Icon(
+              Icons.warning,
+              size: indicatorSize,
+              color: Colors.red,
+            ),
           ),
-        ),
-        TitleText(name: error)
-      ],
+          TitleText(name: error)
+        ],
+      ),
     );
   }
 }

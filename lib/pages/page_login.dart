@@ -11,15 +11,15 @@ class PageLogin extends StatefulWidget {
 }
 
 class _PageLoginState extends State<PageLogin> {
-  void loginButtonPressed() async {
-    try {
-      await LoginController().login();
-      Utility.showSnackBar(context, 'Logged');
-      Utility.goPage(context, 'home');
-    } catch (e) {
-      Utility.showSnackBar(context, e.toString());
-    }
-  }
+  // void loginButtonPressed() async {
+  //   try {
+  //     await LoginController().login();
+  //     // Utility.showSnackBar(context, 'Logged');
+  //     // Utility.goPage(context, 'home');
+  //   } catch (e) {
+  //     Utility.showSnackBar(context, e.toString());
+  //   }
+  // }
 
   @override
   void initState() {
@@ -32,21 +32,21 @@ class _PageLoginState extends State<PageLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("BLOX"),
-        ),
-        body: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const TitleText(name: 'Login Page'),
-              TextButton(
-                onPressed: () => loginButtonPressed(),
-                child: const Text("Go to Home Page"),
-              ),
-            ],
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const TitleText(name: 'Login Page'),
+          TextButton(
+            onPressed: () => LoginController().login(),
+            child: const Text("Go to Home Page"),
           ),
-        ]));
+          TextButton(
+            onPressed: () => LoginController().logout(),
+            child: const Text("Logout"),
+          ),
+        ],
+      ),
+    ]);
   }
 }

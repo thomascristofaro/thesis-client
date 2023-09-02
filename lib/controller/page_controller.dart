@@ -17,7 +17,7 @@ class PageAppController extends ChangeNotifier {
 
   PageAppController({required this.pageId, this.currentFilters = const []}) {
     // _pageRepo = PageFakeRepository(VirtualDB(), pageId);
-    LoginController().checkLogged();
+    // LoginController().checkLogged();
     _pageRepo = PageAPIRepository(pageId);
   }
 

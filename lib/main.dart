@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thesis_client/base_setup.dart';
+import 'package:thesis_client/controller/login_controller.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/pages/navigation.dart';
@@ -23,42 +24,50 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  GoRouter createRouter(BaseSetup baseSetup) {
-    return GoRouter(initialLocation: "/login", routes: [
-      ShellRoute(
-          // navigatorKey: mainNavigatorKey,
-          builder: (context, state, child) {
-            return Navigation(
-              baseSetup: baseSetup,
-              child: child,
-            );
-          },
-          // sarebbe da fare i sottoroutes, al momento è gestito con un show menu
-          routes: [
-            GoRoute(
-              name: 'login',
-              path: "/login",
-              builder: (context, state) => const PageLogin(),
-            ),
-            GoRoute(
-                name: 'page',
-                path: "/page/:pageId",
-                // server solo per le transizioni
-                pageBuilder: (context, state) => NoTransitionPage<void>(
-                      key: UniqueKey(),
-                      child: ChangeNotifierProvider(
-                        create: (context) => PageAppController(
-                          pageId: state.pathParameters['pageId']!,
-                          currentFilters: state.extra == null
-                              ? []
-                              : state.extra as List<Filter>,
-                        ),
-                        child: const page.Page(),
-                      ),
-                    ))
-          ]),
-    ]);
+  GoRouter createRouter() {
+    return GoRouter(
+        initialLocation: LoginController().isLogged() ? "/page/home" : "/login",
+        routes: [
+          ShellRoute(
+              // navigatorKey: mainNavigatorKey,
+              builder: (context, state, child) {
+                return Navigation(
+                  pageStartIndex: LoginController().isLogged() ? 1 : 0,
+                  child: child,
+                );
+              },
+              routes: [
+                GoRoute(
+                  name: 'login',
+                  path: "/login",
+                  builder: (context, state) => const PageLogin(),
+                ),
+                GoRoute(
+                  name: 'user',
+                  path: "/user",
+                  builder: (context, state) => const PageLogin(),
+                ),
+                GoRoute(
+                    name: 'page',
+                    path: "/page/:pageId",
+                    // server solo per le transizioni
+                    pageBuilder: (context, state) => NoTransitionPage<void>(
+                          key: UniqueKey(),
+                          child: ChangeNotifierProvider(
+                            create: (context) => PageAppController(
+                              pageId: state.pathParameters['pageId']!,
+                              currentFilters: state.extra == null
+                                  ? []
+                                  : state.extra as List<Filter>,
+                            ),
+                            child: const page.Page(),
+                          ),
+                        ))
+              ]),
+        ]);
   }
+
+  // da capire come gestire il login all'apertura dell'applicazione
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +78,7 @@ class _AppState extends State<App> {
         themeMode: baseSetup.themeMode,
         theme: baseSetup.getThemeLight(),
         darkTheme: baseSetup.getThemeDark(),
-        routerConfig: createRouter(baseSetup),
+        routerConfig: createRouter(),
       );
     });
   }
