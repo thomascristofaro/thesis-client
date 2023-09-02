@@ -21,7 +21,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
   List<Widget> buttonsWidget = [];
 
   void unimplementedSnackbar(Button button) {
-    Utility.sendSnackBar(context, '${button.caption} not implemented');
+    Utility.showSnackBar(context, '${button.caption} not implemented');
   }
 
   Widget createMenu(Button button) {
@@ -68,7 +68,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
     return createButton(Button("default_new", "New", 0xe404, []), () {
       var pageCtrl = Provider.of<PageAppController>(context, listen: false);
       if (pageCtrl.layout.cardPageId.isEmpty) {
-        Utility.sendSnackBar(context, 'Card not available');
+        Utility.showSnackBar(context, 'Card not available');
       } else {
         Utility.pushPage(context, pageCtrl.layout.cardPageId);
       }
@@ -81,9 +81,9 @@ class _ButtonHeaderState extends State<ButtonHeader> {
       try {
         await Provider.of<PageAppController>(context, listen: false)
             .addRecord();
-        Utility.sendSnackBar(context, 'Inserted');
+        Utility.showSnackBar(context, 'Inserted');
       } catch (e) {
-        Utility.sendSnackBar(context, e.toString());
+        Utility.showSnackBar(context, e.toString());
       }
     });
   }
@@ -94,9 +94,9 @@ class _ButtonHeaderState extends State<ButtonHeader> {
       try {
         await Provider.of<PageAppController>(context, listen: false)
             .modifyRecord();
-        Utility.sendSnackBar(context, 'Modified');
+        Utility.showSnackBar(context, 'Modified');
       } catch (e) {
-        Utility.sendSnackBar(context, e.toString());
+        Utility.showSnackBar(context, e.toString());
       }
     });
   }
@@ -112,7 +112,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
         if (!context.mounted) return;
         Navigator.pop(context); // chiude la pagina
       } catch (e) {
-        Utility.sendSnackBar(context, e.toString());
+        Utility.showSnackBar(context, e.toString());
       }
     });
   }

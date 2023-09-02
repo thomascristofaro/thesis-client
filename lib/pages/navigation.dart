@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thesis_client/base_setup.dart';
+import 'package:thesis_client/controller/login_controller.dart';
 import 'package:thesis_client/controller/navigation_model.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/controller/record.dart';
@@ -137,7 +138,45 @@ class _NavigationState extends State<Navigation>
         ]);
   }
 
+  Widget navigationRailLeading(UserModel user) {
+    return extendedRail
+        ? Container(
+            constraints: const BoxConstraints.tightFor(width: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondaryContainer,
+                        child: const Icon(
+                          Icons.person,
+                        ),
+                      ),
+                      Text(user.username)
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Text('Material 3'),
+                      Expanded(child: Container()),
+                      Switch(value: true, onChanged: (_) {})
+                    ],
+                  ),
+                ]))
+        : CircleAvatar(
+            child: Icon(
+              Icons.person,
+            ),
+            backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          );
+  }
+
   Widget buildScrollNavigationRail() {
+    final UserModel user = LoginController().user!;
     final List<NavigationRailDestination> railDestinations = navigationList
         .where((e) => e.show)
         .map(
@@ -161,6 +200,7 @@ class _NavigationState extends State<Navigation>
                     (MediaQuery.of(context).padding.top + kToolbarHeight)),
             child: IntrinsicHeight(
                 child: NavigationRail(
+              leading: navigationRailLeading(user),
               extended: extendedRail,
               destinations: railDestinations,
               selectedIndex: pageIndex,

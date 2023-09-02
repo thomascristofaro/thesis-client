@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thesis_client/controller/login_controller.dart';
 import 'package:thesis_client/controller/page_api_repository.dart';
 // import 'package:thesis_client/controller/page_fake_repository.dart';
 // import 'package:thesis_client/controller/virtual_db.dart';
@@ -16,6 +17,7 @@ class PageAppController extends ChangeNotifier {
 
   PageAppController({required this.pageId, this.currentFilters = const []}) {
     // _pageRepo = PageFakeRepository(VirtualDB(), pageId);
+    LoginController().checkLogged();
     _pageRepo = PageAPIRepository(pageId);
   }
 

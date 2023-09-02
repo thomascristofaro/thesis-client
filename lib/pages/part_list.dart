@@ -24,7 +24,7 @@ class _PartListState extends State<PartList> {
     return createFloatingButton(Icons.add, () {
       var pageCtrl = Provider.of<PageAppController>(context, listen: false);
       if (pageCtrl.layout.cardPageId.isEmpty) {
-        Utility.sendSnackBar(context, 'Card not available');
+        Utility.showSnackBar(context, 'Card not available');
       } else {
         Utility.pushPage(context, pageCtrl.layout.cardPageId);
       }

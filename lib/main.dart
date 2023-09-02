@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thesis_client/base_setup.dart';
-import 'package:thesis_client/controller/navigation_model.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/pages/navigation.dart';
@@ -26,11 +25,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   GoRouter createRouter(BaseSetup baseSetup) {
     return GoRouter(initialLocation: "/login", routes: [
-      GoRoute(
-        name: 'login',
-        path: "/login",
-        builder: (context, state) => const PageLogin(),
-      ),
       ShellRoute(
           // navigatorKey: mainNavigatorKey,
           builder: (context, state, child) {
@@ -41,6 +35,11 @@ class _AppState extends State<App> {
           },
           // sarebbe da fare i sottoroutes, al momento è gestito con un show menu
           routes: [
+            GoRoute(
+              name: 'login',
+              path: "/login",
+              builder: (context, state) => const PageLogin(),
+            ),
             GoRoute(
                 name: 'page',
                 path: "/page/:pageId",
