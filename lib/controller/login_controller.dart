@@ -69,10 +69,10 @@ class LoginController extends ChangeNotifier {
     Uri redirectUrl;
 
     if (Utility.isWeb()) {
-      // PROD: https://thomascristofaro.github.io/thesis-client/auth.html
-      redirectUrl = Uri.parse('http://localhost:53996/auth.html');
+      redirectUrl = Uri.parse(
+          'https://thomascristofaro.github.io/thesis-client/auth.html');
+      // redirectUrl = Uri.parse('http://localhost:53996/auth.html');
     } else if (Utility.isDesktop()) {
-      // PROD: http://localhost:63215/login
       redirectUrl = Uri.parse('http://localhost:$portLocalhost/login');
     } else {
       redirectUrl = Uri.parse('$callbackUrlScheme://login');
@@ -140,10 +140,10 @@ class LoginController extends ChangeNotifier {
 
     Uri redirectUrl;
     if (Utility.isWeb()) {
-      // PROD: https://thomascristofaro.github.io/thesis-client/auth.html
-      redirectUrl = Uri.parse('http://localhost:53996/auth.html');
+      redirectUrl = Uri.parse(
+          'https://thomascristofaro.github.io/thesis-client/auth.html');
+      // redirectUrl = Uri.parse('http://localhost:53996/auth.html');
     } else if (Utility.isDesktop()) {
-      // PROD: http://localhost:63215/logout
       redirectUrl = Uri.parse('http://localhost:$portLocalhost/logout');
     } else {
       redirectUrl = Uri.parse('$callbackUrlScheme://logout');
