@@ -40,13 +40,17 @@ class _AppState extends State<App> {
                 GoRoute(
                   name: 'login',
                   path: "/login",
-                  builder: (context, state) => const PageLogin(),
+                  // builder: (context, state) => const PageLogin(),
+                  pageBuilder: (context, state) => NoTransitionPage<void>(
+                    key: UniqueKey(),
+                    child: const PageLogin(),
+                  ),
                 ),
-                GoRoute(
-                  name: 'user',
-                  path: "/user",
-                  builder: (context, state) => const PageLogin(),
-                ),
+                // GoRoute(
+                //   name: 'user',
+                //   path: "/user",
+                //   builder: (context, state) => const PageLogin(),
+                // ),
                 GoRoute(
                     name: 'page',
                     path: "/page/:pageId",
@@ -68,6 +72,7 @@ class _AppState extends State<App> {
   }
 
   // da capire come gestire il login all'apertura dell'applicazione
+  // mettere il file html per quello web
 
   @override
   Widget build(BuildContext context) {

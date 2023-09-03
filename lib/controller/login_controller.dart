@@ -151,5 +151,6 @@ class LoginController extends ChangeNotifier {
 
     await _callExternalUrl(Uri.parse('$endpoint/logout?client_id=$identifier'
         '&logout_uri=${redirectUrl.toString()}'));
+    notifyListeners();
   }
 }

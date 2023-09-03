@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:thesis_client/constants.dart';
 import 'package:thesis_client/controller/login_controller.dart';
-import 'package:thesis_client/controller/utility.dart';
 import 'package:thesis_client/widgets/title_text.dart';
 
+// se rimane così può diventare stateless
 class PageLogin extends StatefulWidget {
   const PageLogin({super.key});
 
@@ -11,39 +12,47 @@ class PageLogin extends StatefulWidget {
 }
 
 class _PageLoginState extends State<PageLogin> {
-  // void loginButtonPressed() async {
-  //   try {
-  //     await LoginController().login();
-  //     // Utility.showSnackBar(context, 'Logged');
-  //     // Utility.goPage(context, 'home');
-  //   } catch (e) {
-  //     Utility.showSnackBar(context, e.toString());
-  //   }
-  // }
-
-  @override
-  void initState() {
-    super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) async =>
-    //     await LoginController().loginOnlyStorage()
-    //         ? Utility.goPage(context, 'home')
-    //         : null);
+  Widget textSubTitle(String name) {
+    return Padding(
+      padding: const EdgeInsets.all(smallSpacing),
+      child: Text(name, style: Theme.of(context).textTheme.headlineSmall),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const TitleText(name: 'Login Page'),
-          TextButton(
-            onPressed: () => LoginController().login(),
-            child: const Text("Go to Home Page"),
-          ),
-          TextButton(
-            onPressed: () => LoginController().logout(),
-            child: const Text("Logout"),
+          textSubTitle('Username: ${LoginController().user!.username}'),
+          textSubTitle('Email: ${LoginController().user!.email}'),
+          textSubTitle('Is Logged: ${LoginController().isLogged()}'),
+          Padding(
+            padding: const EdgeInsets.all(smallSpacing),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(smallSpacing),
+                  child: FilledButton.tonalIcon(
+                    label: const Text('Login'),
+                    icon: const Icon(Icons.login),
+                    onPressed: () => LoginController().login(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(smallSpacing),
+                  child: FilledButton.tonalIcon(
+                      label: const Text('Logout'),
+                      icon: const Icon(Icons.logout),
+                      onPressed: () => setState(() {
+                            LoginController().logout();
+                          })),
+                ),
+              ],
+            ),
           ),
         ],
       ),

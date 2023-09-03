@@ -9,11 +9,13 @@ import 'package:thesis_client/controller/record.dart';
 import 'package:thesis_client/controller/utility.dart';
 
 import 'package:thesis_client/widgets/brightness_button.dart';
+import 'package:thesis_client/widgets/error_indicator.dart';
 import 'package:thesis_client/widgets/future_progress.dart';
 import 'package:thesis_client/widgets/material_3_button.dart';
 import 'package:thesis_client/widgets/color_seed_button.dart';
 
 import 'package:thesis_client/constants.dart';
+import 'package:thesis_client/widgets/progress.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({
@@ -30,7 +32,7 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-  // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool showSmallSizeLayout = true;
   bool showMediumSizeLayout = false;
   bool showLargeSizeLayout = false;
@@ -52,7 +54,9 @@ class _NavigationState extends State<Navigation> {
 
   void handleLogin() {
     setState(() {
-      toHomePage = true;
+      if (LoginController().isLogged()) {
+        toHomePage = true;
+      }
       futureRecords = getList();
     });
   }
@@ -97,7 +101,7 @@ class _NavigationState extends State<Navigation> {
       context.pop();
     }
     if (pageSelected == 0) {
-      context.goNamed('user');
+      context.goNamed(navigationList.elementAt(pageSelected).pageId);
     } else {
       Utility.goPage(context,
           navigationList.where((e) => e.show).elementAt(pageSelected).pageId);
@@ -208,7 +212,7 @@ class _NavigationState extends State<Navigation> {
         : 'User';
     navigationList.clear();
     navigationList.add(NavigationModel(
-        pageId: 'user',
+        pageId: 'login',
         caption: user,
         tooltip: user,
         icon: 0xf27b,
@@ -224,31 +228,40 @@ class _NavigationState extends State<Navigation> {
         .toList());
   }
 
+  Widget buildNavigationBody(List<Record> records, Widget child) {
+    buildNavigationList(records);
+    return Row(
+      children: <Widget>[
+        if (!showSmallSizeLayout) buildScrollNavigationRail(),
+        if (!showSmallSizeLayout) const VerticalDivider(thickness: 1, width: 1),
+        // This is the main content.
+        Expanded(
+          child: child,
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // key: scaffoldKey,
+      key: scaffoldKey,
       appBar: buildAppBar(),
       body: FutureProgress<List<Record>>(
           future: futureRecords,
           builder: (List<Record> records) {
-            buildNavigationList(records);
             if (toHomePage) {
               toHomePage = false;
               WidgetsBinding.instance
                   .addPostFrameCallback((_) => handlePageChanged(1));
             }
-            return Row(
-              children: <Widget>[
-                if (!showSmallSizeLayout) buildScrollNavigationRail(),
-                if (!showSmallSizeLayout)
-                  const VerticalDivider(thickness: 1, width: 1),
-                // This is the main content.
-                Expanded(
-                  child: widget.child,
-                ),
-              ],
-            );
+            return buildNavigationBody(records, widget.child);
+          },
+          builderOnProgress: () {
+            return buildNavigationBody([], const Progress());
+          },
+          builderOnError: (error) {
+            return buildNavigationBody([], ErrorIndicator(error: error));
           }),
       drawer: showSmallSizeLayout ? buildNavigationDrawer() : null,
     );
