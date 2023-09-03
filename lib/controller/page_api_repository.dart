@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:thesis_client/controller/cache_controller.dart';
 import 'package:thesis_client/controller/layout.dart';
 import 'package:thesis_client/controller/login_controller.dart';
 import 'package:thesis_client/controller/page_interface.dart';
@@ -15,23 +16,28 @@ class PageAPIRepository implements IPageRepository {
   @override
   Future<Layout> getLayout() async {
     LoginController().checkLogged();
-    var client = Client(LoginController().credentials!);
-    print('getLayout ${_pageId.toLowerCase()}/schema');
-    final response =
-        await client.get(Uri.https(URL, '${_pageId.toLowerCase()}/schema'));
+    String body = CacheController().get(_pageId);
 
-    if (response.statusCode == 200) {
-      return Layout.fromMap(await jsonDecode(response.body));
-    } else {
-      throw Exception(getErrorMessage(response.body));
+    if (body.isEmpty) {
+      var client = Client(LoginController().credentials!);
+      final response =
+          await client.get(Uri.https(URL, '/${_pageId.toLowerCase()}/schema'));
+
+      if (response.statusCode != 200) {
+        throw Exception(getErrorMessage(response.body));
+      }
+      body = response.body;
+      CacheController().set(_pageId, body);
     }
+
+    return Layout.fromMap(await jsonDecode(body));
   }
 
   @override
   Future<List<Record>> get(List<Filter> filters) async {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
-    var address = Uri.https(URL, "/${_pageId.toLowerCase()}",
+    var address = Uri.https(URL, "/${_pageId.toLowerCase()}/",
         {for (var filter in filters) filter.id: filter.value});
     final response = await client.get(address);
 
@@ -65,7 +71,8 @@ class PageAPIRepository implements IPageRepository {
   Future<Record> insert(Record record) async {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
-    final response = await client.post(Uri.https(URL, _pageId.toLowerCase()),
+    final response = await client.post(
+        Uri.https(URL, '/${_pageId.toLowerCase()}/'),
         body: jsonEncode(record.toMap()),
         headers: {'Content-Type': 'application/json'});
 
@@ -81,7 +88,8 @@ class PageAPIRepository implements IPageRepository {
   Future<void> update(Record record) async {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
-    final response = await client.patch(Uri.https(URL, _pageId.toLowerCase()),
+    final response = await client.patch(
+        Uri.https(URL, '/${_pageId.toLowerCase()}/'),
         body: jsonEncode(record.toMap()),
         headers: {'Content-Type': 'application/json'});
 
@@ -94,7 +102,7 @@ class PageAPIRepository implements IPageRepository {
   Future<void> delete(List<Filter> filters) async {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
-    var address = Uri.https(URL, _pageId.toLowerCase(),
+    var address = Uri.https(URL, '/${_pageId.toLowerCase()}/',
         {for (var filter in filters) filter.id: filter.value});
     final response = await client.delete(address);
 

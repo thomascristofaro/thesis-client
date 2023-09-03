@@ -19,6 +19,22 @@ class _PageLoginState extends State<PageLogin> {
     );
   }
 
+  void update() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    LoginController().addListener(update);
+  }
+
+  @override
+  void dispose() {
+    LoginController().removeListener(update);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -47,9 +63,7 @@ class _PageLoginState extends State<PageLogin> {
                   child: FilledButton.tonalIcon(
                       label: const Text('Logout'),
                       icon: const Icon(Icons.logout),
-                      onPressed: () => setState(() {
-                            LoginController().logout();
-                          })),
+                      onPressed: () => LoginController().logout()),
                 ),
               ],
             ),

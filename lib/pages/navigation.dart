@@ -38,7 +38,6 @@ class _NavigationState extends State<Navigation> {
   bool showLargeSizeLayout = false;
   bool extendedRail = false;
   int pageIndex = 0;
-  bool toHomePage = false;
 
   late PageAppController pageCtrl;
   late Future<List<Record>> futureRecords;
@@ -54,9 +53,6 @@ class _NavigationState extends State<Navigation> {
 
   void handleLogin() {
     setState(() {
-      if (LoginController().isLogged()) {
-        toHomePage = true;
-      }
       futureRecords = getList();
     });
   }
@@ -250,11 +246,6 @@ class _NavigationState extends State<Navigation> {
       body: FutureProgress<List<Record>>(
           future: futureRecords,
           builder: (List<Record> records) {
-            if (toHomePage) {
-              toHomePage = false;
-              WidgetsBinding.instance
-                  .addPostFrameCallback((_) => handlePageChanged(1));
-            }
             return buildNavigationBody(records, widget.child);
           },
           builderOnProgress: () {

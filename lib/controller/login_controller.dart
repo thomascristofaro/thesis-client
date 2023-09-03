@@ -70,12 +70,12 @@ class LoginController extends ChangeNotifier {
 
     if (Utility.isWeb()) {
       // PROD: https://thomascristofaro.github.io/thesis-client/auth.html
-      redirectUrl = Uri.parse('http://localhost:54267/auth.html');
+      redirectUrl = Uri.parse('http://localhost:53996/auth.html');
     } else if (Utility.isDesktop()) {
-      // PROD: http://localhost:63215/auth
-      redirectUrl = Uri.parse('http://localhost:$portLocalhost/auth');
+      // PROD: http://localhost:63215/login
+      redirectUrl = Uri.parse('http://localhost:$portLocalhost/login');
     } else {
-      redirectUrl = Uri.parse('$callbackUrlScheme://auth');
+      redirectUrl = Uri.parse('$callbackUrlScheme://login');
     }
 
     var grant = AuthorizationCodeGrant(
@@ -140,8 +140,8 @@ class LoginController extends ChangeNotifier {
 
     Uri redirectUrl;
     if (Utility.isWeb()) {
-      // PROD: https://thomascristofaro.github.io/thesis-client/logout.html
-      redirectUrl = Uri.parse('http://localhost:54267/logout.html');
+      // PROD: https://thomascristofaro.github.io/thesis-client/auth.html
+      redirectUrl = Uri.parse('http://localhost:53996/auth.html');
     } else if (Utility.isDesktop()) {
       // PROD: http://localhost:63215/logout
       redirectUrl = Uri.parse('http://localhost:$portLocalhost/logout');
