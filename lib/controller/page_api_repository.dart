@@ -56,13 +56,11 @@ class PageAPIRepository implements IPageRepository {
 
   @override
   Future<List<Record>> getAll() async {
-    print('getAll ${_pageId.toLowerCase()}');
     return get([]);
   }
 
   @override
   Future<Record> getOne(List<Filter> filters) async {
-    print('getOne ${_pageId.toLowerCase()}');
     var recordset = await get(filters);
     return recordset.first;
   }
@@ -72,7 +70,7 @@ class PageAPIRepository implements IPageRepository {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
     final response = await client.post(
-        Uri.https(URL, '/${_pageId.toLowerCase()}/'),
+        Uri.https(URL, '/${_pageId.toLowerCase()}'),
         body: jsonEncode(record.toMap()),
         headers: {'Content-Type': 'application/json'});
 
@@ -89,7 +87,7 @@ class PageAPIRepository implements IPageRepository {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
     final response = await client.patch(
-        Uri.https(URL, '/${_pageId.toLowerCase()}/'),
+        Uri.https(URL, '/${_pageId.toLowerCase()}'),
         body: jsonEncode(record.toMap()),
         headers: {'Content-Type': 'application/json'});
 
@@ -102,7 +100,7 @@ class PageAPIRepository implements IPageRepository {
   Future<void> delete(List<Filter> filters) async {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
-    var address = Uri.https(URL, '/${_pageId.toLowerCase()}/',
+    var address = Uri.https(URL, '/${_pageId.toLowerCase()}',
         {for (var filter in filters) filter.id: filter.value});
     final response = await client.delete(address);
 
