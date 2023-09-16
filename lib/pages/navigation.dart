@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -63,6 +64,12 @@ class _NavigationState extends State<Navigation> {
     pageIndex = widget.pageStartIndex;
 
     LoginController().addListener(handleLogin);
+
+    // FirebaseMessaging Setup
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Message data: ${message.data}');
+      Utility.showSnackBar(context, message.data.toString());
+    });
 
     pageCtrl = PageAppController(pageId: 'navigationlist');
     futureRecords = getList();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thesis_client/base_setup.dart';
+import 'package:thesis_client/controller/firebase_controller.dart';
 import 'package:thesis_client/controller/login_controller.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/controller/record.dart';
@@ -8,13 +9,20 @@ import 'package:thesis_client/pages/navigation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:thesis_client/pages/page.dart' as page;
 import 'package:thesis_client/pages/page_login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() => runApp(
-      ChangeNotifierProvider(
-        create: (context) => BaseSetup(),
-        child: const App(),
-      ),
-    );
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FireBaseController().initToken();
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => BaseSetup(),
+      child: const App(),
+    ),
+  );
+}
 
 class App extends StatefulWidget {
   const App({super.key});

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thesis_client/constants.dart';
+import 'package:thesis_client/controller/firebase_controller.dart';
 import 'package:thesis_client/controller/login_controller.dart';
 import 'package:thesis_client/widgets/title_text.dart';
 
@@ -27,11 +28,13 @@ class _PageLoginState extends State<PageLogin> {
   void initState() {
     super.initState();
     LoginController().addListener(update);
+    FireBaseController().addListener(update);
   }
 
   @override
   void dispose() {
     LoginController().removeListener(update);
+    FireBaseController().removeListener(update);
     super.dispose();
   }
 
@@ -45,6 +48,13 @@ class _PageLoginState extends State<PageLogin> {
           textSubTitle('Username: ${LoginController().user!.username}'),
           textSubTitle('Email: ${LoginController().user!.email}'),
           textSubTitle('Is Logged: ${LoginController().isLogged()}'),
+          textSubTitle('FCM Token:'),
+          SizedBox(
+              width: 300,
+              child: SelectableText(
+                FireBaseController().getFCMToken() ?? 'No Token',
+                style: const TextStyle(fontSize: smallSpacing),
+              )),
           Padding(
             padding: const EdgeInsets.all(smallSpacing),
             child: Row(
