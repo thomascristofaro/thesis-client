@@ -29,6 +29,7 @@ class _PageLoginState extends State<PageLogin> {
     super.initState();
     LoginController().addListener(update);
     FireBaseController().addListener(update);
+    FireBaseController().askToken();
   }
 
   @override
@@ -48,13 +49,6 @@ class _PageLoginState extends State<PageLogin> {
           textSubTitle('Username: ${LoginController().user!.username}'),
           textSubTitle('Email: ${LoginController().user!.email}'),
           textSubTitle('Is Logged: ${LoginController().isLogged()}'),
-          textSubTitle('FCM Token:'),
-          SizedBox(
-              width: 300,
-              child: SelectableText(
-                FireBaseController().getFCMToken() ?? 'No Token',
-                style: const TextStyle(fontSize: smallSpacing),
-              )),
           Padding(
             padding: const EdgeInsets.all(smallSpacing),
             child: Row(
@@ -74,6 +68,31 @@ class _PageLoginState extends State<PageLogin> {
                       label: const Text('Logout'),
                       icon: const Icon(Icons.logout),
                       onPressed: () => LoginController().logout()),
+                ),
+              ],
+            ),
+          ),
+          textSubTitle(
+              'FCM Permissions: ${FireBaseController().getPermissions() ?? 'notDetermined'}'),
+          textSubTitle('FCM Token:'),
+          SizedBox(
+              width: 300,
+              child: SelectableText(
+                FireBaseController().getFCMToken() ?? 'No Token',
+                style: const TextStyle(fontSize: smallSpacing),
+              )),
+          Padding(
+            padding: const EdgeInsets.all(smallSpacing),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(smallSpacing),
+                  child: FilledButton.tonalIcon(
+                    label: const Text('Get Token'),
+                    icon: const Icon(Icons.notifications_active),
+                    onPressed: () => FireBaseController().askToken(),
+                  ),
                 ),
               ],
             ),
