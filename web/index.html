@@ -44,6 +44,7 @@
 <body>
   <script>
     window.addEventListener('load', function (ev) {
+      navigator.serviceWorker.register('firebase-messaging-sw.js');
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
@@ -55,7 +56,6 @@
           });
         }
       });
-      navigator.serviceWorker.register('firebase-messaging-sw.js');
     });
   </script>
 </body>
