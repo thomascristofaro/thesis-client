@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thesis_client/base_setup.dart';
-import 'package:thesis_client/controller/firebase_controller.dart';
 import 'package:thesis_client/controller/login_controller.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/controller/record.dart';

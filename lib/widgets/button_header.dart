@@ -9,9 +9,13 @@ import '../controller/layout.dart';
 class ButtonHeader extends StatefulWidget {
   final List<Button> buttons;
   final PageType pageType;
+  final bool insertBtn;
 
   const ButtonHeader(
-      {super.key, required this.pageType, required this.buttons});
+      {super.key,
+      required this.pageType,
+      required this.buttons,
+      this.insertBtn = false});
 
   @override
   State<ButtonHeader> createState() => _ButtonHeaderState();
@@ -65,7 +69,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
   }
 
   Widget newButton() {
-    return createButton(Button("default_new", "New", 0xe404, []), () {
+    return createButton(Button("default_new", "New", 0xe047, []), () {
       var pageCtrl = Provider.of<PageAppController>(context, listen: false);
       if (pageCtrl.layout.cardPageId.isEmpty) {
         Utility.showSnackBar(context, 'Card not available');
@@ -76,7 +80,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
   }
 
   Widget insertButton() {
-    return createButton(Button("default_insert", "Insert", 0xe404, []),
+    return createButton(Button("default_insert", "Insert", 0xe047, []),
         () async {
       try {
         await Provider.of<PageAppController>(context, listen: false)
@@ -89,7 +93,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
   }
 
   Widget modifyButton() {
-    return createButton(Button("default_modify", "Modify", 0xe404, []),
+    return createButton(Button("default_modify", "Modify", 0xe21a, []),
         () async {
       try {
         await Provider.of<PageAppController>(context, listen: false)
@@ -102,7 +106,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
   }
 
   Widget deleteButton() {
-    return createButton(Button("default_delete", "Delete", 0xe404, []),
+    return createButton(Button("default_delete", "Delete", 0xe1b9, []),
         () async {
       // TODO qui arrivo senza filtri se faccio un insert
       // quindi o tolgo il delete dal new o capisco come gestirlo
@@ -118,17 +122,24 @@ class _ButtonHeaderState extends State<ButtonHeader> {
   }
 
   Widget closeButton() {
-    return createButton(Button("default_close", "Close", 0xe404, []), () {
+    return createButton(Button("default_close", "Close", 0xe16a, []), () {
       if (context.canPop()) context.pop();
     });
   }
+
+  // Widget refreshButton() {
+  //   return createButton(Button("default_close", "Refresh", 0xe514, []), () {
+  //     if (context.canPop()) context.pop();
+  //     Utility.
+  //   });
+  // }
 
   void createButtonList() {
     buttonsWidget = [
       if (widget.pageType == PageType.list) newButton(),
       if (widget.pageType == PageType.card) closeButton(),
-      if (widget.pageType == PageType.card) insertButton(),
-      if (widget.pageType == PageType.card) modifyButton(),
+      if (widget.pageType == PageType.card && widget.insertBtn) insertButton(),
+      if (widget.pageType == PageType.card && !widget.insertBtn) modifyButton(),
       if (widget.pageType == PageType.card) deleteButton(),
       ...widget.buttons.map((button) => createMenu(button)).toList()
     ];

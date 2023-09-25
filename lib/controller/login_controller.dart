@@ -71,7 +71,7 @@ class LoginController extends ChangeNotifier {
     if (Utility.isWeb()) {
       redirectUrl = Uri.parse(
           'https://thomascristofaro.github.io/thesis-client/auth.html');
-      // redirectUrl = Uri.parse('http://localhost:51938/auth.html');
+      // redirectUrl = Uri.parse('http://localhost:6060/auth.html');
     } else if (Utility.isDesktop()) {
       redirectUrl = Uri.parse('http://localhost:$portLocalhost/login');
     } else {
@@ -142,7 +142,7 @@ class LoginController extends ChangeNotifier {
     if (Utility.isWeb()) {
       redirectUrl = Uri.parse(
           'https://thomascristofaro.github.io/thesis-client/auth.html');
-      // redirectUrl = Uri.parse('http://localhost:51938/auth.html');
+      // redirectUrl = Uri.parse('http://localhost:6060/auth.html');
     } else if (Utility.isDesktop()) {
       redirectUrl = Uri.parse('http://localhost:$portLocalhost/logout');
     } else {

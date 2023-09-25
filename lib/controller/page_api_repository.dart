@@ -44,6 +44,9 @@ class PageAPIRepository implements IPageRepository {
     if (response.statusCode == 200) {
       try {
         final Map<String, dynamic> map = await jsonDecode(response.body);
+        if (map['recordset'] == null) {
+          return [];
+        }
         List<dynamic> recordset = map['recordset'];
         return recordset.map((e) => Record.fromMap(e)).toList();
       } catch (e) {

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thesis_client/controller/layout.dart';
 import 'package:thesis_client/controller/record.dart';
+import 'package:thesis_client/widgets/edit_field_dec.dart';
+import 'package:thesis_client/widgets/edit_field_int.dart';
 import 'package:thesis_client/widgets/button_header.dart';
+import 'package:thesis_client/widgets/edit_field_text.dart';
 import 'package:thesis_client/widgets/title_text.dart';
 import 'package:thesis_client/controller/page_controller.dart';
 import 'package:thesis_client/constants.dart';
@@ -18,17 +21,6 @@ class PageCard extends StatefulWidget {
 class _PageCardState extends State<PageCard> {
   late PageAppController pageCtrl;
   Future<Record?> record = Future.value(null);
-  // questo sarà da spostare dentro il record
-  Map<String, TextEditingController> editCtrlMap = {};
-
-  // se fosse un altro tipo di variabile e non solo testo?
-  void fromFieldsToEditCtrl(Record record) {
-    record.fields.forEach((key, value) {
-      var editCtrl = TextEditingController(text: value.toString());
-      editCtrl.addListener(() => record.fields[key] = editCtrl.text);
-      editCtrlMap[key] = editCtrl;
-    });
-  }
 
   @override
   void initState() {
@@ -43,13 +35,14 @@ class _PageCardState extends State<PageCard> {
     // return ComponentGroupDecoration(label: 'Actions', children: <Widget>[
     return Column(children: [
       TitleText(name: pageCtrl.layout.caption),
-      ButtonHeader(pageType: PageType.card, buttons: pageCtrl.layout.buttons),
+      ButtonHeader(
+        pageType: PageType.card,
+        buttons: pageCtrl.layout.buttons,
+        insertBtn: pageCtrl.currentFilters.isEmpty,
+      ),
       FutureBuilder<Record?>(
           future: record,
           builder: (BuildContext context, AsyncSnapshot<Record?> snapshot) {
-            if (snapshot.hasData) {
-              fromFieldsToEditCtrl(snapshot.data as Record);
-            }
             return Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -58,19 +51,21 @@ class _PageCardState extends State<PageCard> {
                       if (component.type == AreaComponentType.group)
                         ComponentGroup(
                           component: component,
-                          editCtrlMap: editCtrlMap,
+                          record: snapshot.hasData ? snapshot.data : null,
                         )
                       else if (component.type == AreaComponentType.subpage)
-                        SizedBox(
-                          height: component.options['height'].toDouble(),
-                          child: ChangeNotifierProvider(
-                            create: (context) => PageAppController(
-                              pageId: component.options['page_id'] as String,
-                              currentFilters: [],
+                        if (snapshot.hasData)
+                          SizedBox(
+                            height: component.options['height'].toDouble(),
+                            child: ChangeNotifierProvider(
+                              create: (context) => PageAppController(
+                                pageId: component.options['page_id'] as String,
+                                currentFilters: component.createSubpageFilters(
+                                    snapshot.data as Record),
+                              ),
+                              child: const page.Page(),
                             ),
-                            child: const page.Page(),
-                          ),
-                        )
+                          )
                   ],
                 ),
               ),
@@ -81,11 +76,10 @@ class _PageCardState extends State<PageCard> {
 }
 
 class ComponentGroup extends StatelessWidget {
-  const ComponentGroup(
-      {super.key, required this.component, required this.editCtrlMap});
+  const ComponentGroup({super.key, required this.component, this.record});
 
   final AreaComponent component;
-  final Map<String, TextEditingController> editCtrlMap;
+  final Record? record;
 
   @override
   Widget build(BuildContext context) {
@@ -101,13 +95,33 @@ class ComponentGroup extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge),
             colDivider,
             for (var field in component.fields)
-              TextField(
-                decoration: InputDecoration(
-                  border: const UnderlineInputBorder(),
-                  labelText: field.caption,
-                ),
-                controller: editCtrlMap[field.id],
-              )
+              if (field.type == FieldType.int)
+                EditFieldInt(
+                    label: field.caption,
+                    value: record != null ? record!.fields[field.id] : 0,
+                    onChange: (value) {
+                      if (record != null) {
+                        record!.fields[field.id] = value;
+                      }
+                    })
+              else if (field.type == FieldType.text)
+                EditFieldText(
+                    label: field.caption,
+                    value: record != null ? record!.fields[field.id] : "",
+                    onChange: (value) {
+                      if (record != null) {
+                        record!.fields[field.id] = value;
+                      }
+                    })
+              else if (field.type == FieldType.decimal)
+                EditFieldDec(
+                    label: field.caption,
+                    value: record != null ? record!.fields[field.id] : 0,
+                    onChange: (value) {
+                      if (record != null) {
+                        record!.fields[field.id] = value;
+                      }
+                    })
           ],
         ),
       ),

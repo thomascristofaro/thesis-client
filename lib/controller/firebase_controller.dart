@@ -51,7 +51,7 @@ class FireBaseController extends ChangeNotifier {
   }
 
   void removeFCMToken(err) {
-    _fcmToken = null;
+    _fcmToken = '$err'; // null
     notifyListeners();
   }
 }

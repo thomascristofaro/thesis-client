@@ -1,8 +1,10 @@
+import 'record.dart';
+
 enum PageType { list, card, home, partlist }
 
 enum AreaComponentType { repeater, group, piechart, linechart, subpage }
 
-enum FieldType { text, number, boolean, date, time, datetime }
+enum FieldType { text, int, decimal, boolean, date, time, datetime }
 
 class Layout {
   final String id;
@@ -103,6 +105,25 @@ class PageField {
         'caption': caption,
         'type': type.index,
       };
+
+  dynamic getInitValue() {
+    switch (type) {
+      case FieldType.text:
+        return '';
+      case FieldType.int:
+        return 0;
+      case FieldType.decimal:
+        return 0.0;
+      case FieldType.boolean:
+        return false;
+      case FieldType.date:
+        return DateTime.now();
+      case FieldType.datetime:
+        return DateTime.now();
+      default:
+        return '';
+    }
+  }
 }
 
 class AreaComponent {
@@ -131,4 +152,22 @@ class AreaComponent {
         'fields': fields.map((field) => field.toMap()).toList(),
         'options': options,
       };
+
+  List<Filter> createSubpageFilters(Record record) {
+    if (type != AreaComponentType.subpage || !options.containsKey('filters')) {
+      return [];
+    }
+    List<dynamic> jsonfilters = options['filters'];
+    List<Map<String, dynamic>> filtersMap = jsonfilters
+        .map((jfilter) => Map<String, dynamic>.from(jfilter))
+        .toList();
+    return filtersMap.map((filterMap) {
+      if (filterMap.containsKey('field') &&
+          record.fields.containsKey(filterMap['field'])) {
+        return Filter(filterMap['id'], record.fields[filterMap['field']],
+            FilterType.equalTo);
+      }
+      return Filter(filterMap['id'], filterMap['value'], FilterType.equalTo);
+    }).toList();
+  }
 }

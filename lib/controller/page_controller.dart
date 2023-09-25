@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:thesis_client/controller/login_controller.dart';
 import 'package:thesis_client/controller/page_api_repository.dart';
 // import 'package:thesis_client/controller/page_fake_repository.dart';
 // import 'package:thesis_client/controller/virtual_db.dart';
@@ -28,7 +27,7 @@ class PageAppController extends ChangeNotifier {
   }
 
   Future<List<Record>> getAllRecords() {
-    return _pageRepo.getAll();
+    return _pageRepo.get(currentFilters);
   }
 
   Future<Record?> getOneRecord() async {
@@ -58,7 +57,8 @@ class PageAppController extends ChangeNotifier {
   }
 
   Record createNewRecord() {
-    return Record({for (var e in layout.getAllFields()) e.id: ""});
+    return Record(
+        {for (var e in layout.getAllFields()) e.id: e.getInitValue()});
   }
 
   void setCurrentRecord(Record record) {

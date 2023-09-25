@@ -64,7 +64,14 @@
             "fields": [],
             "options": {
                 "page_id": "saleslinelist",
-                "height": 400
+                "height": 400,
+                "filters": [
+                    {
+                        "id": "sales_header_id",
+                        "value": 0,
+                        "field": "id"
+                    }
+                ]
             }
         },
         {
