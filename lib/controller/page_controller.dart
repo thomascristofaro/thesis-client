@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thesis_client/controller/firebase_controller.dart';
 import 'package:thesis_client/controller/page_api_repository.dart';
 // import 'package:thesis_client/controller/page_fake_repository.dart';
 // import 'package:thesis_client/controller/virtual_db.dart';
@@ -13,11 +14,16 @@ class PageAppController extends ChangeNotifier {
   late IPageRepository _pageRepo;
   late Layout layout;
   late Record currentRecord;
+  String url;
+  Function? refreshCallback;
 
-  PageAppController({required this.pageId, this.currentFilters = const []}) {
+  PageAppController(
+      {required this.pageId,
+      required this.url,
+      this.currentFilters = const []}) {
     // _pageRepo = PageFakeRepository(VirtualDB(), pageId);
     // LoginController().checkLogged();
-    _pageRepo = PageAPIRepository(pageId);
+    _pageRepo = PageAPIRepository(pageId, url);
   }
 
   Future<Layout> getLayout() async {
@@ -77,5 +83,18 @@ class PageAppController extends ChangeNotifier {
     for (var filter in filters) {
       currentFilters.add(filter);
     }
+  }
+
+  void setRefreshCallback(Function refreshCallback) {
+    this.refreshCallback = refreshCallback;
+  }
+
+  void callRefreshCallback() {
+    if (refreshCallback != null) refreshCallback!();
+  }
+
+  Future<void> buttonPressed(Button button) {
+    String? deviceId = FireBaseController().getFCMToken();
+    return _pageRepo.button(button.id, deviceId, currentFilters);
   }
 }

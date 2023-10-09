@@ -10,6 +10,7 @@ import 'package:thesis_client/pages/page.dart' as page;
 import 'package:thesis_client/pages/page_login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:thesis_client/constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,9 +67,19 @@ class _AppState extends State<App> {
                           child: ChangeNotifierProvider(
                             create: (context) => PageAppController(
                               pageId: state.pathParameters['pageId']!,
+                              url: state.extra == null
+                                  ? baseURL
+                                  : (state.extra
+                                          as Map<String, dynamic>)['url'] ??
+                                      '',
                               currentFilters: state.extra == null
                                   ? []
-                                  : state.extra as List<Filter>,
+                                  : ((state.extra as Map<String, dynamic>)[
+                                              'filters'] ==
+                                          null
+                                      ? []
+                                      : (state.extra as Map<String, dynamic>)[
+                                          'filters'] as List<Filter>),
                             ),
                             child: const page.Page(),
                           ),

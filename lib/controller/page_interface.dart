@@ -10,4 +10,5 @@ abstract class IPageRepository {
   Future<Record> insert(Record record);
   Future<void> update(Record record);
   Future<void> delete(List<Filter> filters);
+  Future<void> button(String buttonId, String? devideId, List<Filter> filters);
 }

@@ -26,7 +26,7 @@ class _PartListState extends State<PartList> {
       if (pageCtrl.layout.cardPageId.isEmpty) {
         Utility.showSnackBar(context, 'Card not available');
       } else {
-        Utility.pushPage(context, pageCtrl.layout.cardPageId);
+        Utility.pushPage(context, pageCtrl.layout.cardPageId, pageCtrl.url);
       }
     });
   }

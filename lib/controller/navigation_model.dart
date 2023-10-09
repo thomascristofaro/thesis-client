@@ -7,7 +7,7 @@ class NavigationModel {
   final String tooltip;
   final int icon;
   final int selectedIcon;
-  final bool show;
+  final String url;
 
   const NavigationModel(
       {required this.pageId,
@@ -15,15 +15,15 @@ class NavigationModel {
       required this.tooltip,
       required this.icon,
       required this.selectedIcon,
-      this.show = true});
+      required this.url});
 
   NavigationModel.fromMap(Map<String, dynamic> data)
-      : pageId = data['page_id'],
-        caption = data['caption'],
-        tooltip = data['tooltip'],
-        icon = data['icon'],
-        selectedIcon = data['selected_icon'],
-        show = data['show'];
+      : pageId = data['PageId'],
+        caption = data['Caption'],
+        tooltip = data['Tooltip'],
+        icon = data['Icon'],
+        selectedIcon = data['SelectedIcon'],
+        url = data['URL'];
 
   Icon getIconWidget() {
     return Icon(IconData(icon, fontFamily: 'MaterialIcons'));

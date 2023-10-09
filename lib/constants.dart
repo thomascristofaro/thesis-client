@@ -33,4 +33,4 @@ const indicatorSize = 60.0;
 const double cardWidth = 115;
 const double widthConstraint = 450;
 
-const baseURL = 'https://thomascristofaro.github.io/app/assets/';
+const baseURL = 'i3evoitgzc.execute-api.us-east-1.amazonaws.com';

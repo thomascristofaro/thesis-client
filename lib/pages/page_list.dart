@@ -18,8 +18,8 @@ class _PageListState extends State<PageList> {
 
   @override
   void initState() {
-    pageCtrl = Provider.of<PageAppController>(context, listen: false);
     super.initState();
+    pageCtrl = Provider.of<PageAppController>(context, listen: false);
   }
 
   @override

@@ -1,14 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:thesis_client/controller/record.dart';
 
 class Utility {
-  static goPage(BuildContext context, String pageId) {
-    context.goNamed('page', pathParameters: {"pageId": pageId});
+  static goPage(BuildContext context, String pageId, String url,
+      {Object? filters}) {
+    context.goNamed('page',
+        pathParameters: {"pageId": pageId},
+        extra: {"url": url, "filters": filters});
   }
 
-  static pushPage(BuildContext context, String pageId, {Object? extra}) {
-    context.pushNamed('page', pathParameters: {"pageId": pageId}, extra: extra);
+  static pushPage(BuildContext context, String pageId, String url,
+      {List<Filter> filters = const []}) {
+    context.pushNamed('page',
+        pathParameters: {"pageId": pageId},
+        extra: {"url": url, "filters": filters});
   }
 
   static void showSnackBar(BuildContext context, String string) {

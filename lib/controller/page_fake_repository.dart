@@ -81,6 +81,10 @@ class PageFakeRepository implements IPageRepository {
   Future<void> delete(List<Filter> filters) async {
     _db.remove(_pageId, filters.map((e) => e.toMap()).toList());
   }
+
+  @override
+  Future<void> button(
+      String buttonId, String? devideId, List<Filter> filters) async {}
 }
 
 class Test {}

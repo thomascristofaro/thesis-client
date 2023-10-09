@@ -52,7 +52,7 @@ class _NavigationState extends State<Navigation> {
     }
   }
 
-  void handleLogin() {
+  void updatePage() {
     setState(() {
       futureRecords = getList();
     });
@@ -63,7 +63,7 @@ class _NavigationState extends State<Navigation> {
     super.initState();
     pageIndex = widget.pageStartIndex;
 
-    LoginController().addListener(handleLogin);
+    LoginController().addListener(updatePage);
 
     // FirebaseMessaging Setup
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -71,13 +71,13 @@ class _NavigationState extends State<Navigation> {
       Utility.showSnackBar(context, message.data.toString());
     });
 
-    pageCtrl = PageAppController(pageId: 'navigationlist');
+    pageCtrl = PageAppController(pageId: 'navigationlist', url: baseURL);
     futureRecords = getList();
   }
 
   @override
   void dispose() {
-    LoginController().removeListener(handleLogin);
+    LoginController().removeListener(updatePage);
     super.dispose();
   }
 
@@ -106,8 +106,8 @@ class _NavigationState extends State<Navigation> {
     if (pageSelected == 0) {
       context.goNamed(navigationList.elementAt(pageSelected).pageId);
     } else {
-      Utility.goPage(context,
-          navigationList.where((e) => e.show).elementAt(pageSelected).pageId);
+      NavigationModel model = navigationList.elementAt(pageSelected);
+      Utility.goPage(context, model.pageId, model.url);
     }
   }
 
@@ -158,7 +158,6 @@ class _NavigationState extends State<Navigation> {
             ),
           ),
           ...(navigationList
-              .where((e) => e.show)
               .map(
                 (element) => NavigationDrawerDestination(
                   icon: Tooltip(
@@ -178,7 +177,6 @@ class _NavigationState extends State<Navigation> {
 
   Widget buildScrollNavigationRail() {
     final List<NavigationRailDestination> railDestinations = navigationList
-        .where((e) => e.show)
         .map(
           (element) => NavigationRailDestination(
               icon: Tooltip(
@@ -219,13 +217,15 @@ class _NavigationState extends State<Navigation> {
         caption: user,
         tooltip: user,
         icon: 0xf27b,
-        selectedIcon: 0xe491));
+        selectedIcon: 0xe491,
+        url: ''));
     navigationList.add(const NavigationModel(
         pageId: 'home',
         caption: 'Home Page',
         tooltip: 'Home Page',
         icon: 61703,
-        selectedIcon: 58136));
+        selectedIcon: 58136,
+        url: baseURL));
     navigationList.addAll(records
         .map((record) => NavigationModel.fromMap(record.fields))
         .toList());

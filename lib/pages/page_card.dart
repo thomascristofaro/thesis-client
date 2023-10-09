@@ -22,10 +22,17 @@ class _PageCardState extends State<PageCard> {
   late PageAppController pageCtrl;
   Future<Record?> record = Future.value(null);
 
+  void refreshPage() {
+    setState(() {
+      record = pageCtrl.getOneRecord();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     pageCtrl = Provider.of<PageAppController>(context, listen: false);
+    pageCtrl.setRefreshCallback(refreshPage);
     record = pageCtrl.getOneRecord();
   }
 
@@ -60,6 +67,7 @@ class _PageCardState extends State<PageCard> {
                             child: ChangeNotifierProvider(
                               create: (context) => PageAppController(
                                 pageId: component.options['page_id'] as String,
+                                url: pageCtrl.url,
                                 currentFilters: component.createSubpageFilters(
                                     snapshot.data as Record),
                               ),

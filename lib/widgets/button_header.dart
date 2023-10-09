@@ -28,9 +28,15 @@ class _ButtonHeaderState extends State<ButtonHeader> {
     Utility.showSnackBar(context, '${button.caption} not implemented');
   }
 
+  void buttonPressed(Button button) {
+    Provider.of<PageAppController>(context, listen: false)
+        .buttonPressed(button);
+    Utility.showSnackBar(context, '${button.caption} pressed');
+  }
+
   Widget createMenu(Button button) {
     return button.buttons.isEmpty
-        ? createButton(button, () => unimplementedSnackbar(button))
+        ? createButton(button, () => buttonPressed(button))
         : MenuAnchor(
             builder: (context, controller, child) {
               return createButton(button, () {
@@ -49,7 +55,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
         .map((button) => button.buttons.isEmpty
             ? MenuItemButton(
                 leadingIcon: const Icon(Icons.more_vert),
-                onPressed: () => unimplementedSnackbar(button),
+                onPressed: () => buttonPressed(button),
                 child: Text(button.caption),
               )
             : SubmenuButton(
@@ -74,7 +80,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
       if (pageCtrl.layout.cardPageId.isEmpty) {
         Utility.showSnackBar(context, 'Card not available');
       } else {
-        Utility.pushPage(context, pageCtrl.layout.cardPageId);
+        Utility.pushPage(context, pageCtrl.layout.cardPageId, pageCtrl.url);
       }
     });
   }
@@ -121,18 +127,18 @@ class _ButtonHeaderState extends State<ButtonHeader> {
     });
   }
 
+  Widget refreshButton() {
+    return createButton(
+        Button("default_refresh", "Refresh", 0xe514, []),
+        () => Provider.of<PageAppController>(context, listen: false)
+            .callRefreshCallback());
+  }
+
   Widget closeButton() {
     return createButton(Button("default_close", "Close", 0xe16a, []), () {
       if (context.canPop()) context.pop();
     });
   }
-
-  // Widget refreshButton() {
-  //   return createButton(Button("default_close", "Refresh", 0xe514, []), () {
-  //     if (context.canPop()) context.pop();
-  //     Utility.
-  //   });
-  // }
 
   void createButtonList() {
     buttonsWidget = [
@@ -140,6 +146,7 @@ class _ButtonHeaderState extends State<ButtonHeader> {
       if (widget.pageType == PageType.card) closeButton(),
       if (widget.pageType == PageType.card && widget.insertBtn) insertButton(),
       if (widget.pageType == PageType.card && !widget.insertBtn) modifyButton(),
+      if (widget.pageType == PageType.card) refreshButton(),
       if (widget.pageType == PageType.card) deleteButton(),
       ...widget.buttons.map((button) => createMenu(button)).toList()
     ];

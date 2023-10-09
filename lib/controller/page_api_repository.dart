@@ -8,26 +8,25 @@ import 'package:thesis_client/controller/record.dart';
 import 'package:oauth2/oauth2.dart';
 
 class PageAPIRepository implements IPageRepository {
-  static const String URL = 'ngb197hjce.execute-api.us-east-1.amazonaws.com';
   final String _pageId;
+  String url;
 
-  PageAPIRepository(this._pageId);
-
+  PageAPIRepository(this._pageId, this.url);
   @override
   Future<Layout> getLayout() async {
     LoginController().checkLogged();
-    String body = CacheController().get(_pageId);
+    String body = CacheController().get('SCHEMA_$_pageId');
 
     if (body.isEmpty) {
       var client = Client(LoginController().credentials!);
       final response =
-          await client.get(Uri.https(URL, '/${_pageId.toLowerCase()}/schema'));
+          await client.get(Uri.https(url, '/${_pageId.toLowerCase()}/schema'));
 
       if (response.statusCode != 200) {
         throw Exception(getErrorMessage(response.body));
       }
       body = response.body;
-      CacheController().set(_pageId, body);
+      CacheController().set('SCHEMA_$_pageId', body);
     }
 
     return Layout.fromMap(await jsonDecode(body));
@@ -37,8 +36,12 @@ class PageAPIRepository implements IPageRepository {
   Future<List<Record>> get(List<Filter> filters) async {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
-    var address = Uri.https(URL, "/${_pageId.toLowerCase()}/",
-        {for (var filter in filters) filter.id: filter.value});
+    Map<String, dynamic> queryParameters = {};
+    for (var filter in filters) {
+      queryParameters[filter.id] = filter.value.toString();
+    }
+    // parameters must be string
+    var address = Uri.https(url, "/${_pageId.toLowerCase()}/", queryParameters);
     final response = await client.get(address);
 
     if (response.statusCode == 200) {
@@ -73,7 +76,7 @@ class PageAPIRepository implements IPageRepository {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
     final response = await client.post(
-        Uri.https(URL, '/${_pageId.toLowerCase()}'),
+        Uri.https(url, '/${_pageId.toLowerCase()}'),
         body: jsonEncode(record.toMap()),
         headers: {'Content-Type': 'application/json'});
 
@@ -90,7 +93,7 @@ class PageAPIRepository implements IPageRepository {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
     final response = await client.patch(
-        Uri.https(URL, '/${_pageId.toLowerCase()}'),
+        Uri.https(url, '/${_pageId.toLowerCase()}'),
         body: jsonEncode(record.toMap()),
         headers: {'Content-Type': 'application/json'});
 
@@ -103,9 +106,32 @@ class PageAPIRepository implements IPageRepository {
   Future<void> delete(List<Filter> filters) async {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
-    var address = Uri.https(URL, '/${_pageId.toLowerCase()}',
+    var address = Uri.https(url, '/${_pageId.toLowerCase()}',
         {for (var filter in filters) filter.id: filter.value});
     final response = await client.delete(address);
+
+    if (response.statusCode != 200) {
+      throw Exception(getErrorMessage(response.body));
+    }
+  }
+
+  @override
+  Future<void> button(
+      String buttonId, String? devideId, List<Filter> filters) async {
+    LoginController().checkLogged();
+
+    Map<String, dynamic> queryParameters = {
+      "button_id": buttonId,
+      "device_id": devideId ?? ""
+    };
+    for (var filter in filters) {
+      queryParameters[filter.id] = filter.value.toString();
+    }
+
+    var client = Client(LoginController().credentials!);
+    var address =
+        Uri.https(url, '/${_pageId.toLowerCase()}/button', queryParameters);
+    final response = await client.get(address);
 
     if (response.statusCode != 200) {
       throw Exception(getErrorMessage(response.body));

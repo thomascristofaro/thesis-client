@@ -66,17 +66,7 @@ class LoginController extends ChangeNotifier {
     Uri authorizationEndpoint = Uri.parse('$endpoint/oauth2/authorize');
     Uri tokenEndpoint = Uri.parse('$endpoint/oauth2/token');
     Uri responseUrl = Uri();
-    Uri redirectUrl;
-
-    if (Utility.isWeb()) {
-      redirectUrl = Uri.parse(
-          'https://thomascristofaro.github.io/thesis-client/auth.html');
-      // redirectUrl = Uri.parse('http://localhost:6060/auth.html');
-    } else if (Utility.isDesktop()) {
-      redirectUrl = Uri.parse('http://localhost:$portLocalhost/login');
-    } else {
-      redirectUrl = Uri.parse('$callbackUrlScheme://login');
-    }
+    Uri redirectUrl = buildRedirectUrl('login');
 
     var grant = AuthorizationCodeGrant(
         identifier, authorizationEndpoint, tokenEndpoint,
@@ -138,19 +128,26 @@ class LoginController extends ChangeNotifier {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('credentials');
 
-    Uri redirectUrl;
-    if (Utility.isWeb()) {
-      redirectUrl = Uri.parse(
-          'https://thomascristofaro.github.io/thesis-client/auth.html');
-      // redirectUrl = Uri.parse('http://localhost:6060/auth.html');
-    } else if (Utility.isDesktop()) {
-      redirectUrl = Uri.parse('http://localhost:$portLocalhost/logout');
-    } else {
-      redirectUrl = Uri.parse('$callbackUrlScheme://logout');
-    }
+    Uri redirectUrl = buildRedirectUrl('logout');
 
     await _callExternalUrl(Uri.parse('$endpoint/logout?client_id=$identifier'
         '&logout_uri=${redirectUrl.toString()}'));
     notifyListeners();
+  }
+
+  Uri buildRedirectUrl(String suffix) {
+    Uri redirectUrl;
+
+    if (Utility.isWeb()) {
+      // redirectUrl = Uri.parse(
+      //     'https://thomascristofaro.github.io/thesis-client/auth.html');
+      redirectUrl = Uri.parse('http://localhost:6060/auth.html');
+    } else if (Utility.isDesktop()) {
+      redirectUrl = Uri.parse('http://localhost:$portLocalhost/$suffix');
+    } else {
+      redirectUrl = Uri.parse('$callbackUrlScheme://$suffix');
+    }
+
+    return redirectUrl;
   }
 }

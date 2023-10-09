@@ -25,8 +25,8 @@ class _RepeaterState extends State<Repeater> {
 
   void openCard(Record record) {
     if (pageCtrl.layout.cardPageId == '') throw Exception('Card not available');
-    Utility.pushPage(context, pageCtrl.layout.cardPageId,
-        extra: record.getKeyFilters(pageCtrl.layout.key));
+    Utility.pushPage(context, pageCtrl.layout.cardPageId, pageCtrl.url,
+        filters: record.getKeyFilters(pageCtrl.layout.key));
   }
 
   @override
