@@ -67,8 +67,15 @@ class _NavigationState extends State<Navigation> {
 
     // FirebaseMessaging Setup
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Message data: ${message.data}');
-      Utility.showSnackBar(context, message.data.toString());
+      if (message.data['message'] != null) {
+        Utility.showSnackBar(context, message.data['message'].toString());
+      } else if (message.notification != null &&
+          message.notification!.title != null) {
+        Utility.showSnackBar(context, message.notification!.title!);
+      } else {
+        Utility.showSnackBar(context, 'New Notification');
+      }
+      // se data['action'] = 'update' allora aggiorna la pagina
     });
 
     pageCtrl = PageAppController(pageId: 'navigationlist', url: baseURL);

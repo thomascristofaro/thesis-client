@@ -67,11 +67,18 @@ class _ButtonHeaderState extends State<ButtonHeader> {
   }
 
   Widget createButton(Button button, void Function() onPressed) {
-    return FilledButton.tonalIcon(
-      label: Text(button.caption),
-      icon: const Icon(Icons.more_vert),
-      onPressed: onPressed,
-    );
+    if (button.icon == 0) {
+      return FilledButton.tonal(
+        onPressed: onPressed,
+        child: Text(button.caption),
+      );
+    } else {
+      return FilledButton.tonalIcon(
+        label: Text(button.caption),
+        icon: button.getIconWidget(),
+        onPressed: onPressed,
+      );
+    }
   }
 
   Widget newButton() {

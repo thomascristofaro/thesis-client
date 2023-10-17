@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'record.dart';
 
 enum PageType { list, card, home, partlist }
@@ -86,6 +87,10 @@ class Button {
         'icon': icon,
         'buttons': buttons.map((button) => button.toMap()).toList()
       };
+
+  Icon getIconWidget() {
+    return Icon(IconData(icon, fontFamily: 'MaterialIcons'));
+  }
 }
 
 class PageField {
