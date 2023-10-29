@@ -150,9 +150,9 @@ class LoginController extends ChangeNotifier {
     Uri redirectUrl;
 
     if (Utility.isWeb()) {
-      // redirectUrl = Uri.parse(
-      //     'https://thomascristofaro.github.io/thesis-client/auth.html');
-      redirectUrl = Uri.parse('http://localhost:6060/auth.html');
+      redirectUrl = Uri.parse(
+          'https://thomascristofaro.github.io/thesis-client/auth.html');
+      // redirectUrl = Uri.parse('http://localhost:6060/auth.html');
     } else if (Utility.isDesktop()) {
       redirectUrl = Uri.parse('http://localhost:$portLocalhost/$suffix');
     } else {
