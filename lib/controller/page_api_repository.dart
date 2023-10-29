@@ -107,7 +107,7 @@ class PageAPIRepository implements IPageRepository {
     LoginController().checkLogged();
     var client = Client(LoginController().credentials!);
     var address = Uri.https(url, '/${_pageId.toLowerCase()}',
-        {for (var filter in filters) filter.id: filter.value});
+        {for (var filter in filters) filter.id: filter.value.toString()});
     final response = await client.delete(address);
 
     if (response.statusCode != 200) {

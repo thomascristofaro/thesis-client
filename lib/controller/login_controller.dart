@@ -55,8 +55,19 @@ class LoginController extends ChangeNotifier {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? credStr = prefs.getString('credentials');
     if (credStr != null) {
-      // bisogna controllare che non sia scaduto
       credentials = Credentials.fromJson(credStr);
+      if (credentials!.isExpired) {
+        if (credentials!.canRefresh) {
+          try {
+            credentials = await credentials!.refresh();
+          } catch (e) {
+            return false;
+          }
+          return true;
+        } else {
+          return false;
+        }
+      }
       return true;
     }
     return false;

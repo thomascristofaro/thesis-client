@@ -75,6 +75,7 @@ class _NavigationState extends State<Navigation> {
       } else {
         Utility.showSnackBar(context, 'New Notification');
       }
+      print(message.data.toString());
       // se data['action'] = 'update' allora aggiorna la pagina
     });
 
