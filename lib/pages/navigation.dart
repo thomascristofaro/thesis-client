@@ -128,7 +128,7 @@ class _NavigationState extends State<Navigation> {
   PreferredSizeWidget buildAppBar() {
     BaseSetup baseSetup = Provider.of<BaseSetup>(context);
     return AppBar(
-      title: const Text('BLOX'),
+      title: const Text('KUBE'),
       leading: !showSmallSizeLayout
           ? IconButton(
               icon: const Icon(Icons.menu),
